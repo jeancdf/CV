@@ -3,8 +3,8 @@
 :root {
   color-scheme: light;
   font-family: 'Space Grotesk', sans-serif;
-  background: #f4f1e8;
-  color: #18211d;
+  background: #f5f1e8;
+  color: #1e1b16;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
 }
@@ -21,7 +21,7 @@ body {
   margin: 0;
   min-width: 320px;
   min-height: 100vh;
-  background: #f4f1e8;
+  background: #f5f1e8;
 }
 
 button,
@@ -40,6 +40,6 @@ a {
 }
 
 ::selection {
-  color: #f4f1e8;
-  background: #c0563a;
+  color: #f5f1e8;
+  background: #1e1b16;
 }

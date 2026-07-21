@@ -15,6 +15,12 @@ import * as L from 'leaflet';
 type Language = 'fr' | 'en';
 type CodeTab = 'fetch' | 'curl' | 'json';
 type PinId = 'g7' | 'hetic' | 'mariage' | 'golf';
+type TokenKind = 'punct' | 'key' | 'str' | 'fn' | 'kw' | 'plain' | 'ok' | 'dim';
+
+interface Token {
+  text: string;
+  kind: TokenKind;
+}
 
 interface Pin {
   id: PinId;
@@ -34,320 +40,291 @@ const copy = {
       skills: 'Compétences',
       map: 'Carte',
       contact: 'Contact',
-      cv: 'Télécharger le CV',
+      cv: 'CV PDF',
       menu: 'Ouvrir le menu',
     },
     hero: {
       eyebrow: 'Développeur full-stack',
-      available: 'Disponible à Paris',
-      role: 'Je conçois des produits web',
-      roleTail: 'utiles et durables.',
+      available: 'Disponible pour de nouveaux projets',
+      role: 'Je conçois et je fais tourner des produits web,',
+      roleTail: "du front au back, jusqu'en prod.",
       tagline:
-        'Du besoin métier à la mise en production, je transforme des idées complexes en expériences simples, robustes et maintenables.',
-      primary: 'Voir mon parcours',
+        "4 ans d'expérience à transformer des besoins métier en outils fiables — du dispatch de taxis parisiens aux microservices critiques.",
+      primary: 'Voir le parcours',
       secondary: 'Me contacter',
-      locationLabel: 'Localisation',
-      experienceLabel: 'Expérience',
-      experienceValue: '4 ans',
-      currentLabel: 'Actuellement',
-      scroll: 'Découvrir mon profil',
+      locationLabel: 'BASÉ À',
+      experienceLabel: 'EXPÉRIENCE',
+      experienceValue: '4 ans · full-stack',
+      currentLabel: 'ACTUELLEMENT',
+      scroll: 'Faites défiler pour découvrir le parcours',
     },
     about: {
       title: 'À propos',
       lead:
-        'Développeur full-stack avec une sensibilité produit, j’aime construire des interfaces soignées autant que des systèmes solides.',
+        'Développeur full-stack confiant et direct : je pars du besoin réel et je livre des solutions concrètes, fiables et pensées pour ceux qui les utilisent.',
       body:
-        'Je participe à toutes les étapes d’un projet : analyse du besoin, conception technique, développement, intégration et mise en production. Habitué au travail en équipe, j’accorde une attention particulière à la qualité du code, aux performances, à la sécurité et à la maintenabilité.',
-      statA: 'années à transformer des besoins métier en produits web',
-      statB: 'vision front, back, data et déploiement',
+        "Côté front, je travaille surtout avec Angular et React (TypeScript, Tailwind) pour des interfaces modernes et maintenables. Côté back, je construis des API et des systèmes d'authentification avec Spring Boot, NestJS, Node.js, Django et Python. J'interviens sur tout le cycle — analyse, conception, développement, intégration, tests et mise en production — avec un vrai soin pour la qualité, la performance, la sécurité et la maintenabilité.",
     },
     experience: {
-      title: 'Parcours',
+      title: 'Expérience',
       items: [
         {
-          period: 'Aujourd’hui',
+          period: "2024 — aujourd'hui",
           company: 'G7 Taxis',
-          role: 'Développeur web',
-          place: 'Paris, Île-de-France',
-          description:
-            'Développement et évolution d’applications métier, de l’interface à l’API. Contribution aux choix techniques, aux revues de code, à la correction et à la mise en production.',
-          tags: ['Angular', 'TypeScript', 'Spring Boot', 'API', 'CI/CD'],
+          place: 'Paris, France',
+          role: 'Développeur web full-stack',
+          bullets: [
+            "Développement et maintenance des outils internes de l'entreprise.",
+            'Logiciel de prise de commande et de dispatch des taxis.',
+            'CRM de gestion des taxis et des chauffeurs.',
+            'Deux outils de test des microservices critiques de la société.',
+          ],
+          stack: ['Angular', 'React', 'TypeScript', 'NestJS', 'Spring Boot', 'PostgreSQL', 'MongoDB', 'Docker'],
         },
       ],
     },
     skills: {
-      title: 'Compétences',
+      title: 'Compétences techniques',
       groups: [
-        { index: '01', name: 'Front-end', items: ['Angular', 'React', 'TypeScript', 'Bootstrap', 'Tailwind CSS'] },
-        { index: '02', name: 'Back-end', items: ['Spring Boot', 'NestJS', 'Node.js', 'Django', 'Python'] },
-        { index: '03', name: 'Data', items: ['PostgreSQL', 'SQL', 'MongoDB', 'Modélisation'] },
-        { index: '04', name: 'DevOps', items: ['Docker', 'GitLab CI/CD', 'GitHub Actions', 'Déploiement'] },
+        { name: 'Front-end', items: ['Angular', 'React', 'TypeScript', 'Bootstrap', 'Tailwind CSS'] },
+        { name: 'Back-end', items: ['Spring Boot', 'NestJS', 'Node.js', 'Django', 'Python'] },
+        { name: 'Bases de données', items: ['PostgreSQL', 'SQL', 'MongoDB'] },
+        { name: 'DevOps & outils', items: ['Docker', 'GitLab CI/CD', 'GitHub Actions', 'Git'] },
       ],
     },
     projects: {
-      title: 'Projets choisis',
-      intro: 'Quelques terrains de jeu où produit, design et technique avancent ensemble.',
-      visit: 'Voir le projet',
+      title: 'Projets',
+      intro: 'Deux projets personnels en cours de construction — bientôt en ligne.',
       items: [
         {
-          number: '01',
-          name: 'Mon Mariage',
-          category: 'Produit web · Full-stack',
-          description: 'Une expérience numérique pensée pour rendre l’organisation d’un mariage plus fluide et plus personnelle.',
-          stack: ['Angular', 'NestJS', 'PostgreSQL'],
-          tone: 'rust',
+          no: 'P1',
+          status: 'En cours',
+          name: 'Gestion de mariage',
+          description:
+            "Une plateforme pour organiser un mariage de A à Z : invités, prestataires, budget et planning au même endroit.",
+          stack: ['React', 'NestJS', 'PostgreSQL'],
         },
         {
-          number: '02',
-          name: 'Carnet de golf',
-          category: 'Application · Data',
-          description: 'Un carnet de jeu clair pour suivre ses parties, ses parcours et sa progression au fil du temps.',
-          stack: ['TypeScript', 'API', 'Data'],
-          tone: 'forest',
-        },
-        {
-          number: '03',
-          name: 'Expérimentations',
-          category: 'Lab · Produit',
-          description: 'Des prototypes courts pour explorer de nouvelles interactions, architectures et idées de produit.',
-          stack: ['Angular', 'UX', 'Open source'],
-          tone: 'yellow',
+          no: 'P2',
+          status: 'En cours',
+          name: 'CRM Club de golf',
+          description:
+            "Un CRM pour gérer les membres d'un club de golf : adhésions, réservations et suivi de l'activité.",
+          stack: ['Angular', 'Spring Boot', 'PostgreSQL'],
         },
       ],
     },
     education: {
       title: 'Formation',
       items: [
-        {
-          period: 'Oct. 2024 — Déc. 2026',
-          school: 'HETIC',
-          degree: 'Master — CTO & Tech Lead',
-          description: 'Pilotage technique, architecture, stratégie produit et management des équipes tech.',
-        },
-        {
-          period: 'Sept. 2022 — Oct. 2024',
-          school: 'HETIC',
-          degree: 'Licence — Développeur web',
-          description: 'Conception et développement d’applications web modernes, du front-end au back-end.',
-        },
+        { period: 'oct. 2024 — déc. 2026', school: 'HETIC', degree: 'Master, CTO & Tech Lead' },
+        { period: 'sept. 2022 — oct. 2024', school: 'HETIC', degree: 'Licence, Développeur Web' },
       ],
     },
     map: {
-      title: 'Mon Paris',
-      intro: 'Un parcours professionnel et personnel ancré dans le Grand Paris.',
-      hint: 'Sélectionnez un lieu sur la carte ou dans la liste.',
+      title: 'Paris, sur la carte',
+      intro: 'Cliquez sur les points pour explorer où se passe mon parcours et mes projets.',
+      hint: 'Cliquez sur un autre point pour changer.',
       pins: {
         g7: {
           name: 'G7 Taxis',
-          tag: 'Aujourd’hui · Travail',
-          description: 'Là où je développe des applications métier au service de la mobilité parisienne.',
+          tag: 'EXPÉRIENCE',
+          description:
+            'Développeur full-stack sur les outils internes : dispatch des taxis, CRM et tests des microservices critiques.',
           short: 'G7',
         },
         hetic: {
           name: 'HETIC',
-          tag: 'Formation · Tech',
-          description: 'Le terrain où j’approfondis architecture, produit et leadership technique.',
+          tag: 'FORMATION',
+          description:
+            'École du web à Montreuil : Licence Développeur Web puis Master CTO & Tech Lead (2022 → 2026).',
           short: 'HETIC',
         },
         mariage: {
-          name: 'Mon Mariage',
-          tag: 'Side project · Produit',
-          description: 'Un projet personnel où je relie conception produit, design et développement full-stack.',
-          short: 'Projet mariage',
+          name: 'Gestion de mariage',
+          tag: 'PROJET · BIENTÔT',
+          description:
+            "Plateforme d'organisation de mariage — invités, prestataires, budget et planning. En cours de développement.",
+          short: 'Projet · Mariage',
         },
         golf: {
-          name: 'Carnet de golf',
-          tag: 'Side project · Data',
-          description: 'Une application née de l’envie de mêler pratique sportive, progression et données.',
-          short: 'Projet golf',
+          name: 'CRM Club de golf',
+          tag: 'PROJET · BIENTÔT',
+          description:
+            "CRM de gestion des membres d'un club de golf : adhésions, réservations et suivi. En cours de développement.",
+          short: 'Projet · Golf',
         },
       },
     },
     hobbies: {
       title: 'En dehors du code',
-      note: 'La curiosité reste mon meilleur outil — devant un écran comme ailleurs.',
+      note: "// à personnaliser — dis-moi tes vrais centres d'intérêt et je les remplace",
       items: [
-        { icon: '↗', name: 'Golf', detail: 'Précision, patience, progression.' },
-        { icon: '◎', name: 'Produit', detail: 'Observer les usages et simplifier.' },
-        { icon: '⌁', name: 'Veille tech', detail: 'Tester, apprendre, transmettre.' },
-        { icon: '◇', name: 'Projets perso', detail: 'Transformer une idée en expérience.' },
+        { i: '01', label: 'Side-projects' },
+        { i: '02', label: 'Nouvelles technos' },
+        { i: '03', label: 'Sport' },
+        { i: '04', label: 'Musique' },
       ],
     },
     contact: {
-      title: 'Construisons quelque chose de solide.',
-      body: 'Un projet, une opportunité ou simplement une question ? Écrivez-moi, je vous répondrai avec plaisir.',
-      run: 'Exécuter la requête',
-      live: 'aperçu en direct',
-      codeHint: 'Le message reste sur votre appareil et s’ouvre dans votre messagerie.',
-      sentTitle: 'Requête prête à partir.',
-      sentBody: 'Votre messagerie va s’ouvrir avec le message prérempli.',
-      sentCta: 'Ouvrir ma messagerie',
-      reset: 'Écrire un autre message',
+      title: 'Parlons-en.',
+      body: 'Un poste, un projet, une simple question ? Remplissez la requête — elle se construit en direct à droite.',
       name: 'votre nom',
       email: 'vous@email.com',
       message: 'votre message…',
+      run: 'envoyer la requête',
+      live: 'live',
+      queued: 'message reçu',
+      codeHint: '// requête générée en temps réel — fetch, cURL ou JSON, au choix',
+      sentTitle: 'Merci !',
+      sentBody: "Votre message est prêt à partir. Cliquez ci-dessous pour l'envoyer depuis votre messagerie.",
+      sentCta: "Ouvrir l'email",
+      reset: 'Écrire un autre message',
     },
-    footer: { top: 'Retour en haut' },
+    footer: { top: 'Haut de page' },
   },
   en: {
     nav: {
       about: 'About',
-      experience: 'Experience',
+      experience: 'Career',
       skills: 'Skills',
       map: 'Map',
       contact: 'Contact',
-      cv: 'Download résumé',
+      cv: 'PDF CV',
       menu: 'Open menu',
     },
     hero: {
       eyebrow: 'Full-stack developer',
-      available: 'Based in Paris',
-      role: 'I build web products that are',
-      roleTail: 'useful and built to last.',
+      available: 'Open to new projects',
+      role: 'I design and ship web products,',
+      roleTail: 'front to back, all the way to prod.',
       tagline:
-        'From business need to production, I turn complex ideas into simple, robust and maintainable experiences.',
-      primary: 'View my experience',
+        '4 years turning business needs into reliable tools — from Parisian taxi dispatch to critical microservices.',
+      primary: 'See my career',
       secondary: 'Get in touch',
-      locationLabel: 'Location',
-      experienceLabel: 'Experience',
-      experienceValue: '4 years',
-      currentLabel: 'Currently',
-      scroll: 'Discover my profile',
+      locationLabel: 'BASED IN',
+      experienceLabel: 'EXPERIENCE',
+      experienceValue: '4 yrs · full-stack',
+      currentLabel: 'CURRENTLY',
+      scroll: 'Scroll to explore the journey',
     },
     about: {
       title: 'About',
       lead:
-        'I am a product-minded full-stack developer who cares as much about polished interfaces as resilient systems.',
+        'A confident, straight-to-the-point full-stack developer: I start from the real need and ship concrete, reliable solutions built for the people who use them.',
       body:
-        'I contribute throughout a project’s lifecycle: requirements, technical design, development, integration and delivery. Used to collaborative teams, I pay close attention to code quality, performance, security and maintainability.',
-      statA: 'years turning business needs into web products',
-      statB: 'across front-end, back-end, data and delivery',
+        "On the front end I mostly work with Angular and React (TypeScript, Tailwind) for modern, maintainable interfaces. On the back end I build APIs and authentication systems with Spring Boot, NestJS, Node.js, Django and Python. I cover the whole cycle — analysis, design, development, integration, testing and production — with real care for quality, performance, security and maintainability.",
     },
     experience: {
       title: 'Experience',
       items: [
         {
-          period: 'Present',
+          period: '2024 — present',
           company: 'G7 Taxis',
-          role: 'Web developer',
           place: 'Paris, France',
-          description:
-            'Building and evolving business applications, from user interfaces to APIs. Contributing to technical decisions, code reviews, maintenance and production delivery.',
-          tags: ['Angular', 'TypeScript', 'Spring Boot', 'API', 'CI/CD'],
+          role: 'Full-stack web developer',
+          bullets: [
+            "Building and maintaining the company's internal tools.",
+            'Taxi ordering and dispatch software.',
+            'CRM to manage taxis and drivers.',
+            "Two testing tools for the company's critical microservices.",
+          ],
+          stack: ['Angular', 'React', 'TypeScript', 'NestJS', 'Spring Boot', 'PostgreSQL', 'MongoDB', 'Docker'],
         },
       ],
     },
     skills: {
-      title: 'Skills',
+      title: 'Technical skills',
       groups: [
-        { index: '01', name: 'Front-end', items: ['Angular', 'React', 'TypeScript', 'Bootstrap', 'Tailwind CSS'] },
-        { index: '02', name: 'Back-end', items: ['Spring Boot', 'NestJS', 'Node.js', 'Django', 'Python'] },
-        { index: '03', name: 'Data', items: ['PostgreSQL', 'SQL', 'MongoDB', 'Data modelling'] },
-        { index: '04', name: 'DevOps', items: ['Docker', 'GitLab CI/CD', 'GitHub Actions', 'Delivery'] },
+        { name: 'Front-end', items: ['Angular', 'React', 'TypeScript', 'Bootstrap', 'Tailwind CSS'] },
+        { name: 'Back-end', items: ['Spring Boot', 'NestJS', 'Node.js', 'Django', 'Python'] },
+        { name: 'Databases', items: ['PostgreSQL', 'SQL', 'MongoDB'] },
+        { name: 'DevOps & tools', items: ['Docker', 'GitLab CI/CD', 'GitHub Actions', 'Git'] },
       ],
     },
     projects: {
-      title: 'Selected projects',
-      intro: 'A few playgrounds where product, design and engineering move together.',
-      visit: 'View project',
+      title: 'Projects',
+      intro: 'Two personal projects in the works — coming online soon.',
       items: [
         {
-          number: '01',
-          name: 'Mon Mariage',
-          category: 'Web product · Full-stack',
-          description: 'A digital experience designed to make planning a wedding smoother and more personal.',
-          stack: ['Angular', 'NestJS', 'PostgreSQL'],
-          tone: 'rust',
+          no: 'P1',
+          status: 'In progress',
+          name: 'Wedding planner',
+          description: 'A platform to organize a wedding end to end: guests, vendors, budget and schedule in one place.',
+          stack: ['React', 'NestJS', 'PostgreSQL'],
         },
         {
-          number: '02',
-          name: 'Golf notebook',
-          category: 'Application · Data',
-          description: 'A clear playing journal for tracking rounds, courses and progress over time.',
-          stack: ['TypeScript', 'API', 'Data'],
-          tone: 'forest',
-        },
-        {
-          number: '03',
-          name: 'Experiments',
-          category: 'Lab · Product',
-          description: 'Short prototypes exploring new interactions, architectures and product ideas.',
-          stack: ['Angular', 'UX', 'Open source'],
-          tone: 'yellow',
+          no: 'P2',
+          status: 'In progress',
+          name: 'Golf club CRM',
+          description: "A CRM to manage a golf club's members: memberships, bookings and activity tracking.",
+          stack: ['Angular', 'Spring Boot', 'PostgreSQL'],
         },
       ],
     },
     education: {
       title: 'Education',
       items: [
-        {
-          period: 'Oct. 2024 — Dec. 2026',
-          school: 'HETIC',
-          degree: 'Master — CTO & Tech Lead',
-          description: 'Technical leadership, architecture, product strategy and engineering management.',
-        },
-        {
-          period: 'Sep. 2022 — Oct. 2024',
-          school: 'HETIC',
-          degree: 'Bachelor — Web development',
-          description: 'Design and development of modern web applications, from front-end to back-end.',
-        },
+        { period: 'Oct 2024 — Dec 2026', school: 'HETIC', degree: "Master's, CTO & Tech Lead" },
+        { period: 'Sep 2022 — Oct 2024', school: 'HETIC', degree: "Bachelor's, Web Developer" },
       ],
     },
     map: {
-      title: 'My Paris',
-      intro: 'A professional and personal journey rooted in Greater Paris.',
-      hint: 'Select a place on the map or in the list.',
+      title: 'Paris, on the map',
+      intro: 'Click the points to explore where my career and projects happen.',
+      hint: 'Click another point to switch.',
       pins: {
         g7: {
           name: 'G7 Taxis',
-          tag: 'Today · Work',
-          description: 'Where I build business applications serving mobility across Paris.',
+          tag: 'EXPERIENCE',
+          description: 'Full-stack developer on internal tools: taxi dispatch, CRM and testing of critical microservices.',
           short: 'G7',
         },
         hetic: {
           name: 'HETIC',
-          tag: 'Education · Tech',
-          description: 'Where I deepen my skills in architecture, product and technical leadership.',
+          tag: 'EDUCATION',
+          description: "Web school in Montreuil: Web Developer bachelor's then CTO & Tech Lead master's (2022 → 2026).",
           short: 'HETIC',
         },
         mariage: {
-          name: 'Mon Mariage',
-          tag: 'Side project · Product',
-          description: 'A personal project connecting product thinking, design and full-stack engineering.',
-          short: 'Wedding project',
+          name: 'Wedding planner',
+          tag: 'PROJECT · SOON',
+          description:
+            'Wedding organization platform — guests, vendors, budget and schedule. Currently in development.',
+          short: 'Project · Wedding',
         },
         golf: {
-          name: 'Golf notebook',
-          tag: 'Side project · Data',
-          description: 'An application born from the idea of connecting sport, progress and data.',
-          short: 'Golf project',
+          name: 'Golf club CRM',
+          tag: 'PROJECT · SOON',
+          description: "CRM to manage a golf club's members: memberships, bookings and tracking. Currently in development.",
+          short: 'Project · Golf',
         },
       },
     },
     hobbies: {
-      title: 'Beyond code',
-      note: 'Curiosity remains my best tool — at a screen and everywhere else.',
+      title: 'Beyond the code',
+      note: "// to customize — tell me your real interests and I'll swap these",
       items: [
-        { icon: '↗', name: 'Golf', detail: 'Precision, patience, progress.' },
-        { icon: '◎', name: 'Product', detail: 'Watch how people use things. Simplify.' },
-        { icon: '⌁', name: 'Tech watch', detail: 'Test, learn and share.' },
-        { icon: '◇', name: 'Side projects', detail: 'Turn an idea into an experience.' },
+        { i: '01', label: 'Side-projects' },
+        { i: '02', label: 'New tech' },
+        { i: '03', label: 'Sport' },
+        { i: '04', label: 'Music' },
       ],
     },
     contact: {
-      title: 'Let’s build something solid.',
-      body: 'A project, an opportunity or just a question? Send me a note — I will be happy to reply.',
-      run: 'Run request',
-      live: 'live preview',
-      codeHint: 'Your message stays on your device and opens in your email client.',
-      sentTitle: 'Request ready to go.',
-      sentBody: 'Your email client will open with the message filled in.',
-      sentCta: 'Open email client',
-      reset: 'Write another message',
+      title: "Let's talk.",
+      body: 'A role, a project, a quick question? Fill in the request — it builds live on the right.',
       name: 'your name',
       email: 'you@email.com',
       message: 'your message…',
+      run: 'send request',
+      live: 'live',
+      queued: 'message received',
+      codeHint: '// request generated in real time — fetch, cURL or JSON, your pick',
+      sentTitle: 'Thanks!',
+      sentBody: 'Your message is ready to go. Click below to send it from your mail app.',
+      sentCta: 'Open email',
+      reset: 'Write another message',
     },
     footer: { top: 'Back to top' },
   },
@@ -370,59 +347,111 @@ export class AppComponent implements AfterViewInit, OnDestroy {
   readonly activeTab = signal<CodeTab>('fetch');
   readonly selectedPinId = signal<PinId>('g7');
   readonly sent = signal(false);
+  readonly msgId = signal('');
   readonly year = new Date().getFullYear();
   readonly form = { name: '', email: '', message: '' };
 
   readonly pins = computed<Pin[]>(() => {
     const labels = this.t().map.pins;
     return [
-      { id: 'g7', ...labels.g7, coordinates: [48.9005, 2.3206], color: '#f2c94c' },
-      { id: 'hetic', ...labels.hetic, coordinates: [48.8624, 2.4412], color: '#c0563a' },
-      { id: 'mariage', ...labels.mariage, coordinates: [48.8736, 2.3392], color: '#e9e1cf' },
-      { id: 'golf', ...labels.golf, coordinates: [48.8524, 2.3509], color: '#97a798' },
+      { id: 'g7', ...labels.g7, coordinates: [48.8988602, 2.304037], color: '#f2c94c' },
+      { id: 'hetic', ...labels.hetic, coordinates: [48.8555, 2.439], color: '#c0563a' },
+      { id: 'mariage', ...labels.mariage, coordinates: [48.8792259, 2.2832742], color: '#e9e1cf' },
+      { id: 'golf', ...labels.golf, coordinates: [48.8941179, 2.2855198], color: '#97a798' },
     ];
   });
   readonly selectedPin = computed(
     () => this.pins().find((pin) => pin.id === this.selectedPinId()) ?? this.pins()[0]!,
   );
 
+  private map?: L.Map;
+  private markers = new Map<PinId, L.Marker>();
+  private observer?: IntersectionObserver;
+
   mailtoHref(): string {
-    const subject = encodeURIComponent(`Contact CV — ${this.form.name || 'Nouveau message'}`);
+    const subject = encodeURIComponent(`Contact — ${this.form.name || 'Nouveau message'}`);
     const body = encodeURIComponent(`${this.form.message}\n\n${this.form.name}\n${this.form.email}`);
     return `mailto:jeancdfpro@gmail.com?subject=${subject}&body=${body}`;
   }
 
-  codePreview(): string {
-    const data = {
-      name: this.form.name || this.t().contact.name,
-      email: this.form.email || this.t().contact.email,
-      message: this.form.message || this.t().contact.message,
-    };
-
-    switch (this.activeTab()) {
-      case 'curl':
-        return `curl -X POST \\\n  https://jean-cazals.dev/contact \\\n  -H "Content-Type: application/json" \\\n  -d '${JSON.stringify(data, null, 2)}'`;
-      case 'json':
-        return JSON.stringify(data, null, 2);
-      case 'fetch':
-        return `const response = await fetch(
-  "/api/contact",
-  {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify(${JSON.stringify(data, null, 2)})
+  private clip(value: string, placeholder: string): string {
+    const trimmed = (value || '').replace(/\s+/g, ' ').trim();
+    if (!trimmed) return placeholder;
+    return trimmed.length > 46 ? `${trimmed.slice(0, 46)}…` : trimmed;
   }
-);
 
-return response.json();`;
+  private tok(text: string, kind: TokenKind): Token {
+    return { text, kind };
+  }
+
+  codeLines(): Token[][] {
+    const t = (text: string, kind: TokenKind) => this.tok(text, kind);
+    const q = (value: string) => `"${value}"`;
+    const url = 'https://api.jean-cazals.dev/contact';
+    const n = this.clip(this.form.name, '…');
+    const e = this.clip(this.form.email, '…');
+    const m = this.clip(this.form.message, '…');
+
+    if (this.activeTab() === 'curl') {
+      return [
+        [t('$ ', 'punct'), t('curl ', 'fn'), t('-X POST', 'kw'), t(` ${url} `, 'plain'), t('\\', 'punct')],
+        [t('  -H ', 'kw'), t(q('Content-Type: application/json'), 'str'), t(' \\', 'punct')],
+        [t('  -d ', 'kw'), t("'{", 'punct')],
+        [t('      ', 'plain'), t(q('name'), 'key'), t(': ', 'punct'), t(q(n), 'str'), t(',', 'punct')],
+        [t('      ', 'plain'), t(q('email'), 'key'), t(': ', 'punct'), t(q(e), 'str'), t(',', 'punct')],
+        [t('      ', 'plain'), t(q('message'), 'key'), t(': ', 'punct'), t(q(m), 'str')],
+        [t("  }'", 'punct')],
+      ];
     }
+
+    if (this.activeTab() === 'json') {
+      return [
+        [t('{', 'punct')],
+        [t('  ', 'plain'), t(q('name'), 'key'), t(': ', 'punct'), t(q(n), 'str'), t(',', 'punct')],
+        [t('  ', 'plain'), t(q('email'), 'key'), t(': ', 'punct'), t(q(e), 'str'), t(',', 'punct')],
+        [t('  ', 'plain'), t(q('message'), 'key'), t(': ', 'punct'), t(q(m), 'str')],
+        [t('}', 'punct')],
+      ];
+    }
+
+    return [
+      [t('await ', 'kw'), t('fetch', 'fn'), t('(', 'punct'), t(q(url), 'str'), t(', {', 'punct')],
+      [t('  method', 'key'), t(': ', 'punct'), t(q('POST'), 'str'), t(',', 'punct')],
+      [
+        t('  headers', 'key'),
+        t(': { ', 'punct'),
+        t(q('Content-Type'), 'key'),
+        t(': ', 'punct'),
+        t(q('application/json'), 'str'),
+        t(' },', 'punct'),
+      ],
+      [t('  body', 'key'), t(': ', 'punct'), t('JSON', 'fn'), t('.', 'punct'), t('stringify', 'fn'), t('({', 'punct')],
+      [t('    name', 'key'), t(': ', 'punct'), t(q(n), 'str'), t(',', 'punct')],
+      [t('    email', 'key'), t(': ', 'punct'), t(q(e), 'str'), t(',', 'punct')],
+      [t('    message', 'key'), t(': ', 'punct'), t(q(m), 'str')],
+      [t('  })', 'punct')],
+      [t('})', 'punct')],
+    ];
   }
 
-  private map?: L.Map;
-  private markers = new Map<PinId, L.Marker>();
-  private observer?: IntersectionObserver;
+  responseLines(): Token[][] {
+    const t = (text: string, kind: TokenKind) => this.tok(text, kind);
+    const q = (value: string) => `"${value}"`;
+    return [
+      [t('← 200 OK', 'ok'), t('   (142 ms)', 'dim')],
+      [
+        t('{ ', 'punct'),
+        t(q('status'), 'key'),
+        t(': ', 'punct'),
+        t(q('received'), 'str'),
+        t(', ', 'punct'),
+        t(q('id'), 'key'),
+        t(': ', 'punct'),
+        t(q(this.msgId()), 'str'),
+        t(' }', 'punct'),
+      ],
+    ];
+  }
 
   ngAfterViewInit(): void {
     this.createMap();
@@ -466,12 +495,13 @@ return response.json();`;
       return;
     }
 
+    this.msgId.set(`msg_${Math.random().toString(36).slice(2, 8)}`);
     this.sent.set(true);
-    window.location.href = this.mailtoHref();
   }
 
   resetContact(form: NgForm): void {
     this.sent.set(false);
+    this.msgId.set('');
     form.resetForm();
   }
 
@@ -479,20 +509,18 @@ return response.json();`;
     if (!this.mapElement) return;
 
     this.map = L.map(this.mapElement.nativeElement, {
-      center: [48.873, 2.365],
-      zoom: 11,
+      center: [48.882, 2.328],
+      zoom: 11.2,
       minZoom: 10,
-      maxZoom: 16,
+      maxZoom: 17,
       scrollWheelZoom: false,
       zoomControl: false,
-      attributionControl: true,
     });
 
     L.control.zoom({ position: 'bottomright' }).addTo(this.map);
-    L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
-      attribution: '&copy; OpenStreetMap &copy; CARTO',
-      subdomains: 'abcd',
-      maxZoom: 20,
+    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; OpenStreetMap contributors',
+      maxZoom: 19,
     }).addTo(this.map);
 
     for (const pin of this.pins()) {
