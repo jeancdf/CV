@@ -1,0 +1,45 @@
+@import 'leaflet/dist/leaflet.css';
+
+:root {
+  color-scheme: light;
+  font-family: 'Space Grotesk', sans-serif;
+  background: #f4f1e8;
+  color: #18211d;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+  background: #f4f1e8;
+}
+
+button,
+input,
+textarea {
+  font: inherit;
+}
+
+button,
+a {
+  -webkit-tap-highlight-color: transparent;
+}
+
+a {
+  color: inherit;
+}
+
+::selection {
+  color: #f4f1e8;
+  background: #c0563a;
+}
