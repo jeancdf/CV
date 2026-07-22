@@ -488,6 +488,9 @@ export class AppComponent implements AfterViewInit, OnDestroy {
   private map?: L.Map;
   private markers = new Map<PinId, L.Marker>();
   private observer?: IntersectionObserver;
+  private mapResizeObserver?: ResizeObserver;
+  private mapRefreshFrame?: number;
+  private mapRevealTimer?: number;
 
   contactErrorMessage(): string {
     const error = this.contactError();
@@ -618,18 +621,21 @@ export class AppComponent implements AfterViewInit, OnDestroy {
   }
 
   ngAfterViewInit(): void {
-    this.createMap();
     this.observeSections();
   }
 
   ngOnDestroy(): void {
     this.observer?.disconnect();
+    this.mapResizeObserver?.disconnect();
+    if (this.mapRefreshFrame) cancelAnimationFrame(this.mapRefreshFrame);
+    if (this.mapRevealTimer) window.clearTimeout(this.mapRevealTimer);
     this.map?.remove();
   }
 
   toggleLanguage(): void {
     this.language.update((language) => (language === 'fr' ? 'en' : 'fr'));
     document.documentElement.lang = this.language();
+    this.scheduleMapRefresh();
   }
 
   toggleMenu(): void {
@@ -697,9 +703,10 @@ export class AppComponent implements AfterViewInit, OnDestroy {
   }
 
   private createMap(): void {
-    if (!this.mapElement) return;
+    if (this.map || !this.mapElement) return;
 
-    this.map = L.map(this.mapElement.nativeElement, {
+    const mapContainer = this.mapElement.nativeElement;
+    this.map = L.map(mapContainer, {
       center: [48.882, 2.328],
       zoom: 11.2,
       minZoom: 10,
@@ -728,21 +735,54 @@ export class AppComponent implements AfterViewInit, OnDestroy {
       this.markers.set(pin.id, marker);
     }
 
-    window.setTimeout(() => this.map?.invalidateSize(), 0);
+    if ('ResizeObserver' in window) {
+      this.mapResizeObserver = new ResizeObserver(() => this.scheduleMapRefresh());
+      this.mapResizeObserver.observe(mapContainer);
+    }
+
+    this.map.whenReady(() => this.scheduleMapRefresh());
+  }
+
+  private scheduleMapRefresh(): void {
+    if (!this.map) return;
+    if (this.mapRefreshFrame) cancelAnimationFrame(this.mapRefreshFrame);
+
+    this.mapRefreshFrame = requestAnimationFrame(() => {
+      this.mapRefreshFrame = requestAnimationFrame(() => {
+        this.map?.invalidateSize({ pan: false, debounceMoveend: true });
+        this.mapRefreshFrame = undefined;
+      });
+    });
   }
 
   private observeSections(): void {
-    if (!('IntersectionObserver' in window)) return;
+    const sections = document.querySelectorAll('.reveal');
+
+    if (!('IntersectionObserver' in window)) {
+      sections.forEach((element) => element.classList.add('is-visible'));
+      this.createMap();
+      return;
+    }
 
     this.observer = new IntersectionObserver(
       (entries) => {
         for (const entry of entries) {
-          if (entry.isIntersecting) entry.target.classList.add('is-visible');
+          if (!entry.isIntersecting) continue;
+
+          entry.target.classList.add('is-visible');
+          if (entry.target.id === 'carte') {
+            this.createMap();
+            this.scheduleMapRefresh();
+            if (this.mapRevealTimer) window.clearTimeout(this.mapRevealTimer);
+            this.mapRevealTimer = window.setTimeout(() => this.scheduleMapRefresh(), 750);
+          }
+
+          this.observer?.unobserve(entry.target);
         }
       },
       { threshold: 0.12 },
     );
 
-    document.querySelectorAll('.reveal').forEach((element) => this.observer?.observe(element));
+    sections.forEach((element) => this.observer?.observe(element));
   }
 }
