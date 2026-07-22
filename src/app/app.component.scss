@@ -377,54 +377,137 @@
   }
 }
 
-.experience-list {
-  border-top: 1px solid var(--line-soft);
+.journey-intro {
+  max-width: 680px;
+  margin-bottom: 42px;
+  color: var(--muted);
+  font-size: 16px;
+  line-height: 1.65;
 }
 
-.experience-item {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 32px;
-  padding: 34px 0;
+.journey-list {
+  overflow: hidden;
+  border-top: 1px solid var(--line-soft);
   border-bottom: 1px solid var(--line-soft);
 }
 
-.experience-item__meta {
-  flex-shrink: 0;
-  min-width: 200px;
+.journey-item {
+  display: grid;
+  grid-template-columns: minmax(160px, 190px) 24px minmax(0, 1fr);
+  gap: 18px;
+  padding: 32px 0;
+
+  & + & {
+    border-top: 1px solid var(--line-soft);
+  }
 }
 
-.experience-item__period {
+.journey-item__meta {
+  padding-top: 2px;
+  text-align: right;
+}
+
+.journey-item__period {
   margin: 0;
   color: var(--rust);
   font-family: var(--mono);
   font-size: 12px;
+  line-height: 1.5;
 }
 
-.experience-item__company {
-  margin: 6px 0 0;
-  font-family: var(--serif);
-  font-size: 28px;
+.journey-item__kind {
+  display: inline-flex;
+  margin: 9px 0 0;
+  padding: 5px 9px;
+  border: 1px solid var(--line-soft);
+  border-radius: 999px;
+  color: var(--muted-soft);
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
 }
 
-.experience-item__place {
-  margin: 2px 0 0;
+.journey-item__rail {
+  position: relative;
+  display: flex;
+  justify-content: center;
+
+  &::before {
+    position: absolute;
+    top: -34px;
+    bottom: -34px;
+    width: 1px;
+    background: var(--line-soft);
+    content: '';
+  }
+
+  span {
+    position: relative;
+    z-index: 1;
+    width: 11px;
+    height: 11px;
+    margin-top: 3px;
+    border: 2px solid var(--rust);
+    border-radius: 50%;
+    background: var(--paper);
+    box-shadow: 0 0 0 6px var(--paper);
+  }
+}
+
+.journey-item--experience {
+  .journey-item__kind {
+    border-color: rgba(192, 86, 58, 0.28);
+    background: rgba(192, 86, 58, 0.08);
+    color: var(--rust);
+  }
+
+  .journey-item__rail span {
+    background: var(--rust);
+  }
+}
+
+.journey-item__body {
+  min-width: 0;
+}
+
+.journey-item__heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 24px;
+
+  h3 {
+    margin: 0;
+    font-family: var(--serif);
+    font-size: 29px;
+    font-weight: 400;
+    line-height: 1.05;
+  }
+}
+
+.journey-item__role {
+  margin: 8px 0 0;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.journey-item__place {
+  flex-shrink: 0;
+  margin: 3px 0 0;
   color: var(--muted-soft);
   font-size: 13px;
 }
 
-.experience-item__body {
-  flex: 1;
-  min-width: 300px;
+.journey-item__description {
+  max-width: 680px;
+  margin: 15px 0 0;
+  color: var(--muted);
+  font-size: 15px;
+  line-height: 1.6;
 }
 
-.experience-item__role {
-  margin: 0;
-  font-size: 20px;
-  font-weight: 600;
-}
-
-.experience-item__bullets {
+.journey-item__bullets {
   display: flex;
   flex-direction: column;
   gap: 11px;
@@ -580,41 +663,6 @@
   background: var(--tag-bg);
   color: #6a6456;
   font-size: 10px;
-}
-
-.education-list {
-  border-top: 1px solid var(--line-soft);
-}
-
-.education-list article {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: baseline;
-  gap: 24px;
-  padding: 26px 0;
-  border-bottom: 1px solid var(--line-soft);
-}
-
-.education-list__period {
-  min-width: 220px;
-  margin: 0;
-  color: var(--rust);
-  font-family: var(--mono);
-  font-size: 12px;
-}
-
-.education-list article p:not(.education-list__period) {
-  flex: 1;
-  min-width: 260px;
-  margin: 0;
-  color: var(--muted);
-  font-size: 16px;
-}
-
-.education-list__school {
-  color: var(--ink);
-  font-family: var(--serif);
-  font-size: 26px;
 }
 
 .map-section {
@@ -1256,13 +1304,42 @@
     grid-template-columns: 1fr;
   }
 
-  .experience-item,
-  .education-list article {
+  .journey-item {
+    grid-template-columns: 20px minmax(0, 1fr);
+    gap: 0 16px;
+    padding: 28px 0;
+  }
+
+  .journey-item__meta {
+    grid-column: 2;
+    text-align: left;
+  }
+
+  .journey-item__rail {
+    grid-row: 1 / 3;
+    grid-column: 1;
+    justify-content: flex-start;
+
+    &::before {
+      left: 5px;
+    }
+
+    span {
+      margin-top: 4px;
+    }
+  }
+
+  .journey-item__body {
+    grid-column: 2;
+    margin-top: 18px;
+  }
+
+  .journey-item__heading {
     display: block;
   }
 
-  .experience-item__meta {
-    margin-bottom: 16px;
+  .journey-item__place {
+    margin-top: 8px;
   }
 
   .section__grid {

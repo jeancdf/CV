@@ -65,14 +65,63 @@ const copy = {
       body:
         "Côté front, je travaille surtout avec Angular et React (TypeScript, Tailwind) pour des interfaces modernes et maintenables. Côté back, je construis des API et des systèmes d'authentification avec Spring Boot, NestJS, Node.js, Django et Python. J'interviens sur tout le cycle — analyse, conception, développement, intégration, tests et mise en production — avec un vrai soin pour la qualité, la performance, la sécurité et la maintenabilité.",
     },
-    experience: {
-      title: 'Expérience',
+    journey: {
+      title: 'Parcours',
+      intro:
+        "De ma formation en business à l’ESSEC à mon poste de développeur full-stack chez G7, voici les étapes qui ont construit mon parcours.",
       items: [
         {
+          kind: 'education',
+          label: 'Formation',
+          period: '2018 — 2020',
+          company: 'ESSEC Business School',
+          place: 'France',
+          role: 'E-Bachelor',
+          description: 'Formation en management, commerce et entrepreneuriat.',
+          bullets: [],
+          stack: [],
+        },
+        {
+          kind: 'education',
+          label: 'Formation',
+          period: '2021 · 6 mois',
+          company: "O’clock",
+          place: 'France',
+          role: 'Bootcamp développement web',
+          description: 'Formation intensive de six mois aux fondamentaux du développement web.',
+          bullets: [],
+          stack: [],
+        },
+        {
+          kind: 'education',
+          label: 'Formation',
+          period: 'sept. 2022 — oct. 2024',
+          company: 'HETIC',
+          place: 'Montreuil, France',
+          role: 'Licence Développeur Web',
+          description: "Conception et développement d’applications web, du front-end au back-end.",
+          bullets: [],
+          stack: [],
+        },
+        {
+          kind: 'education',
+          label: 'Formation',
+          period: 'oct. 2024 — déc. 2026',
+          company: 'HETIC',
+          place: 'Montreuil, France',
+          role: 'Master CTO & Tech Lead',
+          description: 'Architecture, management technique et pilotage de produits numériques.',
+          bullets: [],
+          stack: [],
+        },
+        {
+          kind: 'experience',
+          label: 'Expérience',
           period: "2024 — aujourd'hui",
           company: 'G7 Taxis',
           place: 'Paris, France',
           role: 'Développeur web full-stack',
+          description: '',
           bullets: [
             "Développement et maintenance des outils internes de l'entreprise.",
             'Logiciel de prise de commande et de dispatch des taxis.',
@@ -112,13 +161,6 @@ const copy = {
             "Un CRM pour gérer les membres d'un club de golf : adhésions, réservations et suivi de l'activité.",
           stack: ['Angular', 'Spring Boot', 'PostgreSQL'],
         },
-      ],
-    },
-    education: {
-      title: 'Formation',
-      items: [
-        { period: 'oct. 2024 — déc. 2026', school: 'HETIC', degree: 'Master, CTO & Tech Lead' },
-        { period: 'sept. 2022 — oct. 2024', school: 'HETIC', degree: 'Licence, Développeur Web' },
       ],
     },
     map: {
@@ -215,14 +257,63 @@ const copy = {
       body:
         "On the front end I mostly work with Angular and React (TypeScript, Tailwind) for modern, maintainable interfaces. On the back end I build APIs and authentication systems with Spring Boot, NestJS, Node.js, Django and Python. I cover the whole cycle — analysis, design, development, integration, testing and production — with real care for quality, performance, security and maintainability.",
     },
-    experience: {
-      title: 'Experience',
+    journey: {
+      title: 'Career & education',
+      intro:
+        'From studying business at ESSEC to working as a full-stack developer at G7, these are the steps that shaped my path.',
       items: [
         {
+          kind: 'education',
+          label: 'Education',
+          period: '2018 — 2020',
+          company: 'ESSEC Business School',
+          place: 'France',
+          role: 'E-Bachelor',
+          description: 'Coursework in management, business and entrepreneurship.',
+          bullets: [],
+          stack: [],
+        },
+        {
+          kind: 'education',
+          label: 'Education',
+          period: '2021 · 6 months',
+          company: "O’clock",
+          place: 'France',
+          role: 'Web development bootcamp',
+          description: 'Six-month intensive course covering the fundamentals of web development.',
+          bullets: [],
+          stack: [],
+        },
+        {
+          kind: 'education',
+          label: 'Education',
+          period: 'Sep 2022 — Oct 2024',
+          company: 'HETIC',
+          place: 'Montreuil, France',
+          role: "Bachelor's in Web Development",
+          description: 'Designing and building web applications across the front end and back end.',
+          bullets: [],
+          stack: [],
+        },
+        {
+          kind: 'education',
+          label: 'Education',
+          period: 'Oct 2024 — Dec 2026',
+          company: 'HETIC',
+          place: 'Montreuil, France',
+          role: "Master's in CTO & Tech Lead",
+          description: 'Software architecture, technical leadership and digital product delivery.',
+          bullets: [],
+          stack: [],
+        },
+        {
+          kind: 'experience',
+          label: 'Experience',
           period: '2024 — present',
           company: 'G7 Taxis',
           place: 'Paris, France',
           role: 'Full-stack web developer',
+          description: '',
           bullets: [
             "Building and maintaining the company's internal tools.",
             'Taxi ordering and dispatch software.',
@@ -260,13 +351,6 @@ const copy = {
           description: "A CRM to manage a golf club's members: memberships, bookings and activity tracking.",
           stack: ['Angular', 'Spring Boot', 'PostgreSQL'],
         },
-      ],
-    },
-    education: {
-      title: 'Education',
-      items: [
-        { period: 'Oct 2024 — Dec 2026', school: 'HETIC', degree: "Master's, CTO & Tech Lead" },
-        { period: 'Sep 2022 — Oct 2024', school: 'HETIC', degree: "Bachelor's, Web Developer" },
       ],
     },
     map: {

@@ -86,27 +86,41 @@
     <div class="shell">
       <div class="section__head section__head--inline">
         <span class="section__index">02</span>
-        <h2>{{ t().experience.title }}</h2>
+        <h2>{{ t().journey.title }}</h2>
       </div>
+      <p class="section__intro journey-intro">{{ t().journey.intro }}</p>
 
-      <div class="experience-list">
-        @for (job of t().experience.items; track job.company) {
-          <article class="experience-item">
-            <div class="experience-item__meta">
-              <p class="experience-item__period">{{ job.period }}</p>
-              <p class="experience-item__company">{{ job.company }}</p>
-              <p class="experience-item__place">{{ job.place }}</p>
+      <div class="journey-list">
+        @for (item of t().journey.items; track item.period) {
+          <article class="journey-item" [class.journey-item--experience]="item.kind === 'experience'">
+            <div class="journey-item__meta">
+              <p class="journey-item__period">{{ item.period }}</p>
+              <p class="journey-item__kind">{{ item.label }}</p>
             </div>
-            <div class="experience-item__body">
-              <p class="experience-item__role">{{ job.role }}</p>
-              <ul class="experience-item__bullets">
-                @for (bullet of job.bullets; track bullet) {
-                  <li><span aria-hidden="true">—</span>{{ bullet }}</li>
-                }
-              </ul>
-              <div class="tag-pills">
-                @for (technology of job.stack; track technology) { <span>{{ technology }}</span> }
+            <div class="journey-item__rail" aria-hidden="true"><span></span></div>
+            <div class="journey-item__body">
+              <div class="journey-item__heading">
+                <div>
+                  <h3>{{ item.company }}</h3>
+                  <p class="journey-item__role">{{ item.role }}</p>
+                </div>
+                <p class="journey-item__place">{{ item.place }}</p>
               </div>
+              @if (item.description) {
+                <p class="journey-item__description">{{ item.description }}</p>
+              }
+              @if (item.bullets.length) {
+                <ul class="journey-item__bullets">
+                  @for (bullet of item.bullets; track bullet) {
+                    <li><span aria-hidden="true">—</span>{{ bullet }}</li>
+                  }
+                </ul>
+              }
+              @if (item.stack.length) {
+                <div class="tag-pills">
+                  @for (technology of item.stack; track technology) { <span>{{ technology }}</span> }
+                </div>
+              }
             </div>
           </article>
         }
@@ -160,28 +174,10 @@
     </div>
   </section>
 
-  <section id="formation" class="section reveal">
-    <div class="shell">
-      <div class="section__head section__head--inline">
-        <span class="section__index">05</span>
-        <h2>{{ t().education.title }}</h2>
-      </div>
-
-      <div class="education-list">
-        @for (item of t().education.items; track item.period) {
-          <article>
-            <p class="education-list__period">{{ item.period }}</p>
-            <p><span class="education-list__school">{{ item.school }}</span> — {{ item.degree }}</p>
-          </article>
-        }
-      </div>
-    </div>
-  </section>
-
   <section id="carte" class="section map-section reveal">
     <div class="shell">
       <div class="section__head section__head--inline section__head--light">
-        <span class="section__index section__index--light">06</span>
+        <span class="section__index section__index--light">05</span>
         <h2>{{ t().map.title }}</h2>
       </div>
       <p class="section__intro section__intro--light">{{ t().map.intro }}</p>
@@ -210,7 +206,7 @@
   <section id="hobbies" class="section reveal">
     <div class="shell">
       <div class="section__head section__head--inline">
-        <span class="section__index">07</span>
+        <span class="section__index">06</span>
         <h2>{{ t().hobbies.title }}</h2>
       </div>
       <div class="hobbies-list">
@@ -225,7 +221,7 @@
   <section id="contact" class="section contact-section reveal">
     <div class="shell contact-layout">
       <div class="contact-copy">
-        <span class="section__index section__index--light">08</span>
+        <span class="section__index section__index--light">07</span>
         <h2>{{ t().contact.title }}</h2>
         <p>{{ t().contact.body }}</p>
 
