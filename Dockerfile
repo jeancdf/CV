@@ -12,6 +12,7 @@ ENV PORT=80
 COPY package*.json ./
 RUN npm ci --omit=dev
 COPY server.mjs ./
+COPY email-templates.mjs ./
 COPY --from=build /app/dist/jean-cazals-cv/browser ./dist/jean-cazals-cv/browser
 EXPOSE 80
 CMD ["node", "server.mjs"]

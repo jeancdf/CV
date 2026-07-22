@@ -8,6 +8,8 @@ import { rateLimit } from 'express-rate-limit';
 import helmet from 'helmet';
 import nodemailer from 'nodemailer';
 
+import { confirmationEmail, ownerNotificationEmail } from './email-templates.mjs';
+
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const staticDirectory = path.join(__dirname, 'dist', 'jean-cazals-cv', 'browser');
 const indexFile = path.join(staticDirectory, 'index.html');
@@ -77,34 +79,6 @@ function isValidEmail(email) {
   return email.length <= 254 && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 }
 
-function escapeHtml(value) {
-  return value
-    .replaceAll('&', '&amp;')
-    .replaceAll('<', '&lt;')
-    .replaceAll('>', '&gt;')
-    .replaceAll('"', '&quot;')
-    .replaceAll("'", '&#039;');
-}
-
-function confirmationCopy(language, name, message) {
-  const safeName = escapeHtml(name);
-  const safeMessage = escapeHtml(message).replaceAll('\n', '<br />');
-
-  if (language === 'en') {
-    return {
-      subject: 'Your message to Jean Cazals has been received',
-      text: `Hello ${name},\n\nThank you for your message. I have received your request and will reply personally as soon as possible.\n\nYour message:\n${message}\n\nJean Cazals`,
-      html: `<p>Hello ${safeName},</p><p>Thank you for your message. I have received your request and will reply personally as soon as possible.</p><p><strong>Your message:</strong><br />${safeMessage}</p><p>Jean Cazals</p>`,
-    };
-  }
-
-  return {
-    subject: 'Votre message à Jean Cazals a bien été reçu',
-    text: `Bonjour ${name},\n\nMerci pour votre message. J’ai bien reçu votre demande et je vous répondrai personnellement dès que possible.\n\nVotre message :\n${message}\n\nJean Cazals`,
-    html: `<p>Bonjour ${safeName},</p><p>Merci pour votre message. J’ai bien reçu votre demande et je vous répondrai personnellement dès que possible.</p><p><strong>Votre message :</strong><br />${safeMessage}</p><p>Jean Cazals</p>`,
-  };
-}
-
 app.post('/api/contact', contactLimiter, async (request, response) => {
   const name = normalizeSingleLine(request.body?.name);
   const email = normalizeSingleLine(request.body?.email).toLowerCase();
@@ -133,10 +107,8 @@ app.post('/api/contact', contactLimiter, async (request, response) => {
   }
 
   const requestId = randomUUID();
-  const safeName = escapeHtml(name);
-  const safeEmail = escapeHtml(email);
-  const safeMessage = escapeHtml(message).replaceAll('\n', '<br />');
-  const confirmation = confirmationCopy(language, name, message);
+  const ownerNotification = ownerNotificationEmail({ name, email, message, requestId, language });
+  const confirmation = confirmationEmail({ language, name, message });
 
   try {
     await Promise.all([
@@ -144,9 +116,9 @@ app.post('/api/contact', contactLimiter, async (request, response) => {
         from: mailFrom,
         to: contactEmail,
         replyTo: { name, address: email },
-        subject: `[CV] Nouvelle demande de ${name}`,
-        text: `Nouvelle demande depuis le CV\n\nNom : ${name}\nE-mail : ${email}\n\nMessage :\n${message}\n\nRéférence : ${requestId}`,
-        html: `<h2>Nouvelle demande depuis le CV</h2><p><strong>Nom :</strong> ${safeName}<br /><strong>E-mail :</strong> ${safeEmail}</p><p><strong>Message :</strong><br />${safeMessage}</p><p><small>Référence : ${requestId}</small></p>`,
+        subject: ownerNotification.subject,
+        text: ownerNotification.text,
+        html: ownerNotification.html,
         headers: { 'X-Contact-Request-Id': requestId },
       }),
       transporter.sendMail({
