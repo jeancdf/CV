@@ -22,9 +22,14 @@
         <a href="#contact" (click)="closeMenu()">{{ t().nav.contact }}</a>
       </div>
       <button class="lang-pill" type="button" (click)="toggleLanguage()">
-        <span [class.active]="language() === 'fr'">FR</span> / <span [class.active]="language() === 'en'">EN</span>
+        <span [class.active]="language() === 'fr'">FR</span> /
+        <span [class.active]="language() === 'en'">EN</span>
       </button>
-      <a class="button button--dark button--small" href="uploads/Profile.pdf" download="CV-Jean-Cazals.pdf">
+      <a
+        class="button button--dark button--small"
+        href="uploads/Profile.pdf"
+        download="CV-Jean-Cazals.pdf"
+      >
         {{ t().nav.cv }}
       </a>
     </div>
@@ -42,7 +47,9 @@
     <div class="hero__row">
       <div class="hero__primary">
         <h1>Jean<br />Cazals</h1>
-        <p class="hero__role">{{ t().hero.role }} <span>{{ t().hero.roleTail }}</span></p>
+        <p class="hero__role">
+          {{ t().hero.role }} <span>{{ t().hero.roleTail }}</span>
+        </p>
         <p class="hero__tagline">{{ t().hero.tagline }}</p>
         <div class="hero__actions">
           <a class="button button--dark" href="#parcours">{{ t().hero.primary }}</a>
@@ -92,7 +99,10 @@
 
       <div class="journey-list">
         @for (item of t().journey.items; track item.period) {
-          <article class="journey-item" [class.journey-item--experience]="item.kind === 'experience'">
+          <article
+            class="journey-item"
+            [class.journey-item--experience]="item.kind === 'experience'"
+          >
             <div class="journey-item__meta">
               <p class="journey-item__period">{{ item.period }}</p>
               <p class="journey-item__kind">{{ item.label }}</p>
@@ -118,7 +128,9 @@
               }
               @if (item.stack.length) {
                 <div class="tag-pills">
-                  @for (technology of item.stack; track technology) { <span>{{ technology }}</span> }
+                  @for (technology of item.stack; track technology) {
+                    <span>{{ technology }}</span>
+                  }
                 </div>
               }
             </div>
@@ -140,7 +152,9 @@
           <article class="skill-group">
             <p class="skill-group__name">{{ group.name }}</p>
             <ul>
-              @for (item of group.items; track item) { <li><span aria-hidden="true"></span>{{ item }}</li> }
+              @for (item of group.items; track item) {
+                <li><span aria-hidden="true"></span>{{ item }}</li>
+              }
             </ul>
           </article>
         }
@@ -166,7 +180,9 @@
             <h3>{{ project.name }}</h3>
             <p class="project-card__description">{{ project.description }}</p>
             <div class="tag-pills">
-              @for (technology of project.stack; track technology) { <span>{{ technology }}</span> }
+              @for (technology of project.stack; track technology) {
+                <span>{{ technology }}</span>
+              }
             </div>
           </article>
         }
@@ -183,11 +199,19 @@
       <p class="section__intro section__intro--light">{{ t().map.intro }}</p>
 
       <div class="map-layout">
-        <div #mapElement class="map-frame" aria-label="Carte des lieux du parcours de Jean Cazals"></div>
+        <div
+          #mapElement
+          class="map-frame"
+          aria-label="Carte des lieux du parcours de Jean Cazals"
+        ></div>
         <aside class="map-panel">
           <div class="map-panel__nav">
             @for (pin of pins(); track pin.id) {
-              <button type="button" [class.active]="selectedPinId() === pin.id" (click)="selectPin(pin.id)">
+              <button
+                type="button"
+                [class.active]="selectedPinId() === pin.id"
+                (click)="selectPin(pin.id)"
+              >
                 <i [style.background]="pin.color"></i>{{ pin.short }}
               </button>
             }
@@ -211,7 +235,10 @@
       </div>
       <div class="hobbies-list">
         @for (item of t().hobbies.items; track item.label) {
-          <div class="hobby-pill"><span>{{ item.i }}</span>{{ item.label }}</div>
+          <div class="hobby-pill">
+            <span>{{ item.i }}</span
+            >{{ item.label }}
+          </div>
         }
       </div>
       <p class="hobbies-note">{{ t().hobbies.note }}</p>
@@ -225,7 +252,12 @@
         <h2>{{ t().contact.title }}</h2>
         <p>{{ t().contact.body }}</p>
 
-        <form #contactForm="ngForm" class="terminal" (ngSubmit)="submitContact(contactForm)" novalidate>
+        <form
+          #contactForm="ngForm"
+          class="terminal"
+          (ngSubmit)="submitContact(contactForm)"
+          novalidate
+        >
           <div class="terminal__bar">
             <span></span><span></span><span></span>
             <p>~/contact.request.ts</p>
@@ -263,14 +295,18 @@
                   [placeholder]="'&quot;' + t().contact.message + '&quot;'"
                 ></textarea>
               </label>
-              <button class="terminal__submit" type="submit"><span aria-hidden="true">▶</span>{{ t().contact.run }}</button>
+              <button class="terminal__submit" type="submit">
+                <span aria-hidden="true">▶</span>{{ t().contact.run }}
+              </button>
             } @else {
               <div class="terminal__sent">
                 <p class="terminal__status">✓ 200 OK — {{ t().contact.queued }}</p>
                 <h3>{{ t().contact.sentTitle }}</h3>
                 <p>{{ t().contact.sentBody }}</p>
                 <a class="button button--dark" [href]="mailtoHref()">{{ t().contact.sentCta }}</a>
-                <button type="button" (click)="resetContact(contactForm)">{{ t().contact.reset }}</button>
+                <button type="button" (click)="resetContact(contactForm)">
+                  {{ t().contact.reset }}
+                </button>
               </div>
             }
           </div>
@@ -279,14 +315,36 @@
 
       <div class="code-window">
         <div class="code-window__tabs">
-          <button type="button" [class.active]="activeTab() === 'fetch'" (click)="setTab('fetch')">fetch()</button>
-          <button type="button" [class.active]="activeTab() === 'curl'" (click)="setTab('curl')">cURL</button>
-          <button type="button" [class.active]="activeTab() === 'json'" (click)="setTab('json')">JSON</button>
+          <button type="button" [class.active]="activeTab() === 'fetch'" (click)="setTab('fetch')">
+            fetch()
+          </button>
+          <button type="button" [class.active]="activeTab() === 'curl'" (click)="setTab('curl')">
+            cURL
+          </button>
+          <button type="button" [class.active]="activeTab() === 'json'" (click)="setTab('json')">
+            JSON
+          </button>
           <span class="code-window__live"><i></i>{{ t().contact.live }}</span>
         </div>
-        <div class="code-window__pre">@for (line of codeLines(); track $index) {<div class="code-line">@for (token of line; track $index) {<span [class]="'tok-' + token.kind">{{ token.text }}</span>}</div>}</div>
+        <div class="code-window__pre">
+          @for (line of codeLines(); track $index) {
+            <div class="code-line">
+              @for (token of line; track $index) {
+                <span [class]="'tok-' + token.kind">{{ token.text }}</span>
+              }
+            </div>
+          }
+        </div>
         @if (sent()) {
-          <div class="code-window__response">@for (line of responseLines(); track $index) {<div class="code-line">@for (token of line; track $index) {<span [class]="'tok-' + token.kind">{{ token.text }}</span>}</div>}</div>
+          <div class="code-window__response">
+            @for (line of responseLines(); track $index) {
+              <div class="code-line">
+                @for (token of line; track $index) {
+                  <span [class]="'tok-' + token.kind">{{ token.text }}</span>
+                }
+              </div>
+            }
+          </div>
         }
         <p class="code-window__hint">{{ t().contact.codeHint }}</p>
       </div>

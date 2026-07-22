@@ -60,15 +60,13 @@ const copy = {
     },
     about: {
       title: 'À propos',
-      lead:
-        'Développeur full-stack confiant et direct : je pars du besoin réel et je livre des solutions concrètes, fiables et pensées pour ceux qui les utilisent.',
-      body:
-        "Côté front, je travaille surtout avec Angular et React (TypeScript, Tailwind) pour des interfaces modernes et maintenables. Côté back, je construis des API et des systèmes d'authentification avec Spring Boot, NestJS, Node.js, Django et Python. J'interviens sur tout le cycle — analyse, conception, développement, intégration, tests et mise en production — avec un vrai soin pour la qualité, la performance, la sécurité et la maintenabilité.",
+      lead: 'Développeur full-stack confiant et direct : je pars du besoin réel et je livre des solutions concrètes, fiables et pensées pour ceux qui les utilisent.',
+      body: "Côté front, je travaille surtout avec Angular et React (TypeScript, Tailwind) pour des interfaces modernes et maintenables. Côté back, je construis des API et des systèmes d'authentification avec Spring Boot, NestJS, Node.js, Django et Python. J'interviens sur tout le cycle — analyse, conception, développement, intégration, tests et mise en production — avec un vrai soin pour la qualité, la performance, la sécurité et la maintenabilité.",
     },
     journey: {
       title: 'Parcours',
       intro:
-        "De ma formation en business à l’ESSEC à mon poste de développeur full-stack chez G7, voici les étapes qui ont construit mon parcours.",
+        'De ma formation en business à l’ESSEC à mon poste de développeur full-stack chez G7, voici les étapes qui ont construit mon parcours.',
       items: [
         {
           kind: 'education',
@@ -85,7 +83,7 @@ const copy = {
           kind: 'education',
           label: 'Formation',
           period: '2021 · 6 mois',
-          company: "O’clock",
+          company: 'O’clock',
           place: 'France',
           role: 'Bootcamp développement web',
           description: 'Formation intensive de six mois aux fondamentaux du développement web.',
@@ -99,7 +97,7 @@ const copy = {
           company: 'HETIC',
           place: 'Montreuil, France',
           role: 'Licence Développeur Web',
-          description: "Conception et développement d’applications web, du front-end au back-end.",
+          description: 'Conception et développement d’applications web, du front-end au back-end.',
           bullets: [],
           stack: [],
         },
@@ -128,14 +126,26 @@ const copy = {
             'CRM de gestion des taxis et des chauffeurs.',
             'Deux outils de test des microservices critiques de la société.',
           ],
-          stack: ['Angular', 'React', 'TypeScript', 'NestJS', 'Spring Boot', 'PostgreSQL', 'MongoDB', 'Docker'],
+          stack: [
+            'Angular',
+            'React',
+            'TypeScript',
+            'NestJS',
+            'Spring Boot',
+            'PostgreSQL',
+            'MongoDB',
+            'Docker',
+          ],
         },
       ],
     },
     skills: {
       title: 'Compétences techniques',
       groups: [
-        { name: 'Front-end', items: ['Angular', 'React', 'TypeScript', 'Bootstrap', 'Tailwind CSS'] },
+        {
+          name: 'Front-end',
+          items: ['Angular', 'React', 'TypeScript', 'Bootstrap', 'Tailwind CSS'],
+        },
         { name: 'Back-end', items: ['Spring Boot', 'NestJS', 'Node.js', 'Django', 'Python'] },
         { name: 'Bases de données', items: ['PostgreSQL', 'SQL', 'MongoDB'] },
         { name: 'DevOps & outils', items: ['Docker', 'GitLab CI/CD', 'GitHub Actions', 'Git'] },
@@ -150,7 +160,7 @@ const copy = {
           status: 'En cours',
           name: 'Gestion de mariage',
           description:
-            "Une plateforme pour organiser un mariage de A à Z : invités, prestataires, budget et planning au même endroit.",
+            'Une plateforme pour organiser un mariage de A à Z : invités, prestataires, budget et planning au même endroit.',
           stack: ['React', 'NestJS', 'PostgreSQL'],
         },
         {
@@ -219,7 +229,8 @@ const copy = {
       queued: 'message reçu',
       codeHint: '// requête générée en temps réel — fetch, cURL ou JSON, au choix',
       sentTitle: 'Merci !',
-      sentBody: "Votre message est prêt à partir. Cliquez ci-dessous pour l'envoyer depuis votre messagerie.",
+      sentBody:
+        "Votre message est prêt à partir. Cliquez ci-dessous pour l'envoyer depuis votre messagerie.",
       sentCta: "Ouvrir l'email",
       reset: 'Écrire un autre message',
     },
@@ -252,10 +263,8 @@ const copy = {
     },
     about: {
       title: 'About',
-      lead:
-        'A confident, straight-to-the-point full-stack developer: I start from the real need and ship concrete, reliable solutions built for the people who use them.',
-      body:
-        "On the front end I mostly work with Angular and React (TypeScript, Tailwind) for modern, maintainable interfaces. On the back end I build APIs and authentication systems with Spring Boot, NestJS, Node.js, Django and Python. I cover the whole cycle — analysis, design, development, integration, testing and production — with real care for quality, performance, security and maintainability.",
+      lead: 'A confident, straight-to-the-point full-stack developer: I start from the real need and ship concrete, reliable solutions built for the people who use them.',
+      body: 'On the front end I mostly work with Angular and React (TypeScript, Tailwind) for modern, maintainable interfaces. On the back end I build APIs and authentication systems with Spring Boot, NestJS, Node.js, Django and Python. I cover the whole cycle — analysis, design, development, integration, testing and production — with real care for quality, performance, security and maintainability.',
     },
     journey: {
       title: 'Career & education',
@@ -277,7 +286,7 @@ const copy = {
           kind: 'education',
           label: 'Education',
           period: '2021 · 6 months',
-          company: "O’clock",
+          company: 'O’clock',
           place: 'France',
           role: 'Web development bootcamp',
           description: 'Six-month intensive course covering the fundamentals of web development.',
@@ -320,14 +329,26 @@ const copy = {
             'CRM to manage taxis and drivers.',
             "Two testing tools for the company's critical microservices.",
           ],
-          stack: ['Angular', 'React', 'TypeScript', 'NestJS', 'Spring Boot', 'PostgreSQL', 'MongoDB', 'Docker'],
+          stack: [
+            'Angular',
+            'React',
+            'TypeScript',
+            'NestJS',
+            'Spring Boot',
+            'PostgreSQL',
+            'MongoDB',
+            'Docker',
+          ],
         },
       ],
     },
     skills: {
       title: 'Technical skills',
       groups: [
-        { name: 'Front-end', items: ['Angular', 'React', 'TypeScript', 'Bootstrap', 'Tailwind CSS'] },
+        {
+          name: 'Front-end',
+          items: ['Angular', 'React', 'TypeScript', 'Bootstrap', 'Tailwind CSS'],
+        },
         { name: 'Back-end', items: ['Spring Boot', 'NestJS', 'Node.js', 'Django', 'Python'] },
         { name: 'Databases', items: ['PostgreSQL', 'SQL', 'MongoDB'] },
         { name: 'DevOps & tools', items: ['Docker', 'GitLab CI/CD', 'GitHub Actions', 'Git'] },
@@ -341,14 +362,16 @@ const copy = {
           no: 'P1',
           status: 'In progress',
           name: 'Wedding planner',
-          description: 'A platform to organize a wedding end to end: guests, vendors, budget and schedule in one place.',
+          description:
+            'A platform to organize a wedding end to end: guests, vendors, budget and schedule in one place.',
           stack: ['React', 'NestJS', 'PostgreSQL'],
         },
         {
           no: 'P2',
           status: 'In progress',
           name: 'Golf club CRM',
-          description: "A CRM to manage a golf club's members: memberships, bookings and activity tracking.",
+          description:
+            "A CRM to manage a golf club's members: memberships, bookings and activity tracking.",
           stack: ['Angular', 'Spring Boot', 'PostgreSQL'],
         },
       ],
@@ -361,13 +384,15 @@ const copy = {
         g7: {
           name: 'G7 Taxis',
           tag: 'EXPERIENCE',
-          description: 'Full-stack developer on internal tools: taxi dispatch, CRM and testing of critical microservices.',
+          description:
+            'Full-stack developer on internal tools: taxi dispatch, CRM and testing of critical microservices.',
           short: 'G7',
         },
         hetic: {
           name: 'HETIC',
           tag: 'EDUCATION',
-          description: "Web school in Montreuil: Web Developer bachelor's then CTO & Tech Lead master's (2022 → 2026).",
+          description:
+            "Web school in Montreuil: Web Developer bachelor's then CTO & Tech Lead master's (2022 → 2026).",
           short: 'HETIC',
         },
         mariage: {
@@ -380,7 +405,8 @@ const copy = {
         golf: {
           name: 'Golf club CRM',
           tag: 'PROJECT · SOON',
-          description: "CRM to manage a golf club's members: memberships, bookings and tracking. Currently in development.",
+          description:
+            "CRM to manage a golf club's members: memberships, bookings and tracking. Currently in development.",
           short: 'Project · Golf',
         },
       },
@@ -454,7 +480,9 @@ export class AppComponent implements AfterViewInit, OnDestroy {
 
   mailtoHref(): string {
     const subject = encodeURIComponent(`Contact — ${this.form.name || 'Nouveau message'}`);
-    const body = encodeURIComponent(`${this.form.message}\n\n${this.form.name}\n${this.form.email}`);
+    const body = encodeURIComponent(
+      `${this.form.message}\n\n${this.form.name}\n${this.form.email}`,
+    );
     return `mailto:jeancdfpro@gmail.com?subject=${subject}&body=${body}`;
   }
 
@@ -478,11 +506,29 @@ export class AppComponent implements AfterViewInit, OnDestroy {
 
     if (this.activeTab() === 'curl') {
       return [
-        [t('$ ', 'punct'), t('curl ', 'fn'), t('-X POST', 'kw'), t(` ${url} `, 'plain'), t('\\', 'punct')],
+        [
+          t('$ ', 'punct'),
+          t('curl ', 'fn'),
+          t('-X POST', 'kw'),
+          t(` ${url} `, 'plain'),
+          t('\\', 'punct'),
+        ],
         [t('  -H ', 'kw'), t(q('Content-Type: application/json'), 'str'), t(' \\', 'punct')],
         [t('  -d ', 'kw'), t("'{", 'punct')],
-        [t('      ', 'plain'), t(q('name'), 'key'), t(': ', 'punct'), t(q(n), 'str'), t(',', 'punct')],
-        [t('      ', 'plain'), t(q('email'), 'key'), t(': ', 'punct'), t(q(e), 'str'), t(',', 'punct')],
+        [
+          t('      ', 'plain'),
+          t(q('name'), 'key'),
+          t(': ', 'punct'),
+          t(q(n), 'str'),
+          t(',', 'punct'),
+        ],
+        [
+          t('      ', 'plain'),
+          t(q('email'), 'key'),
+          t(': ', 'punct'),
+          t(q(e), 'str'),
+          t(',', 'punct'),
+        ],
         [t('      ', 'plain'), t(q('message'), 'key'), t(': ', 'punct'), t(q(m), 'str')],
         [t("  }'", 'punct')],
       ];
@@ -509,7 +555,14 @@ export class AppComponent implements AfterViewInit, OnDestroy {
         t(q('application/json'), 'str'),
         t(' },', 'punct'),
       ],
-      [t('  body', 'key'), t(': ', 'punct'), t('JSON', 'fn'), t('.', 'punct'), t('stringify', 'fn'), t('({', 'punct')],
+      [
+        t('  body', 'key'),
+        t(': ', 'punct'),
+        t('JSON', 'fn'),
+        t('.', 'punct'),
+        t('stringify', 'fn'),
+        t('({', 'punct'),
+      ],
       [t('    name', 'key'), t(': ', 'punct'), t(q(n), 'str'), t(',', 'punct')],
       [t('    email', 'key'), t(': ', 'punct'), t(q(e), 'str'), t(',', 'punct')],
       [t('    message', 'key'), t(': ', 'punct'), t(q(m), 'str')],
