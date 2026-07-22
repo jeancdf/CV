@@ -1,6 +1,6 @@
-<nav class="nav" aria-label="Navigation principale">
-  <div class="nav__inner shell">
-    <a class="logo" href="#top" (click)="closeMenu()">Jean Cazals<span>.</span></a>
+<nav class="site-nav" aria-label="Navigation principale">
+  <div class="site-nav__inner shell">
+    <a class="site-nav__logo" href="#top" (click)="closeMenu()">Jean Cazals</a>
 
     <button
       class="menu-toggle"
@@ -13,109 +13,99 @@
       <span></span><span></span>
     </button>
 
-    <div class="nav__panel" [class.is-open]="mobileMenuOpen()">
-      <div class="nav__links">
+    <div class="site-nav__panel" [class.is-open]="mobileMenuOpen()">
+      <div class="site-nav__links">
         <a href="#apropos" (click)="closeMenu()">{{ t().nav.about }}</a>
         <a href="#parcours" (click)="closeMenu()">{{ t().nav.experience }}</a>
         <a href="#competences" (click)="closeMenu()">{{ t().nav.skills }}</a>
         <a href="#carte" (click)="closeMenu()">{{ t().nav.map }}</a>
         <a href="#contact" (click)="closeMenu()">{{ t().nav.contact }}</a>
       </div>
-      <button class="language" type="button" (click)="toggleLanguage()">
-        <span [class.active]="language() === 'fr'">FR</span>
-        <i></i>
-        <span [class.active]="language() === 'en'">EN</span>
+      <button class="lang-pill" type="button" (click)="toggleLanguage()">
+        <span [class.active]="language() === 'fr'">FR</span> / <span [class.active]="language() === 'en'">EN</span>
       </button>
-      <a class="button button--small" href="uploads/Profile.pdf" download="CV-Jean-Cazals.pdf">
-        {{ t().nav.cv }} <span aria-hidden="true">↓</span>
+      <a class="button button--dark button--small" href="uploads/Profile.pdf" download="CV-Jean-Cazals.pdf">
+        {{ t().nav.cv }}
       </a>
     </div>
   </div>
 </nav>
 
 <main>
-  <header id="top" class="hero">
-    <div class="hero__grid" aria-hidden="true"></div>
-    <div class="hero__orb" aria-hidden="true"><span>JC</span></div>
-    <div class="hero__inner shell">
-      <div class="eyebrow">
-        <span>{{ t().hero.eyebrow }}</span>
-        <i></i>
-        <span class="availability"><b></b>{{ t().hero.available }}</span>
-      </div>
+  <header id="top" class="hero shell">
+    <p class="hero__eyebrow">
+      <span>{{ t().hero.eyebrow }}</span>
+      <span class="hero__dot" aria-hidden="true">●</span>
+      <span>{{ t().hero.available }}</span>
+    </p>
 
-      <div class="hero__content">
-        <div class="hero__primary">
-          <p class="hero__kicker">Portfolio / 2026</p>
-          <h1>Jean<br><em>Cazals</em></h1>
-          <p class="hero__role">{{ t().hero.role }} <span>{{ t().hero.roleTail }}</span></p>
-          <p class="hero__tagline">{{ t().hero.tagline }}</p>
-          <div class="hero__actions">
-            <a class="button" href="#parcours">{{ t().hero.primary }} <span aria-hidden="true">↘</span></a>
-            <a class="text-link" href="#contact">{{ t().hero.secondary }} <span aria-hidden="true">→</span></a>
-          </div>
+    <div class="hero__row">
+      <div class="hero__primary">
+        <h1>Jean<br />Cazals</h1>
+        <p class="hero__role">{{ t().hero.role }} <span>{{ t().hero.roleTail }}</span></p>
+        <p class="hero__tagline">{{ t().hero.tagline }}</p>
+        <div class="hero__actions">
+          <a class="button button--dark" href="#parcours">{{ t().hero.primary }}</a>
+          <a class="button button--outline" href="#contact">{{ t().hero.secondary }}</a>
         </div>
-
-        <dl class="hero__meta">
-          <div>
-            <dt>{{ t().hero.locationLabel }}</dt>
-            <dd>Paris, Île-de-France</dd>
-          </div>
-          <div>
-            <dt>{{ t().hero.experienceLabel }}</dt>
-            <dd>{{ t().hero.experienceValue }}</dd>
-          </div>
-          <div>
-            <dt>{{ t().hero.currentLabel }}</dt>
-            <dd>G7 Taxis</dd>
-          </div>
-        </dl>
       </div>
 
-      <a class="scroll-cue" href="#apropos">
-        <span aria-hidden="true">↓</span>
-        {{ t().hero.scroll }}
-      </a>
+      <dl class="hero__meta">
+        <div>
+          <dt>{{ t().hero.locationLabel }}</dt>
+          <dd>Paris, Île-de-France</dd>
+        </div>
+        <div>
+          <dt>{{ t().hero.experienceLabel }}</dt>
+          <dd>{{ t().hero.experienceValue }}</dd>
+        </div>
+        <div>
+          <dt>{{ t().hero.currentLabel }}</dt>
+          <dd>G7 Taxis</dd>
+        </div>
+      </dl>
     </div>
+
+    <p class="hero__scroll"><span aria-hidden="true">↓</span>{{ t().hero.scroll }}</p>
   </header>
 
-  <section id="apropos" class="section section--about reveal">
-    <div class="shell about">
-      <div class="section-heading">
-        <span class="section-number">01</span>
+  <section id="apropos" class="section reveal">
+    <div class="shell section__grid">
+      <div class="section__head">
+        <span class="section__index">01</span>
         <h2>{{ t().about.title }}</h2>
       </div>
-      <div class="about__content">
+      <div class="section__content">
         <p class="lead">{{ t().about.lead }}</p>
         <p class="body-copy">{{ t().about.body }}</p>
-        <div class="about__stats">
-          <div><strong>4</strong><span>{{ t().about.statA }}</span></div>
-          <div><strong>360°</strong><span>{{ t().about.statB }}</span></div>
-        </div>
       </div>
     </div>
   </section>
 
   <section id="parcours" class="section reveal">
     <div class="shell">
-      <div class="section-heading section-heading--inline">
-        <span class="section-number">02</span>
+      <div class="section__head section__head--inline">
+        <span class="section__index">02</span>
         <h2>{{ t().experience.title }}</h2>
       </div>
 
-      <div class="timeline">
-        @for (item of t().experience.items; track item.company) {
-          <article class="timeline__item">
-            <div class="timeline__period"><span></span>{{ item.period }}</div>
-            <div>
-              <p class="timeline__company">{{ item.company }}</p>
-              <h3>{{ item.role }}</h3>
-              <p class="timeline__place">{{ item.place }}</p>
+      <div class="experience-list">
+        @for (job of t().experience.items; track job.company) {
+          <article class="experience-item">
+            <div class="experience-item__meta">
+              <p class="experience-item__period">{{ job.period }}</p>
+              <p class="experience-item__company">{{ job.company }}</p>
+              <p class="experience-item__place">{{ job.place }}</p>
             </div>
-            <div>
-              <p class="body-copy">{{ item.description }}</p>
-              <div class="tag-list">
-                @for (tag of item.tags; track tag) { <span>{{ tag }}</span> }
+            <div class="experience-item__body">
+              <p class="experience-item__role">{{ job.role }}</p>
+              <ul class="experience-item__bullets">
+                @for (bullet of job.bullets; track bullet) {
+                  <li><span aria-hidden="true">—</span>{{ bullet }}</li>
+                }
+              </ul>
+              <div class="tag-pills">
+                @for (technology of job.stack; track technology) { <span>{{ technology }}</span> }
               </div>
             </div>
           </article>
@@ -124,20 +114,19 @@
     </div>
   </section>
 
-  <section id="competences" class="section section--ink reveal">
+  <section id="competences" class="section reveal">
     <div class="shell">
-      <div class="section-heading section-heading--inline section-heading--light">
-        <span class="section-number">03</span>
+      <div class="section__head section__head--inline">
+        <span class="section__index">03</span>
         <h2>{{ t().skills.title }}</h2>
       </div>
 
       <div class="skills-grid">
         @for (group of t().skills.groups; track group.name) {
-          <article class="skill-card">
-            <span>{{ group.index }}</span>
-            <h3>{{ group.name }}</h3>
+          <article class="skill-group">
+            <p class="skill-group__name">{{ group.name }}</p>
             <ul>
-              @for (item of group.items; track item) { <li>{{ item }}</li> }
+              @for (item of group.items; track item) { <li><span aria-hidden="true"></span>{{ item }}</li> }
             </ul>
           </article>
         }
@@ -147,25 +136,22 @@
 
   <section id="projets" class="section reveal">
     <div class="shell">
-      <div class="section-heading section-heading--inline section-heading--tight">
-        <span class="section-number">04</span>
+      <div class="section__head section__head--inline">
+        <span class="section__index">04</span>
         <h2>{{ t().projects.title }}</h2>
       </div>
-      <p class="section-intro">{{ t().projects.intro }}</p>
+      <p class="section__intro">{{ t().projects.intro }}</p>
 
       <div class="projects-grid">
         @for (project of t().projects.items; track project.name) {
-          <article class="project-card" [attr.data-tone]="project.tone">
+          <article class="project-card">
             <div class="project-card__top">
-              <span>{{ project.number }}</span>
-              <span aria-hidden="true">↗</span>
+              <span>{{ project.no }}</span>
+              <span class="status-pill">{{ project.status }}</span>
             </div>
-            <div>
-              <p>{{ project.category }}</p>
-              <h3>{{ project.name }}</h3>
-              <p class="project-card__description">{{ project.description }}</p>
-            </div>
-            <div class="tag-list">
+            <h3>{{ project.name }}</h3>
+            <p class="project-card__description">{{ project.description }}</p>
+            <div class="tag-pills">
               @for (technology of project.stack; track technology) { <span>{{ technology }}</span> }
             </div>
           </article>
@@ -174,10 +160,10 @@
     </div>
   </section>
 
-  <section id="formation" class="section section--paper reveal">
+  <section id="formation" class="section reveal">
     <div class="shell">
-      <div class="section-heading section-heading--inline">
-        <span class="section-number">05</span>
+      <div class="section__head section__head--inline">
+        <span class="section__index">05</span>
         <h2>{{ t().education.title }}</h2>
       </div>
 
@@ -185,11 +171,7 @@
         @for (item of t().education.items; track item.period) {
           <article>
             <p class="education-list__period">{{ item.period }}</p>
-            <p class="education-list__school">{{ item.school }}</p>
-            <div>
-              <h3>{{ item.degree }}</h3>
-              <p class="body-copy">{{ item.description }}</p>
-            </div>
+            <p><span class="education-list__school">{{ item.school }}</span> — {{ item.degree }}</p>
           </article>
         }
       </div>
@@ -198,22 +180,18 @@
 
   <section id="carte" class="section map-section reveal">
     <div class="shell">
-      <div class="section-heading section-heading--inline section-heading--light section-heading--tight">
-        <span class="section-number">06</span>
+      <div class="section__head section__head--inline section__head--light">
+        <span class="section__index section__index--light">06</span>
         <h2>{{ t().map.title }}</h2>
       </div>
-      <p class="section-intro section-intro--light">{{ t().map.intro }}</p>
+      <p class="section__intro section__intro--light">{{ t().map.intro }}</p>
 
       <div class="map-layout">
-        <div #mapElement class="map" aria-label="Carte des lieux du parcours de Jean Cazals"></div>
+        <div #mapElement class="map-frame" aria-label="Carte des lieux du parcours de Jean Cazals"></div>
         <aside class="map-panel">
           <div class="map-panel__nav">
             @for (pin of pins(); track pin.id) {
-              <button
-                type="button"
-                [class.active]="selectedPinId() === pin.id"
-                (click)="selectPin(pin.id)"
-              >
+              <button type="button" [class.active]="selectedPinId() === pin.id" (click)="selectPin(pin.id)">
                 <i [style.background]="pin.color"></i>{{ pin.short }}
               </button>
             }
@@ -223,7 +201,7 @@
             <h3>{{ selectedPin().name }}</h3>
             <p>{{ selectedPin().description }}</p>
           </div>
-          <p class="map-panel__hint"><span aria-hidden="true">◎</span>{{ t().map.hint }}</p>
+          <p class="map-panel__hint">{{ t().map.hint }}</p>
         </aside>
       </div>
     </div>
@@ -231,17 +209,13 @@
 
   <section id="hobbies" class="section reveal">
     <div class="shell">
-      <div class="section-heading section-heading--inline">
-        <span class="section-number">07</span>
+      <div class="section__head section__head--inline">
+        <span class="section__index">07</span>
         <h2>{{ t().hobbies.title }}</h2>
       </div>
       <div class="hobbies-list">
-        @for (item of t().hobbies.items; track item.name) {
-          <article>
-            <span>{{ item.icon }}</span>
-            <h3>{{ item.name }}</h3>
-            <p>{{ item.detail }}</p>
-          </article>
+        @for (item of t().hobbies.items; track item.label) {
+          <div class="hobby-pill"><span>{{ item.i }}</span>{{ item.label }}</div>
         }
       </div>
       <p class="hobbies-note">{{ t().hobbies.note }}</p>
@@ -251,7 +225,7 @@
   <section id="contact" class="section contact-section reveal">
     <div class="shell contact-layout">
       <div class="contact-copy">
-        <span class="section-number section-number--light">08</span>
+        <span class="section__index section__index--light">08</span>
         <h2>{{ t().contact.title }}</h2>
         <p>{{ t().contact.body }}</p>
 
@@ -270,7 +244,7 @@
                   required
                   [(ngModel)]="form.name"
                   [placeholder]="'&quot;' + t().contact.name + '&quot;'"
-                >
+                />
               </label>
               <label>
                 <span><b>const</b> email =</span>
@@ -281,7 +255,7 @@
                   email
                   [(ngModel)]="form.email"
                   [placeholder]="'&quot;' + t().contact.email + '&quot;'"
-                >
+                />
               </label>
               <label class="terminal__message">
                 <span><b>const</b> message =</span>
@@ -293,13 +267,13 @@
                   [placeholder]="'&quot;' + t().contact.message + '&quot;'"
                 ></textarea>
               </label>
-              <button class="terminal__submit" type="submit"><span>▶</span>{{ t().contact.run }}</button>
+              <button class="terminal__submit" type="submit"><span aria-hidden="true">▶</span>{{ t().contact.run }}</button>
             } @else {
               <div class="terminal__sent">
-                <p class="terminal__status">✓ 200 OK</p>
+                <p class="terminal__status">✓ 200 OK — {{ t().contact.queued }}</p>
                 <h3>{{ t().contact.sentTitle }}</h3>
                 <p>{{ t().contact.sentBody }}</p>
-                <a [href]="mailtoHref()">{{ t().contact.sentCta }} ↗</a>
+                <a class="button button--dark" [href]="mailtoHref()">{{ t().contact.sentCta }}</a>
                 <button type="button" (click)="resetContact(contactForm)">{{ t().contact.reset }}</button>
               </div>
             }
@@ -312,19 +286,19 @@
           <button type="button" [class.active]="activeTab() === 'fetch'" (click)="setTab('fetch')">fetch()</button>
           <button type="button" [class.active]="activeTab() === 'curl'" (click)="setTab('curl')">cURL</button>
           <button type="button" [class.active]="activeTab() === 'json'" (click)="setTab('json')">JSON</button>
-          <span><i></i>{{ t().contact.live }}</span>
+          <span class="code-window__live"><i></i>{{ t().contact.live }}</span>
         </div>
-        <pre><code>{{ codePreview() }}</code></pre>
-        <div class="code-window__response">
-          <span>status</span><strong>{{ sent() ? '200 OK' : 'READY' }}</strong>
-        </div>
+        <div class="code-window__pre">@for (line of codeLines(); track $index) {<div class="code-line">@for (token of line; track $index) {<span [class]="'tok-' + token.kind">{{ token.text }}</span>}</div>}</div>
+        @if (sent()) {
+          <div class="code-window__response">@for (line of responseLines(); track $index) {<div class="code-line">@for (token of line; track $index) {<span [class]="'tok-' + token.kind">{{ token.text }}</span>}</div>}</div>
+        }
         <p class="code-window__hint">{{ t().contact.codeHint }}</p>
       </div>
     </div>
   </section>
 </main>
 
-<footer class="footer">
+<footer class="site-footer">
   <div class="shell">
     <span>© {{ year }} Jean Cazals — Paris</span>
     <a href="#top">{{ t().footer.top }} ↑</a>
