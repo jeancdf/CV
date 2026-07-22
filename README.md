@@ -36,16 +36,14 @@ Dans `Settings > Secrets and variables > Actions` du dépôt GitHub :
 - ajoutez `SMTP_PASS` dans l’onglet **Secrets** avec le mot de passe d’application Google ;
 - ajoutez les valeurs non sensibles dans l’onglet **Variables** : `SMTP_USER`, `CONTACT_TO_EMAIL`, `MAIL_FROM`, `SMTP_HOST`, `SMTP_PORT` et `SMTP_SECURE`.
 
-Le workflow utilise des valeurs par défaut pour toutes les variables non sensibles. `SMTP_PASS` est le seul réglage obligatoire. À chaque déploiement, le workflow génère le fichier sécurisé `~/cv-de-jean/mailing.env` sur le VPS.
+Le workflow utilise des valeurs par défaut pour toutes les variables non sensibles. `SMTP_PASS` est le seul réglage obligatoire. À chaque déploiement, le workflow :
 
-Dans `docker-compose.prod.yml`, le service du CV doit contenir cette liaison une seule fois :
+1. détecte automatiquement le service utilisant l’image du CV ;
+2. génère le fichier sécurisé `~/cv-de-jean/mailing.env` sur le VPS ;
+3. génère un fichier Compose complémentaire qui relie cette configuration au bon service ;
+4. redémarre l’application avec les deux fichiers Compose.
 
-```yaml
-env_file:
-  - mailing.env
-```
-
-Le workflow arrête le déploiement avec une explication si le Secret ou cette liaison manque.
+Aucune connexion manuelle au VPS n’est nécessaire.
 
 ## Build de production
 

@@ -70,11 +70,35 @@ jobs:
 
             DEPLOY_DIR="$HOME/cv-de-jean"
             COMPOSE_FILE="$DEPLOY_DIR/docker-compose.prod.yml"
+            COMPOSE_MAIL_FILE="$DEPLOY_DIR/docker-compose.mail.yml"
             MAIL_ENV_FILE="$DEPLOY_DIR/mailing.env"
-            MAIL_ENV_TEMP=$(mktemp "$DEPLOY_DIR/.mailing.env.XXXXXX")
+            APP_IMAGE="ghcr.io/jeancdf/cv-de-jean:latest"
 
             umask 077
-            trap 'rm -f "$MAIL_ENV_TEMP"' EXIT
+            MAIL_ENV_TEMP=$(mktemp "$DEPLOY_DIR/.mailing.env.XXXXXX")
+            COMPOSE_MAIL_TEMP=$(mktemp "$DEPLOY_DIR/.docker-compose.mail.XXXXXX")
+
+            trap 'rm -f "$MAIL_ENV_TEMP" "$COMPOSE_MAIL_TEMP"' EXIT
+
+            docker pull "$APP_IMAGE"
+
+            CV_SERVICE=$(
+              docker compose -f "$COMPOSE_FILE" config --format json |
+                docker run --rm -i "$APP_IMAGE" node -e '
+                  const fs = require("node:fs");
+                  const config = JSON.parse(fs.readFileSync(0, "utf8"));
+                  const matches = Object.entries(config.services || {}).filter(([, service]) =>
+                    /^ghcr\.io\/jeancdf\/cv-de-jean(?::|@|$)/.test(service.image || ""),
+                  );
+
+                  if (matches.length !== 1) {
+                    process.stderr.write(`Expected one CV service, found ${matches.length}.\n`);
+                    process.exit(1);
+                  }
+
+                  process.stdout.write(matches[0][0]);
+                '
+            )
 
             {
               printf 'SMTP_HOST=%s\n' "$SMTP_HOST"
@@ -88,13 +112,29 @@ jobs:
               printf 'TRUST_PROXY=%s\n' "$TRUST_PROXY"
             } > "$MAIL_ENV_TEMP"
 
+            {
+              printf 'services:\n'
+              printf '  "%s":\n' "$CV_SERVICE"
+              printf '    env_file:\n'
+              printf '      - mailing.env\n'
+            } > "$COMPOSE_MAIL_TEMP"
+
             mv "$MAIL_ENV_TEMP" "$MAIL_ENV_FILE"
+            mv "$COMPOSE_MAIL_TEMP" "$COMPOSE_MAIL_FILE"
             trap - EXIT
 
-            if ! grep -q 'mailing.env' "$COMPOSE_FILE"; then
-              echo "Add 'env_file: - mailing.env' to the CV service in docker-compose.prod.yml."
+            docker compose -f "$COMPOSE_FILE" -f "$COMPOSE_MAIL_FILE" config --quiet
+
+            docker compose -f "$COMPOSE_FILE" -f "$COMPOSE_MAIL_FILE" pull
+            docker compose -f "$COMPOSE_FILE" -f "$COMPOSE_MAIL_FILE" up -d --remove-orphans
+
+            CV_CONTAINER=$(docker compose -f "$COMPOSE_FILE" -f "$COMPOSE_MAIL_FILE" ps -q "$CV_SERVICE")
+            if [ -z "$CV_CONTAINER" ]; then
+              echo "The CV container did not start."
               exit 1
             fi
 
-            docker compose -f "$COMPOSE_FILE" pull
-            docker compose -f "$COMPOSE_FILE" up -d --remove-orphans
+            if ! docker inspect --format '{{range .Config.Env}}{{println .}}{{end}}' "$CV_CONTAINER" | grep -q '^SMTP_PASS='; then
+              echo "The mailing configuration was not injected into the CV container."
+              exit 1
+            fi
