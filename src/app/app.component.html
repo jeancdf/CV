@@ -203,11 +203,13 @@
       <p class="section__intro section__intro--light">{{ t().map.intro }}</p>
 
       <div class="map-layout">
-        <div
-          #mapElement
-          class="map-frame"
-          aria-label="Carte des lieux du parcours de Jean Cazals"
-        ></div>
+        <div class="map-frame">
+          <div
+            #mapElement
+            class="map-canvas"
+            aria-label="Carte des lieux du parcours de Jean Cazals"
+          ></div>
+        </div>
         <aside class="map-panel">
           <div class="map-panel__nav">
             @for (pin of pins(); track pin.id) {
