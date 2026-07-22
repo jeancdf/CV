@@ -15,6 +15,7 @@ import * as L from 'leaflet';
 type Language = 'fr' | 'en';
 type CodeTab = 'fetch' | 'curl' | 'json';
 type PinId = 'g7' | 'hetic' | 'mariage' | 'golf';
+type ContactError = 'invalid' | 'rateLimit' | 'generic' | null;
 type TokenKind = 'punct' | 'key' | 'str' | 'fn' | 'kw' | 'plain' | 'ok' | 'dim';
 
 interface Token {
@@ -225,13 +226,16 @@ const copy = {
       email: 'vous@email.com',
       message: 'votre message…',
       run: 'envoyer la requête',
+      sending: 'envoi en cours…',
       live: 'live',
-      queued: 'message reçu',
+      queued: 'demande reçue',
       codeHint: '// requête générée en temps réel — fetch, cURL ou JSON, au choix',
       sentTitle: 'Merci !',
       sentBody:
-        "Votre message est prêt à partir. Cliquez ci-dessous pour l'envoyer depuis votre messagerie.",
-      sentCta: "Ouvrir l'email",
+        'Votre demande a bien été envoyée. Un e-mail de confirmation vient de vous être adressé et je vous répondrai personnellement dès que possible.',
+      invalid: 'Vérifiez les informations saisies avant de réessayer.',
+      rateLimit: 'Trop de demandes ont été envoyées. Réessayez dans quelques minutes.',
+      error: "L'envoi a échoué. Réessayez dans un instant ou écrivez-moi à jeancdfpro@gmail.com.",
       reset: 'Écrire un autre message',
     },
     footer: { top: 'Haut de page' },
@@ -428,12 +432,17 @@ const copy = {
       email: 'you@email.com',
       message: 'your message…',
       run: 'send request',
+      sending: 'sending…',
       live: 'live',
-      queued: 'message received',
+      queued: 'request received',
       codeHint: '// request generated in real time — fetch, cURL or JSON, your pick',
       sentTitle: 'Thanks!',
-      sentBody: 'Your message is ready to go. Click below to send it from your mail app.',
-      sentCta: 'Open email',
+      sentBody:
+        'Your request has been sent. A confirmation email is on its way, and I will reply personally as soon as possible.',
+      invalid: 'Please check the information you entered before trying again.',
+      rateLimit: 'Too many requests have been sent. Please try again in a few minutes.',
+      error:
+        'Unable to send your request. Please try again shortly or email me at jeancdfpro@gmail.com.',
       reset: 'Write another message',
     },
     footer: { top: 'Back to top' },
@@ -457,9 +466,11 @@ export class AppComponent implements AfterViewInit, OnDestroy {
   readonly activeTab = signal<CodeTab>('fetch');
   readonly selectedPinId = signal<PinId>('g7');
   readonly sent = signal(false);
+  readonly sending = signal(false);
+  readonly contactError = signal<ContactError>(null);
   readonly msgId = signal('');
   readonly year = new Date().getFullYear();
-  readonly form = { name: '', email: '', message: '' };
+  readonly form = { name: '', email: '', message: '', website: '' };
 
   readonly pins = computed<Pin[]>(() => {
     const labels = this.t().map.pins;
@@ -478,12 +489,11 @@ export class AppComponent implements AfterViewInit, OnDestroy {
   private markers = new Map<PinId, L.Marker>();
   private observer?: IntersectionObserver;
 
-  mailtoHref(): string {
-    const subject = encodeURIComponent(`Contact — ${this.form.name || 'Nouveau message'}`);
-    const body = encodeURIComponent(
-      `${this.form.message}\n\n${this.form.name}\n${this.form.email}`,
-    );
-    return `mailto:jeancdfpro@gmail.com?subject=${subject}&body=${body}`;
+  contactErrorMessage(): string {
+    const error = this.contactError();
+    if (error === 'invalid') return this.t().contact.invalid;
+    if (error === 'rateLimit') return this.t().contact.rateLimit;
+    return error ? this.t().contact.error : '';
   }
 
   private clip(value: string, placeholder: string): string {
@@ -499,10 +509,12 @@ export class AppComponent implements AfterViewInit, OnDestroy {
   codeLines(): Token[][] {
     const t = (text: string, kind: TokenKind) => this.tok(text, kind);
     const q = (value: string) => `"${value}"`;
-    const url = 'https://api.jean-cazals.dev/contact';
+    const url =
+      this.activeTab() === 'curl' ? 'https://cv-de-jean.duckdns.org/api/contact' : '/api/contact';
     const n = this.clip(this.form.name, '…');
     const e = this.clip(this.form.email, '…');
     const m = this.clip(this.form.message, '…');
+    const language = this.language();
 
     if (this.activeTab() === 'curl') {
       return [
@@ -529,7 +541,14 @@ export class AppComponent implements AfterViewInit, OnDestroy {
           t(q(e), 'str'),
           t(',', 'punct'),
         ],
-        [t('      ', 'plain'), t(q('message'), 'key'), t(': ', 'punct'), t(q(m), 'str')],
+        [
+          t('      ', 'plain'),
+          t(q('message'), 'key'),
+          t(': ', 'punct'),
+          t(q(m), 'str'),
+          t(',', 'punct'),
+        ],
+        [t('      ', 'plain'), t(q('language'), 'key'), t(': ', 'punct'), t(q(language), 'str')],
         [t("  }'", 'punct')],
       ];
     }
@@ -539,7 +558,14 @@ export class AppComponent implements AfterViewInit, OnDestroy {
         [t('{', 'punct')],
         [t('  ', 'plain'), t(q('name'), 'key'), t(': ', 'punct'), t(q(n), 'str'), t(',', 'punct')],
         [t('  ', 'plain'), t(q('email'), 'key'), t(': ', 'punct'), t(q(e), 'str'), t(',', 'punct')],
-        [t('  ', 'plain'), t(q('message'), 'key'), t(': ', 'punct'), t(q(m), 'str')],
+        [
+          t('  ', 'plain'),
+          t(q('message'), 'key'),
+          t(': ', 'punct'),
+          t(q(m), 'str'),
+          t(',', 'punct'),
+        ],
+        [t('  ', 'plain'), t(q('language'), 'key'), t(': ', 'punct'), t(q(language), 'str')],
         [t('}', 'punct')],
       ];
     }
@@ -565,7 +591,8 @@ export class AppComponent implements AfterViewInit, OnDestroy {
       ],
       [t('    name', 'key'), t(': ', 'punct'), t(q(n), 'str'), t(',', 'punct')],
       [t('    email', 'key'), t(': ', 'punct'), t(q(e), 'str'), t(',', 'punct')],
-      [t('    message', 'key'), t(': ', 'punct'), t(q(m), 'str')],
+      [t('    message', 'key'), t(': ', 'punct'), t(q(m), 'str'), t(',', 'punct')],
+      [t('    language', 'key'), t(': ', 'punct'), t(q(language), 'str')],
       [t('  })', 'punct')],
       [t('})', 'punct')],
     ];
@@ -575,7 +602,7 @@ export class AppComponent implements AfterViewInit, OnDestroy {
     const t = (text: string, kind: TokenKind) => this.tok(text, kind);
     const q = (value: string) => `"${value}"`;
     return [
-      [t('← 200 OK', 'ok'), t('   (142 ms)', 'dim')],
+      [t('← 202 ACCEPTED', 'ok'), t('   (142 ms)', 'dim')],
       [
         t('{ ', 'punct'),
         t(q('status'), 'key'),
@@ -626,18 +653,45 @@ export class AppComponent implements AfterViewInit, OnDestroy {
     }
   }
 
-  submitContact(form: NgForm): void {
+  async submitContact(form: NgForm): Promise<void> {
+    if (this.sending()) return;
+
+    this.contactError.set(null);
+
     if (form.invalid) {
       form.control.markAllAsTouched();
+      this.contactError.set('invalid');
       return;
     }
 
-    this.msgId.set(`msg_${Math.random().toString(36).slice(2, 8)}`);
-    this.sent.set(true);
+    this.sending.set(true);
+
+    try {
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ...this.form, language: this.language() }),
+      });
+      const result = (await response.json().catch(() => ({}))) as { id?: string };
+
+      if (!response.ok) {
+        this.contactError.set(response.status === 429 ? 'rateLimit' : 'generic');
+        return;
+      }
+
+      this.msgId.set(result.id || 'received');
+      this.sent.set(true);
+    } catch {
+      this.contactError.set('generic');
+    } finally {
+      this.sending.set(false);
+    }
   }
 
   resetContact(form: NgForm): void {
     this.sent.set(false);
+    this.sending.set(false);
+    this.contactError.set(null);
     this.msgId.set('');
     form.resetForm();
   }

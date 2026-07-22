@@ -1,11 +1,17 @@
-FROM node:22-alpine AS build
+FROM node:24-alpine AS build
 WORKDIR /app
 COPY package*.json ./
 RUN npm ci
 COPY . .
 RUN npm run build
 
-FROM nginx:1.27-alpine AS runtime
-COPY nginx.conf /etc/nginx/conf.d/default.conf
-COPY --from=build /app/dist/jean-cazals-cv/browser /usr/share/nginx/html
+FROM node:24-alpine AS runtime
+WORKDIR /app
+ENV NODE_ENV=production
+ENV PORT=80
+COPY package*.json ./
+RUN npm ci --omit=dev
+COPY server.mjs ./
+COPY --from=build /app/dist/jean-cazals-cv/browser ./dist/jean-cazals-cv/browser
 EXPOSE 80
+CMD ["node", "server.mjs"]

@@ -270,6 +270,9 @@
                   name="name"
                   type="text"
                   required
+                  minlength="2"
+                  maxlength="100"
+                  autocomplete="name"
                   [(ngModel)]="form.name"
                   [placeholder]="'&quot;' + t().contact.name + '&quot;'"
                 />
@@ -281,6 +284,8 @@
                   type="email"
                   required
                   email
+                  maxlength="254"
+                  autocomplete="email"
                   [(ngModel)]="form.email"
                   [placeholder]="'&quot;' + t().contact.email + '&quot;'"
                 />
@@ -290,20 +295,35 @@
                 <textarea
                   name="message"
                   required
+                  minlength="10"
+                  maxlength="5000"
                   rows="3"
                   [(ngModel)]="form.message"
                   [placeholder]="'&quot;' + t().contact.message + '&quot;'"
                 ></textarea>
               </label>
-              <button class="terminal__submit" type="submit">
-                <span aria-hidden="true">▶</span>{{ t().contact.run }}
+              <label class="terminal__website" aria-hidden="true">
+                <span>website</span>
+                <input
+                  name="website"
+                  type="text"
+                  tabindex="-1"
+                  autocomplete="off"
+                  [(ngModel)]="form.website"
+                />
+              </label>
+              <button class="terminal__submit" type="submit" [disabled]="sending()">
+                <span aria-hidden="true">▶</span>
+                {{ sending() ? t().contact.sending : t().contact.run }}
               </button>
+              @if (contactError()) {
+                <p class="terminal__error" role="alert">{{ contactErrorMessage() }}</p>
+              }
             } @else {
               <div class="terminal__sent">
-                <p class="terminal__status">✓ 200 OK — {{ t().contact.queued }}</p>
+                <p class="terminal__status">✓ 202 ACCEPTED — {{ t().contact.queued }}</p>
                 <h3>{{ t().contact.sentTitle }}</h3>
                 <p>{{ t().contact.sentBody }}</p>
-                <a class="button button--dark" [href]="mailtoHref()">{{ t().contact.sentCta }}</a>
                 <button type="button" (click)="resetContact(contactForm)">
                   {{ t().contact.reset }}
                 </button>

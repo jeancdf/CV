@@ -30,13 +30,71 @@ jobs:
   deploy:
     needs: build-and-push
     runs-on: ubuntu-latest
+    env:
+      SMTP_HOST: ${{ vars.SMTP_HOST || 'smtp.gmail.com' }}
+      SMTP_PORT: ${{ vars.SMTP_PORT || '465' }}
+      SMTP_SECURE: ${{ vars.SMTP_SECURE || 'true' }}
+      SMTP_USER: ${{ vars.SMTP_USER || 'jeancdfpro@gmail.com' }}
+      SMTP_PASS: ${{ secrets.SMTP_PASS }}
+      MAIL_FROM: ${{ vars.MAIL_FROM || 'Jean Cazals <jeancdfpro@gmail.com>' }}
+      CONTACT_TO_EMAIL: ${{ vars.CONTACT_TO_EMAIL || 'jeancdfpro@gmail.com' }}
+      PORT: '80'
+      TRUST_PROXY: 'true'
     steps:
+      - name: Validate mailing secret
+        run: |
+          if [ -z "$SMTP_PASS" ]; then
+            echo "SMTP_PASS is missing. Add it in Settings > Secrets and variables > Actions > Secrets."
+            exit 1
+          fi
+
       - name: SSH to VPS and redeploy
         uses: appleboy/ssh-action@v1
+        env:
+          SMTP_HOST: ${{ env.SMTP_HOST }}
+          SMTP_PORT: ${{ env.SMTP_PORT }}
+          SMTP_SECURE: ${{ env.SMTP_SECURE }}
+          SMTP_USER: ${{ env.SMTP_USER }}
+          SMTP_PASS: ${{ env.SMTP_PASS }}
+          MAIL_FROM: ${{ env.MAIL_FROM }}
+          CONTACT_TO_EMAIL: ${{ env.CONTACT_TO_EMAIL }}
+          PORT: ${{ env.PORT }}
+          TRUST_PROXY: ${{ env.TRUST_PROXY }}
         with:
           host: cv-de-jean.duckdns.org
           username: deploy
           key: ${{ secrets.DEPLOY_SSH_KEY }}
+          envs: SMTP_HOST,SMTP_PORT,SMTP_SECURE,SMTP_USER,SMTP_PASS,MAIL_FROM,CONTACT_TO_EMAIL,PORT,TRUST_PROXY
           script: |
-            docker compose -f ~/cv-de-jean/docker-compose.prod.yml pull
-            docker compose -f ~/cv-de-jean/docker-compose.prod.yml up -d --remove-orphans
+            set -eu
+
+            DEPLOY_DIR="$HOME/cv-de-jean"
+            COMPOSE_FILE="$DEPLOY_DIR/docker-compose.prod.yml"
+            MAIL_ENV_FILE="$DEPLOY_DIR/mailing.env"
+            MAIL_ENV_TEMP=$(mktemp "$DEPLOY_DIR/.mailing.env.XXXXXX")
+
+            umask 077
+            trap 'rm -f "$MAIL_ENV_TEMP"' EXIT
+
+            {
+              printf 'SMTP_HOST=%s\n' "$SMTP_HOST"
+              printf 'SMTP_PORT=%s\n' "$SMTP_PORT"
+              printf 'SMTP_SECURE=%s\n' "$SMTP_SECURE"
+              printf 'SMTP_USER=%s\n' "$SMTP_USER"
+              printf 'SMTP_PASS=%s\n' "$SMTP_PASS"
+              printf 'MAIL_FROM=%s\n' "$MAIL_FROM"
+              printf 'CONTACT_TO_EMAIL=%s\n' "$CONTACT_TO_EMAIL"
+              printf 'PORT=%s\n' "$PORT"
+              printf 'TRUST_PROXY=%s\n' "$TRUST_PROXY"
+            } > "$MAIL_ENV_TEMP"
+
+            mv "$MAIL_ENV_TEMP" "$MAIL_ENV_FILE"
+            trap - EXIT
+
+            if ! grep -q 'mailing.env' "$COMPOSE_FILE"; then
+              echo "Add 'env_file: - mailing.env' to the CV service in docker-compose.prod.yml."
+              exit 1
+            fi
+
+            docker compose -f "$COMPOSE_FILE" pull
+            docker compose -f "$COMPOSE_FILE" up -d --remove-orphans
