@@ -79,8 +79,9 @@ const copy = {
           period: '2018 — 2020',
           company: 'ESSEC Business School',
           place: 'France',
-          role: 'E-Bachelor',
-          description: 'Formation en management, commerce et entrepreneuriat.',
+          role: 'Programme E-Bachelor · cursus interrompu',
+          description:
+            'Formation en management, commerce et entrepreneuriat, interrompue avant l’obtention du diplôme afin de me réorienter vers le développement web.',
           bullets: [],
           stack: [],
         },
@@ -351,8 +352,9 @@ const copy = {
           period: '2018 — 2020',
           company: 'ESSEC Business School',
           place: 'France',
-          role: 'E-Bachelor',
-          description: 'Coursework in management, business and entrepreneurship.',
+          role: 'E-Bachelor programme · not completed',
+          description:
+            'Coursework in management, business and entrepreneurship, left before graduation to transition into web development.',
           bullets: [],
           stack: [],
         },
