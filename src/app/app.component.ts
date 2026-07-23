@@ -575,6 +575,12 @@ export class AppComponent implements AfterViewInit, OnDestroy {
       artist: 'Supertramp',
       spotifyId: '7w9iQxnOMKhJmkLd1hJ4GJ',
     },
+    {
+      no: '06',
+      title: "Movin' Out (Anthony's Song)",
+      artist: 'Billy Joel',
+      spotifyId: '4cG3ovmC8Hnp9ZsmSZI2O4',
+    },
   ] as const;
   readonly selectedTrack = computed(() => this.musicTracks[this.selectedTrackIndex()]!);
   readonly spotifyEmbedUrl = computed(() =>
