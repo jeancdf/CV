@@ -55,6 +55,18 @@
           <a class="button button--dark" href="#parcours">{{ t().hero.primary }}</a>
           <a class="button button--outline" href="#contact">{{ t().hero.secondary }}</a>
         </div>
+        <div class="hero__socials" [attr.aria-label]="t().socials.label">
+          <a href="https://github.com/jeancdf" target="_blank" rel="noopener noreferrer">
+            GitHub <span aria-hidden="true">↗</span>
+          </a>
+          <a
+            href="https://www.linkedin.com/in/jean-cazals-ba183231a"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            LinkedIn <span aria-hidden="true">↗</span>
+          </a>
+        </div>
       </div>
 
       <dl class="hero__meta">
@@ -139,6 +151,12 @@
               }
             </div>
           </article>
+          @if ($index === 0) {
+            <div class="journey-transition" role="note">
+              <span class="journey-transition__rail" aria-hidden="true"></span>
+              <p>{{ t().journey.reorientation }}</p>
+            </div>
+          }
         }
       </div>
     </div>
@@ -179,13 +197,27 @@
           <article class="project-card">
             <div class="project-card__top">
               <span>{{ project.no }}</span>
-              <span class="status-pill">{{ project.status }}</span>
+              <span class="status-pill" [class.status-pill--live]="project.live">
+                {{ project.status }}
+              </span>
             </div>
             <h3>{{ project.name }}</h3>
             <p class="project-card__description">{{ project.description }}</p>
-            <div class="tag-pills">
-              @for (technology of project.stack; track technology) {
-                <span>{{ technology }}</span>
+            <div class="project-card__footer">
+              <div class="tag-pills">
+                @for (technology of project.stack; track technology) {
+                  <span>{{ technology }}</span>
+                }
+              </div>
+              @if (project.url) {
+                <a
+                  class="project-card__link"
+                  [href]="project.url"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  {{ t().projects.visit }} <span aria-hidden="true">↗</span>
+                </a>
               }
             </div>
           </article>
@@ -381,6 +413,18 @@
 <footer class="site-footer">
   <div class="shell">
     <span>© {{ year }} Jean Cazals — Paris</span>
+    <div class="site-footer__socials" [attr.aria-label]="t().socials.label">
+      <a href="https://github.com/jeancdf" target="_blank" rel="noopener noreferrer">
+        GitHub <span aria-hidden="true">↗</span>
+      </a>
+      <a
+        href="https://www.linkedin.com/in/jean-cazals-ba183231a"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        LinkedIn <span aria-hidden="true">↗</span>
+      </a>
+    </div>
     <a href="#top">{{ t().footer.top }} ↑</a>
   </div>
 </footer>

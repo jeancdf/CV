@@ -70,6 +70,7 @@ const copy = {
       title: 'Parcours',
       intro:
         'De ma formation en business à l’ESSEC à mon poste de développeur full-stack chez G7, voici les étapes qui ont construit mon parcours.',
+      reorientation: 'Réorientation',
       items: [
         {
           kind: 'education',
@@ -156,23 +157,38 @@ const copy = {
     },
     projects: {
       title: 'Projets',
-      intro: 'Deux projets personnels en cours de construction — bientôt en ligne.',
+      intro: 'Trois projets personnels — dont Gift Finder, déjà en ligne.',
+      visit: 'Voir le projet',
       items: [
         {
           no: 'P1',
           status: 'En cours',
+          live: false,
           name: 'Gestion de mariage',
           description:
             'Une plateforme pour organiser un mariage de A à Z : invités, prestataires, budget et planning au même endroit.',
           stack: ['React', 'NestJS', 'PostgreSQL'],
+          url: '',
         },
         {
           no: 'P2',
           status: 'En cours',
+          live: false,
           name: 'CRM Club de golf',
           description:
             "Un CRM pour gérer les membres d'un club de golf : adhésions, réservations et suivi de l'activité.",
           stack: ['Angular', 'Spring Boot', 'PostgreSQL'],
+          url: '',
+        },
+        {
+          no: 'P3',
+          status: 'En ligne',
+          live: true,
+          name: 'Gift Finder',
+          description:
+            'Un assistant conversationnel qui propose des idées cadeaux personnalisées grâce à l’IA, puis permet de créer et partager sa liste.',
+          stack: ['Angular', 'Express', 'PostgreSQL', 'Qwen'],
+          url: 'https://gift-finder.duckdns.org',
         },
       ],
     },
@@ -240,6 +256,7 @@ const copy = {
       error: "L'envoi a échoué. Réessayez dans un instant ou écrivez-moi à jeancdfpro@gmail.com.",
       reset: 'Écrire un autre message',
     },
+    socials: { label: 'Profils sociaux' },
     footer: { top: 'Haut de page' },
   },
   en: {
@@ -278,6 +295,7 @@ const copy = {
       title: 'Career & education',
       intro:
         'From studying business at ESSEC to working as a full-stack developer at G7, these are the steps that shaped my path.',
+      reorientation: 'Career change',
       items: [
         {
           kind: 'education',
@@ -364,23 +382,38 @@ const copy = {
     },
     projects: {
       title: 'Projects',
-      intro: 'Two personal projects in the works — coming online soon.',
+      intro: 'Three personal projects — including Gift Finder, now live.',
+      visit: 'View project',
       items: [
         {
           no: 'P1',
           status: 'In progress',
+          live: false,
           name: 'Wedding planner',
           description:
             'A platform to organize a wedding end to end: guests, vendors, budget and schedule in one place.',
           stack: ['React', 'NestJS', 'PostgreSQL'],
+          url: '',
         },
         {
           no: 'P2',
           status: 'In progress',
+          live: false,
           name: 'Golf club CRM',
           description:
             "A CRM to manage a golf club's members: memberships, bookings and activity tracking.",
           stack: ['Angular', 'Spring Boot', 'PostgreSQL'],
+          url: '',
+        },
+        {
+          no: 'P3',
+          status: 'Live',
+          live: true,
+          name: 'Gift Finder',
+          description:
+            'A conversational assistant that uses AI to suggest personalized gift ideas, then lets users create and share their list.',
+          stack: ['Angular', 'Express', 'PostgreSQL', 'Qwen'],
+          url: 'https://gift-finder.duckdns.org',
         },
       ],
     },
@@ -449,6 +482,7 @@ const copy = {
         'Unable to send your request. Please try again shortly or email me at jeancdfpro@gmail.com.',
       reset: 'Write another message',
     },
+    socials: { label: 'Social profiles' },
     footer: { top: 'Back to top' },
   },
 } as const;
