@@ -327,6 +327,8 @@
 
 .map-frame {
   position: relative;
+  z-index: 0;
+  isolation: isolate;
   width: 100%;
   min-width: 0;
   height: clamp(360px, 48vw, 440px);
@@ -477,6 +479,25 @@
       height: 7px;
       border-radius: 50%;
       background: var(--ink);
+    }
+
+    &.portfolio-map-marker--cluster {
+      > span {
+        width: 38px;
+        height: 38px;
+        border-radius: 50%;
+        transform: none;
+      }
+
+      b {
+        width: auto;
+        height: auto;
+        border-radius: 0;
+        background: transparent;
+        font-family: var(--mono);
+        font-size: 12px;
+        font-weight: 700;
+      }
     }
   }
 

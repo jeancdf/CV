@@ -16,7 +16,7 @@ import * as L from 'leaflet';
 
 type Language = 'fr' | 'en';
 type CodeTab = 'fetch' | 'curl' | 'json';
-type PinId = 'g7' | 'hetic' | 'mariage' | 'golf';
+type PinId = 'g7' | 'hetic' | 'mariage' | 'golf' | 'giftFinder' | 'arkeos';
 type ContactError = 'invalid' | 'rateLimit' | 'generic' | null;
 type TokenKind = 'punct' | 'key' | 'str' | 'fn' | 'kw' | 'plain' | 'ok' | 'dim';
 
@@ -104,8 +104,10 @@ const copy = {
           place: 'France',
           role: 'Bootcamp développement web',
           description: 'Formation intensive de six mois aux fondamentaux du développement web.',
-          bullets: [],
-          stack: [],
+          bullets: [
+            'Projet de fin de formation : Arkeos, une plateforme communautaire dédiée aux passionnés de reptiles et d’amphibiens.',
+          ],
+          stack: ['React', 'Express', 'PostgreSQL', 'Socket.IO'],
         },
         {
           kind: 'education',
@@ -170,7 +172,7 @@ const copy = {
     },
     projects: {
       title: 'Projets',
-      intro: 'Trois projets personnels — dont Gift Finder, déjà en ligne.',
+      intro: 'Quatre projets web — dont Gift Finder, déjà en ligne, et Arkeos, réalisé à O’clock.',
       visit: 'Voir le projet',
       items: [
         {
@@ -203,12 +205,22 @@ const copy = {
           stack: ['Angular', 'Express', 'PostgreSQL', 'Qwen'],
           url: 'https://gift-finder.duckdns.org',
         },
+        {
+          no: 'P4',
+          status: 'Projet de formation',
+          live: false,
+          name: 'Arkeos',
+          description:
+            'Une plateforme communautaire pour les passionnés de reptiles et d’amphibiens : articles, marketplace, profils et messagerie.',
+          stack: ['React', 'Express', 'PostgreSQL', 'Socket.IO'],
+          url: 'https://github.com/jeancdf/Arkeos',
+        },
       ],
     },
     map: {
       title: 'Paris, sur la carte',
       intro: 'Cliquez sur les points pour explorer où se passe mon parcours et mes projets.',
-      hint: 'Cliquez sur un autre point pour changer.',
+      hint: 'Les lieux proches sont regroupés. Cliquez sur le compteur ou sur un libellé pour les parcourir.',
       pins: {
         g7: {
           name: 'G7 Taxis',
@@ -237,6 +249,20 @@ const copy = {
           description:
             "CRM de gestion des membres d'un club de golf : adhésions, réservations et suivi. En cours de développement.",
           short: 'Projet · Golf',
+        },
+        giftFinder: {
+          name: 'Gift Finder',
+          tag: 'PROJET · EN LIGNE',
+          description:
+            'Assistant conversationnel de recherche de cadeaux personnalisés et de création de listes partageables.',
+          short: 'Gift Finder',
+        },
+        arkeos: {
+          name: 'Arkeos',
+          tag: 'PROJET · O’CLOCK',
+          description:
+            'Projet de fin de formation : plateforme communautaire pour les passionnés de reptiles et d’amphibiens.',
+          short: 'Arkeos',
         },
       },
     },
@@ -349,8 +375,10 @@ const copy = {
           place: 'France',
           role: 'Web development bootcamp',
           description: 'Six-month intensive course covering the fundamentals of web development.',
-          bullets: [],
-          stack: [],
+          bullets: [
+            'Final project: Arkeos, a community platform for reptile and amphibian enthusiasts.',
+          ],
+          stack: ['React', 'Express', 'PostgreSQL', 'Socket.IO'],
         },
         {
           kind: 'education',
@@ -415,7 +443,7 @@ const copy = {
     },
     projects: {
       title: 'Projects',
-      intro: 'Three personal projects — including Gift Finder, now live.',
+      intro: 'Four web projects — including Gift Finder, now live, and Arkeos, built at O’clock.',
       visit: 'View project',
       items: [
         {
@@ -448,12 +476,22 @@ const copy = {
           stack: ['Angular', 'Express', 'PostgreSQL', 'Qwen'],
           url: 'https://gift-finder.duckdns.org',
         },
+        {
+          no: 'P4',
+          status: 'School project',
+          live: false,
+          name: 'Arkeos',
+          description:
+            'A community platform for reptile and amphibian enthusiasts, featuring articles, a marketplace, profiles and messaging.',
+          stack: ['React', 'Express', 'PostgreSQL', 'Socket.IO'],
+          url: 'https://github.com/jeancdf/Arkeos',
+        },
       ],
     },
     map: {
       title: 'Paris, on the map',
       intro: 'Click the points to explore where my career and projects happen.',
-      hint: 'Click another point to switch.',
+      hint: 'Nearby places are grouped. Click the counter or a label to browse them.',
       pins: {
         g7: {
           name: 'G7 Taxis',
@@ -482,6 +520,20 @@ const copy = {
           description:
             "CRM to manage a golf club's members: memberships, bookings and tracking. Currently in development.",
           short: 'Project · Golf',
+        },
+        giftFinder: {
+          name: 'Gift Finder',
+          tag: 'PROJECT · LIVE',
+          description:
+            'A conversational assistant for personalized gift ideas and shareable gift lists.',
+          short: 'Gift Finder',
+        },
+        arkeos: {
+          name: 'Arkeos',
+          tag: 'PROJECT · O’CLOCK',
+          description:
+            'Final bootcamp project: a community platform for reptile and amphibian enthusiasts.',
+          short: 'Arkeos',
         },
       },
     },
@@ -596,6 +648,18 @@ export class AppComponent implements AfterViewInit, OnDestroy {
       { id: 'hetic', ...labels.hetic, coordinates: [48.8555, 2.439], color: '#c0563a' },
       { id: 'mariage', ...labels.mariage, coordinates: [48.8792259, 2.2832742], color: '#e9e1cf' },
       { id: 'golf', ...labels.golf, coordinates: [48.8941179, 2.2855198], color: '#97a798' },
+      {
+        id: 'giftFinder',
+        ...labels.giftFinder,
+        coordinates: [48.8792259, 2.2832742],
+        color: '#d89075',
+      },
+      {
+        id: 'arkeos',
+        ...labels.arkeos,
+        coordinates: [48.8792259, 2.2832742],
+        color: '#75a9a5',
+      },
     ];
   });
   readonly selectedPin = computed(
@@ -823,6 +887,28 @@ export class AppComponent implements AfterViewInit, OnDestroy {
     form.resetForm();
   }
 
+  private groupNearbyPins(pins: Pin[], maxDistanceMeters = 200): Pin[][] {
+    const groups: Pin[][] = [];
+
+    for (const pin of pins) {
+      const nearbyGroup = groups.find((group) =>
+        group.some(
+          (member) =>
+            L.latLng(member.coordinates).distanceTo(L.latLng(pin.coordinates)) <=
+            maxDistanceMeters,
+        ),
+      );
+
+      if (nearbyGroup) {
+        nearbyGroup.push(pin);
+      } else {
+        groups.push([pin]);
+      }
+    }
+
+    return groups;
+  }
+
   private createMap(): void {
     if (this.map || !this.mapElement) return;
 
@@ -832,7 +918,7 @@ export class AppComponent implements AfterViewInit, OnDestroy {
       zoom: 11.2,
       minZoom: 10,
       maxZoom: 17,
-      scrollWheelZoom: false,
+      scrollWheelZoom: true,
       zoomControl: false,
     });
 
@@ -842,18 +928,35 @@ export class AppComponent implements AfterViewInit, OnDestroy {
       maxZoom: 19,
     }).addTo(this.map);
 
-    for (const pin of this.pins()) {
+    for (const group of this.groupNearbyPins(this.pins())) {
+      const latLngs = group.map((pin) => L.latLng(pin.coordinates));
+      const coordinates = L.latLng(
+        latLngs.reduce((sum, point) => sum + point.lat, 0) / latLngs.length,
+        latLngs.reduce((sum, point) => sum + point.lng, 0) / latLngs.length,
+      );
+      const isCluster = group.length > 1;
+      const markerColor = isCluster ? '#f2c94c' : group[0]!.color;
       const icon = L.divIcon({
-        className: 'portfolio-map-marker',
-        html: `<span style="--pin-color:${pin.color}"><b></b></span>`,
-        iconSize: [32, 42],
-        iconAnchor: [16, 40],
+        className: `portfolio-map-marker${isCluster ? ' portfolio-map-marker--cluster' : ''}`,
+        html: `<span style="--pin-color:${markerColor}"><b>${isCluster ? group.length : ''}</b></span>`,
+        iconSize: isCluster ? [38, 38] : [32, 42],
+        iconAnchor: isCluster ? [19, 19] : [16, 40],
       });
-      const marker = L.marker(pin.coordinates, { icon })
+      const marker = L.marker(coordinates, { icon })
         .addTo(this.map)
-        .bindTooltip(pin.name, { direction: 'top', offset: [0, -34] })
-        .on('click', () => this.selectedPinId.set(pin.id));
-      this.markers.set(pin.id, marker);
+        .bindTooltip(group.map((pin) => pin.name).join(' · '), {
+          direction: 'top',
+          offset: isCluster ? [0, -18] : [0, -34],
+        })
+        .on('click', () => {
+          const currentIndex = group.findIndex((pin) => pin.id === this.selectedPinId());
+          const nextIndex = currentIndex < 0 ? 0 : (currentIndex + 1) % group.length;
+          this.selectedPinId.set(group[nextIndex]!.id);
+        });
+
+      for (const pin of group) {
+        this.markers.set(pin.id, marker);
+      }
     }
 
     if ('ResizeObserver' in window) {
