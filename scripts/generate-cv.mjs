@@ -4,7 +4,7 @@ import { dirname, resolve } from 'node:path';
 import { pathToFileURL } from 'node:url';
 
 const sourcePath = resolve('cv/jean-cazals-cv.html');
-const outputPath = resolve('public/uploads/Profile.pdf');
+const outputPath = resolve('public/uploads/CV-Jean-Cazals-Harvard-2026.pdf');
 
 const browserCandidates = [
   process.env.CHROME_PATH,
