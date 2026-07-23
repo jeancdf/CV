@@ -33,6 +33,7 @@ interface Pin {
   short: string;
   coordinates: L.LatLngExpression;
   color: string;
+  clusterGroup?: string;
 }
 
 const copy = {
@@ -226,7 +227,7 @@ const copy = {
     map: {
       title: 'Paris, sur la carte',
       intro: 'Cliquez sur les points pour explorer où se passe mon parcours et mes projets.',
-      hint: 'Les lieux proches sont regroupés. Cliquez sur le compteur ou sur un libellé pour les parcourir.',
+      hint: 'Les lieux proches sont regroupés. Zoomez ou cliquez sur le compteur pour séparer les points.',
       pins: {
         g7: {
           name: 'G7 Taxis',
@@ -510,7 +511,7 @@ const copy = {
     map: {
       title: 'Paris, on the map',
       intro: 'Click the points to explore where my career and projects happen.',
-      hint: 'Nearby places are grouped. Click the counter or a label to browse them.',
+      hint: 'Nearby places are grouped. Zoom in or click the counter to separate the markers.',
       pins: {
         g7: {
           name: 'G7 Taxis',
@@ -676,19 +677,27 @@ export class AppComponent implements AfterViewInit, OnDestroy {
     return [
       { id: 'g7', ...labels.g7, coordinates: [48.8988602, 2.304037], color: '#f2c94c' },
       { id: 'hetic', ...labels.hetic, coordinates: [48.8555, 2.439], color: '#c0563a' },
-      { id: 'mariage', ...labels.mariage, coordinates: [48.8792259, 2.2832742], color: '#e9e1cf' },
+      {
+        id: 'mariage',
+        ...labels.mariage,
+        coordinates: [48.88182, 2.2832742],
+        color: '#e9e1cf',
+        clusterGroup: 'palais-des-congres',
+      },
       { id: 'golf', ...labels.golf, coordinates: [48.8941179, 2.2855198], color: '#97a798' },
       {
         id: 'giftFinder',
         ...labels.giftFinder,
-        coordinates: [48.8792259, 2.2832742],
+        coordinates: [48.877928, 2.279864],
         color: '#d89075',
+        clusterGroup: 'palais-des-congres',
       },
       {
         id: 'arkeos',
         ...labels.arkeos,
-        coordinates: [48.8792259, 2.2832742],
+        coordinates: [48.877928, 2.286684],
         color: '#75a9a5',
+        clusterGroup: 'palais-des-congres',
       },
     ];
   });
@@ -697,6 +706,7 @@ export class AppComponent implements AfterViewInit, OnDestroy {
   );
 
   private map?: L.Map;
+  private markerLayer?: L.LayerGroup;
   private markers = new Map<PinId, L.Marker>();
   private observer?: IntersectionObserver;
   private mapResizeObserver?: ResizeObserver;
@@ -868,10 +878,10 @@ export class AppComponent implements AfterViewInit, OnDestroy {
   selectPin(pinId: PinId): void {
     this.selectedPinId.set(pinId);
     const pin = this.pins().find((candidate) => candidate.id === pinId);
-    if (pin) {
-      this.map?.flyTo(pin.coordinates, 13, { duration: 0.7 });
-      this.markers.get(pinId)?.openTooltip();
-    }
+    if (!pin || !this.map) return;
+
+    this.map.flyTo(pin.coordinates, pin.clusterGroup ? 14 : 13, { duration: 0.7 });
+    this.map.once('moveend', () => this.markers.get(pinId)?.openTooltip());
   }
 
   selectTrack(index: number): void {
@@ -1006,15 +1016,20 @@ export class AppComponent implements AfterViewInit, OnDestroy {
     form.resetForm();
   }
 
-  private groupNearbyPins(pins: Pin[], maxDistanceMeters = 200): Pin[][] {
+  private groupNearbyPins(pins: Pin[], maxDistancePixels = 56): Pin[][] {
+    if (!this.map) return pins.map((pin) => [pin]);
+
     const groups: Pin[][] = [];
 
     for (const pin of pins) {
       const nearbyGroup = groups.find((group) =>
         group.some(
           (member) =>
-            L.latLng(member.coordinates).distanceTo(L.latLng(pin.coordinates)) <=
-            maxDistanceMeters,
+            Boolean(pin.clusterGroup) &&
+            member.clusterGroup === pin.clusterGroup &&
+            this.map!.project(L.latLng(member.coordinates), this.map!.getZoom()).distanceTo(
+              this.map!.project(L.latLng(pin.coordinates), this.map!.getZoom()),
+            ) <= maxDistancePixels,
         ),
       );
 
@@ -1082,6 +1097,24 @@ export class AppComponent implements AfterViewInit, OnDestroy {
       maxZoom: 19,
     }).addTo(this.map);
 
+    this.markerLayer = L.layerGroup().addTo(this.map);
+    this.renderMapMarkers();
+    this.map.on('zoomend', () => this.renderMapMarkers());
+
+    if ('ResizeObserver' in window) {
+      this.mapResizeObserver = new ResizeObserver(() => this.scheduleMapRefresh());
+      this.mapResizeObserver.observe(mapContainer);
+    }
+
+    this.map.whenReady(() => this.scheduleMapRefresh());
+  }
+
+  private renderMapMarkers(): void {
+    if (!this.map || !this.markerLayer) return;
+
+    this.markerLayer.clearLayers();
+    this.markers.clear();
+
     for (const group of this.groupNearbyPins(this.pins())) {
       const latLngs = group.map((pin) => L.latLng(pin.coordinates));
       const coordinates = L.latLng(
@@ -1097,28 +1130,28 @@ export class AppComponent implements AfterViewInit, OnDestroy {
         iconAnchor: isCluster ? [19, 19] : [16, 40],
       });
       const marker = L.marker(coordinates, { icon })
-        .addTo(this.map)
+        .addTo(this.markerLayer)
         .bindTooltip(group.map((pin) => pin.name).join(' · '), {
           direction: 'top',
           offset: isCluster ? [0, -18] : [0, -34],
         })
         .on('click', () => {
-          const currentIndex = group.findIndex((pin) => pin.id === this.selectedPinId());
-          const nextIndex = currentIndex < 0 ? 0 : (currentIndex + 1) % group.length;
-          this.selectedPinId.set(group[nextIndex]!.id);
+          if (isCluster) {
+            this.map?.fitBounds(L.latLngBounds(latLngs), {
+              animate: true,
+              maxZoom: 14,
+              padding: [64, 64],
+            });
+            return;
+          }
+
+          this.selectedPinId.set(group[0]!.id);
         });
 
       for (const pin of group) {
         this.markers.set(pin.id, marker);
       }
     }
-
-    if ('ResizeObserver' in window) {
-      this.mapResizeObserver = new ResizeObserver(() => this.scheduleMapRefresh());
-      this.mapResizeObserver.observe(mapContainer);
-    }
-
-    this.map.whenReady(() => this.scheduleMapRefresh());
   }
 
   private scheduleMapRefresh(): void {
