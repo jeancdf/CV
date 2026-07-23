@@ -49,6 +49,7 @@ app.use(
         fontSrc: ["'self'", 'https://fonts.gstatic.com', 'data:'],
         imgSrc: ["'self'", 'data:', 'https://tile.openstreetmap.org'],
         connectSrc: ["'self'"],
+        frameSrc: ["'self'", 'https://open.spotify.com'],
         objectSrc: ["'none'"],
         baseUri: ["'self'"],
         formAction: ["'self'"],
