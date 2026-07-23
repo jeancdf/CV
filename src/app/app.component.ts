@@ -178,6 +178,8 @@ const copy = {
       visit: 'Voir le site',
       source: 'GitHub',
       privateRepository: 'privé',
+      firstProjectTitle: 'Mon tout premier projet',
+      firstProjectSubtitle: 'Là où tout a commencé',
       carouselLabel: 'Carrousel des projets',
       previous: 'Projet précédent',
       next: 'Projet suivant',
@@ -195,6 +197,7 @@ const copy = {
           siteUrl: 'https://mon-mariage.duckdns.org/',
           githubUrl: 'https://github.com/jeancdf/mon-mariage',
           repositoryPrivate: false,
+          firstProject: false,
         },
         {
           no: 'P2',
@@ -207,6 +210,7 @@ const copy = {
           siteUrl: '',
           githubUrl: 'https://github.com/jeancdf/carnet-de-golf',
           repositoryPrivate: true,
+          firstProject: false,
         },
         {
           no: 'P3',
@@ -219,6 +223,7 @@ const copy = {
           siteUrl: 'https://gift-finder.duckdns.org/',
           githubUrl: 'https://github.com/jeancdf/Cadeau-anniv',
           repositoryPrivate: false,
+          firstProject: false,
         },
         {
           no: 'P4',
@@ -226,11 +231,12 @@ const copy = {
           live: true,
           name: 'Arkeos',
           description:
-            'Une plateforme communautaire pour les passionnés de reptiles et d’amphibiens : articles, marketplace, profils et messagerie.',
+            'Mon tout premier projet de développement, réalisé à la fin de ma formation O’clock : une plateforme communautaire pour les passionnés de reptiles et d’amphibiens.',
           stack: ['React', 'Express', 'PostgreSQL', 'Socket.IO'],
           siteUrl: 'https://arkeos.duckdns.org/',
           githubUrl: 'https://github.com/jeancdf/Arkeos',
           repositoryPrivate: false,
+          firstProject: true,
         },
       ],
     },
@@ -472,6 +478,8 @@ const copy = {
       visit: 'Visit site',
       source: 'GitHub',
       privateRepository: 'private',
+      firstProjectTitle: 'My very first project',
+      firstProjectSubtitle: 'Where it all began',
       carouselLabel: 'Project carousel',
       previous: 'Previous project',
       next: 'Next project',
@@ -489,6 +497,7 @@ const copy = {
           siteUrl: 'https://mon-mariage.duckdns.org/',
           githubUrl: 'https://github.com/jeancdf/mon-mariage',
           repositoryPrivate: false,
+          firstProject: false,
         },
         {
           no: 'P2',
@@ -501,6 +510,7 @@ const copy = {
           siteUrl: '',
           githubUrl: 'https://github.com/jeancdf/carnet-de-golf',
           repositoryPrivate: true,
+          firstProject: false,
         },
         {
           no: 'P3',
@@ -513,6 +523,7 @@ const copy = {
           siteUrl: 'https://gift-finder.duckdns.org/',
           githubUrl: 'https://github.com/jeancdf/Cadeau-anniv',
           repositoryPrivate: false,
+          firstProject: false,
         },
         {
           no: 'P4',
@@ -520,11 +531,12 @@ const copy = {
           live: true,
           name: 'Arkeos',
           description:
-            'A community platform for reptile and amphibian enthusiasts, featuring articles, a marketplace, profiles and messaging.',
+            'My very first development project, built at the end of my O’clock training: a community platform for reptile and amphibian enthusiasts.',
           stack: ['React', 'Express', 'PostgreSQL', 'Socket.IO'],
           siteUrl: 'https://arkeos.duckdns.org/',
           githubUrl: 'https://github.com/jeancdf/Arkeos',
           repositoryPrivate: false,
+          firstProject: true,
         },
       ],
     },

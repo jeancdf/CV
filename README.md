@@ -53,6 +53,20 @@ npm run build
 
 Le résultat est généré dans `dist/jean-cazals-cv/browser`.
 
+## Régénérer le CV PDF
+
+Le CV téléchargeable suit une mise en page Harvard sobre et compatible avec les logiciels de
+recrutement. Sa source se trouve dans `cv/jean-cazals-cv.html`.
+
+Après une modification du contenu, régénérez `public/uploads/Profile.pdf` avec :
+
+```bash
+npm run cv:pdf
+```
+
+Le script utilise Chrome, Chromium ou Edge en mode headless. La variable `CHROME_PATH` permet
+d’indiquer un autre exécutable si nécessaire.
+
 ## Fonctionnalités
 
 - Angular standalone et détection de changements `OnPush`
