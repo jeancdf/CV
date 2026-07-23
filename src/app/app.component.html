@@ -228,38 +228,109 @@
         <span class="section__index">04</span>
         <h2>{{ t().projects.title }}</h2>
       </div>
-      <p class="section__intro">{{ t().projects.intro }}</p>
 
-      <div class="projects-grid">
-        @for (project of t().projects.items; track project.name) {
-          <article class="project-card">
-            <div class="project-card__top">
-              <span>{{ project.no }}</span>
-              <span class="status-pill" [class.status-pill--live]="project.live">
-                {{ project.status }}
-              </span>
-            </div>
-            <h3>{{ project.name }}</h3>
-            <p class="project-card__description">{{ project.description }}</p>
-            <div class="project-card__footer">
-              <div class="tag-pills">
-                @for (technology of project.stack; track technology) {
-                  <span>{{ technology }}</span>
+      <div class="projects-carousel__heading">
+        <p class="section__intro">{{ t().projects.intro }}</p>
+        <div class="projects-carousel__controls">
+          <span class="projects-carousel__counter" aria-live="polite">
+            <b>{{ formatProjectNumber(projectCarouselIndex() + 1) }}</b>
+            <i></i>
+            {{ formatProjectNumber(t().projects.items.length) }}
+          </span>
+          <button
+            type="button"
+            [attr.aria-label]="t().projects.previous"
+            [disabled]="projectCarouselIndex() === 0"
+            (click)="scrollProjects(-1)"
+          >
+            <span aria-hidden="true">←</span>
+          </button>
+          <button
+            type="button"
+            [attr.aria-label]="t().projects.next"
+            [disabled]="projectCarouselIndex() === t().projects.items.length - 1"
+            (click)="scrollProjects(1)"
+          >
+            <span aria-hidden="true">→</span>
+          </button>
+        </div>
+      </div>
+
+      <div
+        class="projects-carousel"
+        role="region"
+        [attr.aria-label]="t().projects.carouselLabel"
+      >
+        <div
+          #projectsTrack
+          class="projects-grid"
+          [class.is-dragging]="projectCarouselDragging()"
+          tabindex="0"
+          (scroll)="onProjectScroll()"
+          (wheel)="onProjectWheel($event)"
+          (pointerdown)="onProjectPointerDown($event)"
+          (pointermove)="onProjectPointerMove($event)"
+          (pointerup)="onProjectPointerUp($event)"
+          (pointercancel)="onProjectPointerUp($event)"
+          (click)="onProjectTrackClick($event)"
+          (keydown.arrowleft)="scrollProjects(-1); $event.preventDefault()"
+          (keydown.arrowright)="scrollProjects(1); $event.preventDefault()"
+        >
+          @for (project of t().projects.items; track project.name) {
+            <article class="project-card">
+              <div class="project-card__top">
+                <span>{{ project.no }}</span>
+                <span class="status-pill" [class.status-pill--live]="project.live">
+                  {{ project.status }}
+                </span>
+              </div>
+              <h3>{{ project.name }}</h3>
+              <p class="project-card__description">{{ project.description }}</p>
+              <div class="project-card__footer">
+                <div class="tag-pills">
+                  @for (technology of project.stack; track technology) {
+                    <span>{{ technology }}</span>
+                  }
+                </div>
+                @if (project.url) {
+                  <a
+                    class="project-card__link"
+                    [href]="project.url"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    draggable="false"
+                  >
+                    {{ t().projects.visit }} <span aria-hidden="true">↗</span>
+                  </a>
                 }
               </div>
-              @if (project.url) {
-                <a
-                  class="project-card__link"
-                  [href]="project.url"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  {{ t().projects.visit }} <span aria-hidden="true">↗</span>
-                </a>
-              }
-            </div>
-          </article>
-        }
+            </article>
+          }
+        </div>
+
+        <div class="projects-carousel__footer">
+          <span class="projects-carousel__hint">
+            <i aria-hidden="true">↔</i> {{ t().projects.dragHint }}
+          </span>
+          <div class="projects-carousel__progress" aria-hidden="true">
+            <span
+              [style.width.%]="
+                ((projectCarouselIndex() + 1) / t().projects.items.length) * 100
+              "
+            ></span>
+          </div>
+          <div class="projects-carousel__dots">
+            @for (project of t().projects.items; track project.name; let index = $index) {
+              <button
+                type="button"
+                [class.active]="projectCarouselIndex() === index"
+                [attr.aria-current]="projectCarouselIndex() === index ? 'true' : null"
+                [attr.aria-label]="t().projects.goTo + ' ' + project.name"
+                (click)="goToProject(index)"
+              ></button>
+            }
+          </div>
+        </div>
       </div>
     </div>
   </section>

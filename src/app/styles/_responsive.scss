@@ -43,6 +43,10 @@
     margin-top: 32px;
   }
 
+  .projects-grid {
+    --project-card-width: min(480px, calc(100% - 48px));
+  }
+
   .map-panel {
     width: 100%;
   }
@@ -107,6 +111,48 @@
 
   .hero__meta {
     grid-template-columns: 1fr;
+  }
+
+  .projects-carousel__heading {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 22px;
+  }
+
+  .projects-carousel__controls {
+    width: 100%;
+
+    .projects-carousel__counter {
+      margin-right: auto;
+    }
+  }
+
+  .projects-carousel {
+    &::after {
+      bottom: 82px;
+      width: 30px;
+    }
+  }
+
+  .projects-grid {
+    --project-card-width: calc(100% - 24px);
+
+    gap: 14px;
+    padding-right: 24px;
+  }
+
+  .project-card {
+    min-height: 310px;
+    padding: 24px;
+  }
+
+  .projects-carousel__footer {
+    grid-template-columns: minmax(100px, 1fr) auto;
+    gap: 14px 18px;
+  }
+
+  .projects-carousel__hint {
+    grid-column: 1 / -1;
   }
 
   .map-frame {

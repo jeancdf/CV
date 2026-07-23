@@ -175,6 +175,11 @@ const copy = {
       title: 'Projets',
       intro: 'Quatre projets web — dont Gift Finder, déjà en ligne, et Arkeos, réalisé à O’clock.',
       visit: 'Voir le projet',
+      carouselLabel: 'Carrousel des projets',
+      previous: 'Projet précédent',
+      next: 'Projet suivant',
+      goTo: 'Afficher le projet',
+      dragHint: 'Molette, flèches ou glisser pour naviguer',
       items: [
         {
           no: 'P1',
@@ -454,6 +459,11 @@ const copy = {
       title: 'Projects',
       intro: 'Four web projects — including Gift Finder, now live, and Arkeos, built at O’clock.',
       visit: 'View project',
+      carouselLabel: 'Project carousel',
+      previous: 'Previous project',
+      next: 'Next project',
+      goTo: 'Show project',
+      dragHint: 'Scroll, use the arrows or drag to navigate',
       items: [
         {
           no: 'P1',
@@ -608,6 +618,7 @@ const copy = {
 })
 export class AppComponent implements AfterViewInit, OnDestroy {
   @ViewChild('mapElement') private mapElement?: ElementRef<HTMLDivElement>;
+  @ViewChild('projectsTrack') private projectsTrack?: ElementRef<HTMLDivElement>;
 
   private readonly sanitizer = inject(DomSanitizer);
 
@@ -622,6 +633,8 @@ export class AppComponent implements AfterViewInit, OnDestroy {
   readonly msgId = signal('');
   readonly year = new Date().getFullYear();
   readonly form = { name: '', email: '', message: '', website: '' };
+  readonly projectCarouselIndex = signal(0);
+  readonly projectCarouselDragging = signal(false);
   readonly selectedTrackIndex = signal(0);
   readonly musicTracks = [
     {
@@ -689,6 +702,10 @@ export class AppComponent implements AfterViewInit, OnDestroy {
   private mapResizeObserver?: ResizeObserver;
   private mapRefreshFrame?: number;
   private mapRevealTimer?: number;
+  private projectDragPointerId?: number;
+  private projectDragStartX = 0;
+  private projectDragStartScrollLeft = 0;
+  private projectDragMoved = false;
 
   contactErrorMessage(): string {
     const error = this.contactError();
@@ -861,6 +878,91 @@ export class AppComponent implements AfterViewInit, OnDestroy {
     this.selectedTrackIndex.set(index);
   }
 
+  formatProjectNumber(value: number): string {
+    return String(value).padStart(2, '0');
+  }
+
+  scrollProjects(direction: -1 | 1): void {
+    const lastIndex = this.t().projects.items.length - 1;
+    const nextIndex = Math.max(0, Math.min(lastIndex, this.projectCarouselIndex() + direction));
+    this.scrollToProject(nextIndex);
+  }
+
+  goToProject(index: number): void {
+    this.scrollToProject(index);
+  }
+
+  onProjectScroll(): void {
+    this.projectCarouselIndex.set(this.findNearestProjectIndex());
+  }
+
+  onProjectWheel(event: WheelEvent): void {
+    const track = this.projectsTrack?.nativeElement;
+    if (!track) return;
+
+    const delta = Math.abs(event.deltaX) > Math.abs(event.deltaY) ? event.deltaX : event.deltaY;
+    if (!delta) return;
+
+    const maxScrollLeft = track.scrollWidth - track.clientWidth;
+    const atStart = track.scrollLeft <= 1;
+    const atEnd = track.scrollLeft >= maxScrollLeft - 1;
+
+    if ((delta < 0 && atStart) || (delta > 0 && atEnd)) return;
+
+    event.preventDefault();
+    track.scrollLeft += delta;
+  }
+
+  onProjectPointerDown(event: PointerEvent): void {
+    const track = this.projectsTrack?.nativeElement;
+    if (!track || event.pointerType !== 'mouse' || event.button !== 0) return;
+
+    this.projectDragPointerId = event.pointerId;
+    this.projectDragStartX = event.clientX;
+    this.projectDragStartScrollLeft = track.scrollLeft;
+    this.projectDragMoved = false;
+    this.projectCarouselDragging.set(true);
+    track.setPointerCapture(event.pointerId);
+  }
+
+  onProjectPointerMove(event: PointerEvent): void {
+    const track = this.projectsTrack?.nativeElement;
+    if (!track || this.projectDragPointerId !== event.pointerId) return;
+
+    const distance = event.clientX - this.projectDragStartX;
+    if (Math.abs(distance) > 4) this.projectDragMoved = true;
+    if (!this.projectDragMoved) return;
+
+    event.preventDefault();
+    track.scrollLeft = this.projectDragStartScrollLeft - distance;
+  }
+
+  onProjectPointerUp(event: PointerEvent): void {
+    const track = this.projectsTrack?.nativeElement;
+    if (!track || this.projectDragPointerId !== event.pointerId) return;
+
+    if (track.hasPointerCapture(event.pointerId)) {
+      track.releasePointerCapture(event.pointerId);
+    }
+
+    const shouldSnap = this.projectDragMoved;
+    this.projectDragPointerId = undefined;
+    this.projectCarouselDragging.set(false);
+
+    if (shouldSnap) {
+      this.scrollToProject(this.findNearestProjectIndex());
+      window.setTimeout(() => {
+        this.projectDragMoved = false;
+      });
+    }
+  }
+
+  onProjectTrackClick(event: MouseEvent): void {
+    if (!this.projectDragMoved) return;
+    event.preventDefault();
+    event.stopPropagation();
+  }
+
   async submitContact(form: NgForm): Promise<void> {
     if (this.sending()) return;
 
@@ -924,6 +1026,41 @@ export class AppComponent implements AfterViewInit, OnDestroy {
     }
 
     return groups;
+  }
+
+  private projectCards(): HTMLElement[] {
+    const track = this.projectsTrack?.nativeElement;
+    return track ? Array.from(track.querySelectorAll<HTMLElement>('.project-card')) : [];
+  }
+
+  private findNearestProjectIndex(): number {
+    const track = this.projectsTrack?.nativeElement;
+    const cards = this.projectCards();
+    if (!track || cards.length === 0) return 0;
+
+    return cards.reduce(
+      (closestIndex, card, index) => {
+        const distance = Math.abs(card.offsetLeft - track.offsetLeft - track.scrollLeft);
+        const closestCard = cards[closestIndex]!;
+        const closestDistance = Math.abs(
+          closestCard.offsetLeft - track.offsetLeft - track.scrollLeft,
+        );
+        return distance < closestDistance ? index : closestIndex;
+      },
+      0,
+    );
+  }
+
+  private scrollToProject(index: number): void {
+    const track = this.projectsTrack?.nativeElement;
+    const card = this.projectCards()[index];
+    if (!track || !card) return;
+
+    track.scrollTo({
+      left: card.offsetLeft - track.offsetLeft,
+      behavior: 'smooth',
+    });
+    this.projectCarouselIndex.set(index);
   }
 
   private createMap(): void {
