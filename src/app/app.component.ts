@@ -7,9 +7,11 @@ import {
   OnDestroy,
   ViewChild,
   computed,
+  inject,
   signal,
 } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
+import { DomSanitizer } from '@angular/platform-browser';
 import * as L from 'leaflet';
 
 type Language = 'fr' | 'en';
@@ -240,13 +242,23 @@ const copy = {
     },
     hobbies: {
       title: 'En dehors du code',
-      note: "// à personnaliser — dis-moi tes vrais centres d'intérêt et je les remplace",
-      items: [
-        { i: '01', label: 'Side-projects' },
-        { i: '02', label: 'Nouvelles technos' },
-        { i: '03', label: 'Sport' },
-        { i: '04', label: 'Musique' },
-      ],
+      tech: {
+        title: 'IA & nouvelles technologies',
+        description:
+          'Je teste les outils qui changent déjà notre façon de concevoir et de développer.',
+        items: ['ChatGPT', 'Claude', 'Codex', 'Cursor', 'GitHub Copilot', 'Agents IA', 'MCP'],
+      },
+      sport: {
+        title: 'Sports',
+        description: 'Sur le terrain ou avec une raquette.',
+        items: ['Football', 'Tennis', 'Padel'],
+      },
+      music: {
+        eyebrow: 'En écoute',
+        title: 'Ma sélection',
+        description: 'Des classiques aux sons actuels.',
+        choose: 'Choisir un morceau',
+      },
     },
     contact: {
       title: 'Parlons-en.',
@@ -325,8 +337,7 @@ const copy = {
           company: 'Career change',
           place: '',
           role: 'From business to web development',
-          description:
-            'A deliberate shift toward designing and building web applications.',
+          description: 'A deliberate shift toward designing and building web applications.',
           bullets: [],
           stack: [],
         },
@@ -476,13 +487,22 @@ const copy = {
     },
     hobbies: {
       title: 'Beyond the code',
-      note: "// to customize — tell me your real interests and I'll swap these",
-      items: [
-        { i: '01', label: 'Side-projects' },
-        { i: '02', label: 'New tech' },
-        { i: '03', label: 'Sport' },
-        { i: '04', label: 'Music' },
-      ],
+      tech: {
+        title: 'AI & emerging technology',
+        description: 'I explore the tools already reshaping how we design and build.',
+        items: ['ChatGPT', 'Claude', 'Codex', 'Cursor', 'GitHub Copilot', 'AI agents', 'MCP'],
+      },
+      sport: {
+        title: 'Sports',
+        description: 'On the pitch or with a racket.',
+        items: ['Football', 'Tennis', 'Padel'],
+      },
+      music: {
+        eyebrow: 'Now playing',
+        title: 'My selection',
+        description: 'From timeless classics to current sounds.',
+        choose: 'Choose a track',
+      },
     },
     contact: {
       title: "Let's talk.",
@@ -520,6 +540,8 @@ const copy = {
 export class AppComponent implements AfterViewInit, OnDestroy {
   @ViewChild('mapElement') private mapElement?: ElementRef<HTMLDivElement>;
 
+  private readonly sanitizer = inject(DomSanitizer);
+
   readonly language = signal<Language>('fr');
   readonly t = computed(() => copy[this.language()]);
   readonly mobileMenuOpen = signal(false);
@@ -531,6 +553,35 @@ export class AppComponent implements AfterViewInit, OnDestroy {
   readonly msgId = signal('');
   readonly year = new Date().getFullYear();
   readonly form = { name: '', email: '', message: '', website: '' };
+  readonly selectedTrackIndex = signal(0);
+  readonly musicTracks = [
+    {
+      no: '01',
+      title: 'A Day in the Life',
+      artist: 'The Beatles',
+      spotifyId: '4XiDAxr6alWzxm24i2Rt4K',
+    },
+    { no: '02', title: 'Sticky', artist: 'Drake', spotifyId: '4rmVZajAF7PkrCagGPHbqa' },
+    {
+      no: '03',
+      title: 'How Deep Is Your Love',
+      artist: 'Bee Gees',
+      spotifyId: '2JoZzpdeP2G6Csfdq5aLXP',
+    },
+    { no: '04', title: 'Neighbors', artist: 'J. Cole', spotifyId: '0utlOiJy2weVl9WTkcEWHy' },
+    {
+      no: '05',
+      title: 'Give a Little Bit',
+      artist: 'Supertramp',
+      spotifyId: '7w9iQxnOMKhJmkLd1hJ4GJ',
+    },
+  ] as const;
+  readonly selectedTrack = computed(() => this.musicTracks[this.selectedTrackIndex()]!);
+  readonly spotifyEmbedUrl = computed(() =>
+    this.sanitizer.bypassSecurityTrustResourceUrl(
+      `https://open.spotify.com/embed/track/${this.selectedTrack().spotifyId}?utm_source=generator&theme=0`,
+    ),
+  );
 
   readonly pins = computed<Pin[]>(() => {
     const labels = this.t().map.pins;
@@ -717,6 +768,10 @@ export class AppComponent implements AfterViewInit, OnDestroy {
       this.map?.flyTo(pin.coordinates, 13, { duration: 0.7 });
       this.markers.get(pinId)?.openTooltip();
     }
+  }
+
+  selectTrack(index: number): void {
+    this.selectedTrackIndex.set(index);
   }
 
   async submitContact(form: NgForm): Promise<void> {

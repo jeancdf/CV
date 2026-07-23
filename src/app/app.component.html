@@ -309,15 +309,68 @@
         <span class="section__index">06</span>
         <h2>{{ t().hobbies.title }}</h2>
       </div>
-      <div class="hobbies-list">
-        @for (item of t().hobbies.items; track item.label) {
-          <div class="hobby-pill">
-            <span>{{ item.i }}</span
-            >{{ item.label }}
+
+      <div class="interests-grid">
+        <article class="interest-card">
+          <span class="interest-card__index">01</span>
+          <h3>{{ t().hobbies.tech.title }}</h3>
+          <p>{{ t().hobbies.tech.description }}</p>
+          <div class="interest-tags">
+            @for (item of t().hobbies.tech.items; track item) {
+              <span>{{ item }}</span>
+            }
           </div>
-        }
+        </article>
+
+        <article class="interest-card interest-card--sport">
+          <span class="interest-card__index">02</span>
+          <h3>{{ t().hobbies.sport.title }}</h3>
+          <p>{{ t().hobbies.sport.description }}</p>
+          <div class="interest-tags">
+            @for (item of t().hobbies.sport.items; track item) {
+              <span>{{ item }}</span>
+            }
+          </div>
+        </article>
       </div>
-      <p class="hobbies-note">{{ t().hobbies.note }}</p>
+
+      <article class="music-player">
+        <div class="music-player__head">
+          <span class="interest-card__index">03</span>
+          <div>
+            <p>{{ t().hobbies.music.eyebrow }}</p>
+            <h3>{{ t().hobbies.music.title }}</h3>
+            <span>{{ t().hobbies.music.description }}</span>
+          </div>
+          <div class="music-player__equalizer" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+        </div>
+
+        <div class="music-player__body">
+          <iframe
+            [src]="spotifyEmbedUrl()"
+            [title]="selectedTrack().title + ' — ' + selectedTrack().artist"
+            allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+            loading="lazy"
+          ></iframe>
+
+          <div class="playlist">
+            <p>{{ t().hobbies.music.choose }}</p>
+            @for (track of musicTracks; track track.spotifyId; let index = $index) {
+              <button
+                type="button"
+                [class.is-active]="selectedTrackIndex() === index"
+                [attr.aria-pressed]="selectedTrackIndex() === index"
+                (click)="selectTrack(index)"
+              >
+                <span>{{ track.no }}</span>
+                <b>{{ track.title }}</b>
+                <small>{{ track.artist }}</small>
+                <i aria-hidden="true">▶</i>
+              </button>
+            }
+          </div>
+        </div>
+      </article>
     </div>
   </section>
 
