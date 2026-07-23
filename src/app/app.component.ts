@@ -134,7 +134,7 @@ const copy = {
         {
           kind: 'experience',
           label: 'Expérience',
-          period: "2024 — aujourd'hui",
+          period: "2022 — aujourd'hui",
           company: 'G7 Taxis',
           place: 'Paris, France',
           role: 'Développeur web full-stack',
@@ -405,7 +405,7 @@ const copy = {
         {
           kind: 'experience',
           label: 'Experience',
-          period: '2024 — present',
+          period: '2022 — present',
           company: 'G7 Taxis',
           place: 'Paris, France',
           role: 'Full-stack web developer',
