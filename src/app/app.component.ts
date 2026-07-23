@@ -270,10 +270,17 @@ const copy = {
     hobbies: {
       title: 'En dehors du code',
       tech: {
-        title: 'IA & nouvelles technologies',
+        title: 'IA, modèles & agents',
         description:
-          'Je teste les outils qui changent déjà notre façon de concevoir et de développer.',
-        items: ['ChatGPT', 'Claude', 'Codex', 'Cursor', 'GitHub Copilot', 'Agents IA', 'MCP'],
+          'J’aborde l’IA comme un sujet d’ingénierie : conception d’agents autonomes, orchestration d’outils avec MCP, adaptation de modèles issus de Hugging Face et exécution sur les serveurs locaux de l’entreprise pour maîtriser les données, les performances et l’intégration.',
+        items: [
+          'Hugging Face',
+          'Agents autonomes',
+          'Adaptation de modèles',
+          'Inférence locale',
+          'Modèles open source',
+          'MCP',
+        ],
       },
       sport: {
         title: 'Sports',
@@ -542,9 +549,17 @@ const copy = {
     hobbies: {
       title: 'Beyond the code',
       tech: {
-        title: 'AI & emerging technology',
-        description: 'I explore the tools already reshaping how we design and build.',
-        items: ['ChatGPT', 'Claude', 'Codex', 'Cursor', 'GitHub Copilot', 'AI agents', 'MCP'],
+        title: 'AI, models & agents',
+        description:
+          'I approach AI as an engineering discipline: designing autonomous agents, orchestrating tools through MCP, adapting Hugging Face models and running them on the company’s local servers to retain control over data, performance and integration.',
+        items: [
+          'Hugging Face',
+          'Autonomous agents',
+          'Model adaptation',
+          'Local inference',
+          'Open-source models',
+          'MCP',
+        ],
       },
       sport: {
         title: 'Sports',
