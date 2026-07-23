@@ -70,7 +70,6 @@ const copy = {
       title: 'Parcours',
       intro:
         'De ma formation en business à l’ESSEC à mon poste de développeur full-stack chez G7, voici les étapes qui ont construit mon parcours.',
-      reorientation: 'Réorientation',
       items: [
         {
           kind: 'education',
@@ -80,6 +79,18 @@ const copy = {
           place: 'France',
           role: 'E-Bachelor',
           description: 'Formation en management, commerce et entrepreneuriat.',
+          bullets: [],
+          stack: [],
+        },
+        {
+          kind: 'transition',
+          label: 'Réorientation',
+          period: '2020 — 2021',
+          company: 'Réorientation',
+          place: '',
+          role: 'Du business au développement web',
+          description:
+            'Décision de réorienter mon parcours vers la conception et le développement d’applications web.',
           bullets: [],
           stack: [],
         },
@@ -295,7 +306,6 @@ const copy = {
       title: 'Career & education',
       intro:
         'From studying business at ESSEC to working as a full-stack developer at G7, these are the steps that shaped my path.',
-      reorientation: 'Career change',
       items: [
         {
           kind: 'education',
@@ -305,6 +315,18 @@ const copy = {
           place: 'France',
           role: 'E-Bachelor',
           description: 'Coursework in management, business and entrepreneurship.',
+          bullets: [],
+          stack: [],
+        },
+        {
+          kind: 'transition',
+          label: 'Career change',
+          period: '2020 — 2021',
+          company: 'Career change',
+          place: '',
+          role: 'From business to web development',
+          description:
+            'A deliberate shift toward designing and building web applications.',
           bullets: [],
           stack: [],
         },
