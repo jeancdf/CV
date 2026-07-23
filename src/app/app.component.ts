@@ -174,8 +174,10 @@ const copy = {
     },
     projects: {
       title: 'Projets',
-      intro: 'Quatre projets web — dont Gift Finder, déjà en ligne, et Arkeos, réalisé à O’clock.',
-      visit: 'Voir le projet',
+      intro: 'Quatre projets web — dont trois accessibles en ligne, avec leur code source sur GitHub.',
+      visit: 'Voir le site',
+      source: 'GitHub',
+      privateRepository: 'privé',
       carouselLabel: 'Carrousel des projets',
       previous: 'Projet précédent',
       next: 'Projet suivant',
@@ -184,13 +186,15 @@ const copy = {
       items: [
         {
           no: 'P1',
-          status: 'En cours',
-          live: false,
+          status: 'En ligne · en cours',
+          live: true,
           name: 'Gestion de mariage',
           description:
             'Une plateforme pour organiser un mariage de A à Z : invités, prestataires, budget et planning au même endroit.',
           stack: ['React', 'NestJS', 'PostgreSQL'],
-          url: '',
+          siteUrl: 'https://mon-mariage.duckdns.org/',
+          githubUrl: 'https://github.com/jeancdf/mon-mariage',
+          repositoryPrivate: false,
         },
         {
           no: 'P2',
@@ -200,7 +204,9 @@ const copy = {
           description:
             "Un CRM pour gérer les membres d'un club de golf : adhésions, réservations et suivi de l'activité.",
           stack: ['Angular', 'Spring Boot', 'PostgreSQL'],
-          url: '',
+          siteUrl: '',
+          githubUrl: 'https://github.com/jeancdf/carnet-de-golf',
+          repositoryPrivate: true,
         },
         {
           no: 'P3',
@@ -210,17 +216,21 @@ const copy = {
           description:
             'Un assistant conversationnel qui propose des idées cadeaux personnalisées grâce à l’IA, puis permet de créer et partager sa liste.',
           stack: ['Angular', 'Express', 'PostgreSQL', 'Qwen'],
-          url: 'https://gift-finder.duckdns.org',
+          siteUrl: 'https://gift-finder.duckdns.org/',
+          githubUrl: 'https://github.com/jeancdf/Cadeau-anniv',
+          repositoryPrivate: false,
         },
         {
           no: 'P4',
-          status: 'Projet de formation',
-          live: false,
+          status: 'En ligne',
+          live: true,
           name: 'Arkeos',
           description:
             'Une plateforme communautaire pour les passionnés de reptiles et d’amphibiens : articles, marketplace, profils et messagerie.',
           stack: ['React', 'Express', 'PostgreSQL', 'Socket.IO'],
-          url: 'https://github.com/jeancdf/Arkeos',
+          siteUrl: 'https://arkeos.duckdns.org/',
+          githubUrl: 'https://github.com/jeancdf/Arkeos',
+          repositoryPrivate: false,
         },
       ],
     },
@@ -245,9 +255,9 @@ const copy = {
         },
         mariage: {
           name: 'Gestion de mariage',
-          tag: 'PROJET · BIENTÔT',
+          tag: 'PROJET · EN LIGNE',
           description:
-            "Plateforme d'organisation de mariage — invités, prestataires, budget et planning. En cours de développement.",
+            "Plateforme d'organisation de mariage — invités, prestataires, budget et planning. Accessible en ligne et toujours en développement.",
           short: 'Projet · Mariage',
         },
         golf: {
@@ -266,7 +276,7 @@ const copy = {
         },
         arkeos: {
           name: 'Arkeos',
-          tag: 'PROJET · O’CLOCK',
+          tag: 'PROJET O’CLOCK · EN LIGNE',
           description:
             'Projet de fin de formation : plateforme communautaire pour les passionnés de reptiles et d’amphibiens.',
           short: 'Arkeos',
@@ -458,8 +468,10 @@ const copy = {
     },
     projects: {
       title: 'Projects',
-      intro: 'Four web projects — including Gift Finder, now live, and Arkeos, built at O’clock.',
-      visit: 'View project',
+      intro: 'Four web projects — including three live products, with their source code on GitHub.',
+      visit: 'Visit site',
+      source: 'GitHub',
+      privateRepository: 'private',
       carouselLabel: 'Project carousel',
       previous: 'Previous project',
       next: 'Next project',
@@ -468,13 +480,15 @@ const copy = {
       items: [
         {
           no: 'P1',
-          status: 'In progress',
-          live: false,
+          status: 'Live · in progress',
+          live: true,
           name: 'Wedding planner',
           description:
             'A platform to organize a wedding end to end: guests, vendors, budget and schedule in one place.',
           stack: ['React', 'NestJS', 'PostgreSQL'],
-          url: '',
+          siteUrl: 'https://mon-mariage.duckdns.org/',
+          githubUrl: 'https://github.com/jeancdf/mon-mariage',
+          repositoryPrivate: false,
         },
         {
           no: 'P2',
@@ -484,7 +498,9 @@ const copy = {
           description:
             "A CRM to manage a golf club's members: memberships, bookings and activity tracking.",
           stack: ['Angular', 'Spring Boot', 'PostgreSQL'],
-          url: '',
+          siteUrl: '',
+          githubUrl: 'https://github.com/jeancdf/carnet-de-golf',
+          repositoryPrivate: true,
         },
         {
           no: 'P3',
@@ -494,17 +510,21 @@ const copy = {
           description:
             'A conversational assistant that uses AI to suggest personalized gift ideas, then lets users create and share their list.',
           stack: ['Angular', 'Express', 'PostgreSQL', 'Qwen'],
-          url: 'https://gift-finder.duckdns.org',
+          siteUrl: 'https://gift-finder.duckdns.org/',
+          githubUrl: 'https://github.com/jeancdf/Cadeau-anniv',
+          repositoryPrivate: false,
         },
         {
           no: 'P4',
-          status: 'School project',
-          live: false,
+          status: 'Live',
+          live: true,
           name: 'Arkeos',
           description:
             'A community platform for reptile and amphibian enthusiasts, featuring articles, a marketplace, profiles and messaging.',
           stack: ['React', 'Express', 'PostgreSQL', 'Socket.IO'],
-          url: 'https://github.com/jeancdf/Arkeos',
+          siteUrl: 'https://arkeos.duckdns.org/',
+          githubUrl: 'https://github.com/jeancdf/Arkeos',
+          repositoryPrivate: false,
         },
       ],
     },
@@ -529,9 +549,9 @@ const copy = {
         },
         mariage: {
           name: 'Wedding planner',
-          tag: 'PROJECT · SOON',
+          tag: 'PROJECT · LIVE',
           description:
-            'Wedding organization platform — guests, vendors, budget and schedule. Currently in development.',
+            'Wedding organization platform — guests, vendors, budget and schedule. Live and still in development.',
           short: 'Project · Wedding',
         },
         golf: {
@@ -550,7 +570,7 @@ const copy = {
         },
         arkeos: {
           name: 'Arkeos',
-          tag: 'PROJECT · O’CLOCK',
+          tag: 'O’CLOCK PROJECT · LIVE',
           description:
             'Final bootcamp project: a community platform for reptile and amphibian enthusiasts.',
           short: 'Arkeos',

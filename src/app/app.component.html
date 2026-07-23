@@ -256,11 +256,7 @@
         </div>
       </div>
 
-      <div
-        class="projects-carousel"
-        role="region"
-        [attr.aria-label]="t().projects.carouselLabel"
-      >
+      <div class="projects-carousel" role="region" [attr.aria-label]="t().projects.carouselLabel">
         <div
           #projectsTrack
           class="projects-grid"
@@ -292,17 +288,34 @@
                     <span>{{ technology }}</span>
                   }
                 </div>
-                @if (project.url) {
+                <div class="project-card__links">
+                  @if (project.siteUrl) {
+                    <a
+                      class="project-card__link project-card__link--site"
+                      [href]="project.siteUrl"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      draggable="false"
+                    >
+                      {{ t().projects.visit }} <span aria-hidden="true">↗</span>
+                    </a>
+                  }
                   <a
-                    class="project-card__link"
-                    [href]="project.url"
+                    class="project-card__link project-card__link--github"
+                    [href]="project.githubUrl"
                     target="_blank"
                     rel="noopener noreferrer"
                     draggable="false"
                   >
-                    {{ t().projects.visit }} <span aria-hidden="true">↗</span>
+                    {{ t().projects.source }}
+                    @if (project.repositoryPrivate) {
+                      <span class="project-card__private">
+                        · {{ t().projects.privateRepository }}
+                      </span>
+                    }
+                    <span aria-hidden="true">↗</span>
                   </a>
-                }
+                </div>
               </div>
             </article>
           }
@@ -314,9 +327,7 @@
           </span>
           <div class="projects-carousel__progress" aria-hidden="true">
             <span
-              [style.width.%]="
-                ((projectCarouselIndex() + 1) / t().projects.items.length) * 100
-              "
+              [style.width.%]="((projectCarouselIndex() + 1) / t().projects.items.length) * 100"
             ></span>
           </div>
           <div class="projects-carousel__dots">
