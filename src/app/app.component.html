@@ -273,7 +273,7 @@
           (keydown.arrowright)="scrollProjects(1); $event.preventDefault()"
         >
           @for (project of t().projects.items; track project.name) {
-            <article class="project-card" [class.project-card--first]="project.firstProject">
+            <article class="project-card">
               <div class="project-card__top">
                 <span>{{ project.no }}</span>
                 <span class="status-pill" [class.status-pill--live]="project.live">
@@ -281,13 +281,11 @@
                 </span>
               </div>
               @if (project.firstProject) {
-                <div class="project-card__origin" role="note">
-                  <span class="project-card__origin-number" aria-hidden="true">01</span>
-                  <span class="project-card__origin-copy">
-                    <strong>{{ t().projects.firstProjectTitle }}</strong>
-                    <small>{{ t().projects.firstProjectSubtitle }}</small>
-                  </span>
-                </div>
+                <p class="project-card__first-project">
+                  <strong>{{ t().projects.firstProjectTitle }}</strong>
+                  <span aria-hidden="true">·</span>
+                  <span>{{ t().projects.firstProjectSubtitle }}</span>
+                </p>
               }
               <h3>{{ project.name }}</h3>
               <p class="project-card__description">{{ project.description }}</p>
