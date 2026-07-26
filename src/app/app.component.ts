@@ -955,9 +955,14 @@ export class AppComponent implements AfterViewInit, OnDestroy {
     track.scrollLeft += delta;
   }
 
+  private isProjectInteractiveTarget(target: EventTarget | null): boolean {
+    return target instanceof HTMLElement && !!target.closest('a, button');
+  }
+
   onProjectPointerDown(event: PointerEvent): void {
     const track = this.projectsTrack?.nativeElement;
     if (!track || event.pointerType !== 'mouse' || event.button !== 0) return;
+    if (this.isProjectInteractiveTarget(event.target)) return;
 
     this.projectDragPointerId = event.pointerId;
     this.projectDragStartX = event.clientX;
@@ -1000,6 +1005,7 @@ export class AppComponent implements AfterViewInit, OnDestroy {
   }
 
   onProjectTrackClick(event: MouseEvent): void {
+    if (this.isProjectInteractiveTarget(event.target)) return;
     if (!this.projectDragMoved) return;
     event.preventDefault();
     event.stopPropagation();

@@ -303,6 +303,7 @@
                       target="_blank"
                       rel="noopener noreferrer"
                       draggable="false"
+                      (pointerdown)="$event.stopPropagation()"
                     >
                       {{ t().projects.visit }} <span aria-hidden="true">↗</span>
                     </a>
@@ -313,6 +314,7 @@
                     target="_blank"
                     rel="noopener noreferrer"
                     draggable="false"
+                    (pointerdown)="$event.stopPropagation()"
                   >
                     {{ t().projects.source }}
                     @if (project.repositoryPrivate) {
