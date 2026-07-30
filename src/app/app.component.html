@@ -1,3 +1,18 @@
+<svg class="icon-sprite" aria-hidden="true">
+  <defs>
+    <symbol id="icon-github" viewBox="0 0 24 24">
+      <path
+        d="M12 .3A12 12 0 0 0 8.2 23.7c.6.1.8-.3.8-.6v-2.1c-3.3.7-4-1.4-4-1.4-.5-1.4-1.3-1.7-1.3-1.7-1.1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1.1 1.8 2.8 1.3 3.5 1 .1-.8.4-1.3.8-1.6-2.7-.3-5.5-1.3-5.5-5.9 0-1.3.5-2.4 1.2-3.2-.1-.3-.5-1.5.1-3.2 0 0 1-.3 3.3 1.2a11.4 11.4 0 0 1 6 0c2.3-1.5 3.3-1.2 3.3-1.2.6 1.7.2 2.9.1 3.2.8.8 1.2 1.9 1.2 3.2 0 4.6-2.8 5.6-5.5 5.9.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6A12 12 0 0 0 12 .3"
+      />
+    </symbol>
+    <symbol id="icon-linkedin" viewBox="0 0 24 24">
+      <path
+        d="M20.5 20.5h-3.6v-5.6c0-1.3 0-3-1.8-3s-2.2 1.4-2.2 2.9v5.7H9.3V9h3.4v1.6c.5-.9 1.7-1.9 3.4-1.9 3.6 0 4.3 2.4 4.3 5.5v6.3ZM5.3 7.4a2.1 2.1 0 1 1 0-4.1 2.1 2.1 0 0 1 0 4.1Zm1.8 13.1H3.5V9h3.6v11.5ZM22.2 0H1.8C.8 0 0 .8 0 1.7v20.6c0 .9.8 1.7 1.8 1.7h20.4c1 0 1.8-.8 1.8-1.7V1.7C24 .8 23.2 0 22.2 0Z"
+      />
+    </symbol>
+  </defs>
+</svg>
+
 <nav class="site-nav" aria-label="Navigation principale">
   <div class="site-nav__inner shell">
     <a class="site-nav__logo" href="#top" (click)="closeMenu()">Jean Cazals</a>
@@ -21,13 +36,33 @@
         <a href="#carte" (click)="closeMenu()">{{ t().nav.map }}</a>
         <a href="#contact" (click)="closeMenu()">{{ t().nav.contact }}</a>
       </div>
+      <div class="site-nav__socials" [attr.aria-label]="t().socials.label">
+        <a
+          class="social-icon"
+          href="https://github.com/jeancdf"
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="GitHub"
+        >
+          <svg aria-hidden="true"><use href="#icon-github"></use></svg>
+        </a>
+        <a
+          class="social-icon"
+          href="https://www.linkedin.com/in/jean-cazals-ba183231a"
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="LinkedIn"
+        >
+          <svg aria-hidden="true"><use href="#icon-linkedin"></use></svg>
+        </a>
+      </div>
       <button class="lang-pill" type="button" (click)="toggleLanguage()">
         <span [class.active]="language() === 'fr'">FR</span> /
         <span [class.active]="language() === 'en'">EN</span>
       </button>
       <a
         class="button button--dark button--small"
-        href="uploads/Profile.pdf"
+        href="uploads/CV-Jean-Cazals-Harvard-2026.pdf"
         download="CV-Jean-Cazals.pdf"
       >
         {{ t().nav.cv }}
@@ -54,6 +89,26 @@
         <div class="hero__actions">
           <a class="button button--dark" href="#parcours">{{ t().hero.primary }}</a>
           <a class="button button--outline" href="#contact">{{ t().hero.secondary }}</a>
+        </div>
+        <div class="hero__socials" [attr.aria-label]="t().socials.label">
+          <a
+            class="social-link"
+            href="https://github.com/jeancdf"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <svg aria-hidden="true"><use href="#icon-github"></use></svg>
+            <span>GitHub</span>
+          </a>
+          <a
+            class="social-link"
+            href="https://www.linkedin.com/in/jean-cazals-ba183231a"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <svg aria-hidden="true"><use href="#icon-linkedin"></use></svg>
+            <span>LinkedIn</span>
+          </a>
         </div>
       </div>
 
@@ -106,6 +161,7 @@
           <article
             class="journey-item"
             [class.journey-item--experience]="item.kind === 'experience'"
+            [class.journey-item--transition]="item.kind === 'transition'"
           >
             <div class="journey-item__meta">
               <p class="journey-item__period">{{ item.period }}</p>
@@ -172,24 +228,129 @@
         <span class="section__index">04</span>
         <h2>{{ t().projects.title }}</h2>
       </div>
-      <p class="section__intro">{{ t().projects.intro }}</p>
 
-      <div class="projects-grid">
-        @for (project of t().projects.items; track project.name) {
-          <article class="project-card">
-            <div class="project-card__top">
-              <span>{{ project.no }}</span>
-              <span class="status-pill">{{ project.status }}</span>
-            </div>
-            <h3>{{ project.name }}</h3>
-            <p class="project-card__description">{{ project.description }}</p>
-            <div class="tag-pills">
-              @for (technology of project.stack; track technology) {
-                <span>{{ technology }}</span>
+      <div class="projects-carousel__heading">
+        <p class="section__intro">{{ t().projects.intro }}</p>
+        <div class="projects-carousel__controls">
+          <span class="projects-carousel__counter" aria-live="polite">
+            <b>{{ formatProjectNumber(projectCarouselIndex() + 1) }}</b>
+            <i></i>
+            {{ formatProjectNumber(t().projects.items.length) }}
+          </span>
+          <button
+            type="button"
+            [attr.aria-label]="t().projects.previous"
+            [disabled]="projectCarouselIndex() === 0"
+            (click)="scrollProjects(-1)"
+          >
+            <span aria-hidden="true">←</span>
+          </button>
+          <button
+            type="button"
+            [attr.aria-label]="t().projects.next"
+            [disabled]="projectCarouselIndex() === t().projects.items.length - 1"
+            (click)="scrollProjects(1)"
+          >
+            <span aria-hidden="true">→</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="projects-carousel" role="region" [attr.aria-label]="t().projects.carouselLabel">
+        <div
+          #projectsTrack
+          class="projects-grid"
+          [class.is-dragging]="projectCarouselDragging()"
+          tabindex="0"
+          (scroll)="onProjectScroll()"
+          (wheel)="onProjectWheel($event)"
+          (pointerdown)="onProjectPointerDown($event)"
+          (pointermove)="onProjectPointerMove($event)"
+          (pointerup)="onProjectPointerUp($event)"
+          (pointercancel)="onProjectPointerUp($event)"
+          (click)="onProjectTrackClick($event)"
+          (keydown.arrowleft)="scrollProjects(-1); $event.preventDefault()"
+          (keydown.arrowright)="scrollProjects(1); $event.preventDefault()"
+        >
+          @for (project of t().projects.items; track project.name) {
+            <article class="project-card">
+              <div class="project-card__top">
+                <span>{{ project.no }}</span>
+                <span class="status-pill" [class.status-pill--live]="project.live">
+                  {{ project.status }}
+                </span>
+              </div>
+              @if (project.firstProject) {
+                <p class="project-card__first-project">
+                  <strong>{{ t().projects.firstProjectTitle }}</strong>
+                  <span aria-hidden="true">·</span>
+                  <span>{{ t().projects.firstProjectSubtitle }}</span>
+                </p>
               }
-            </div>
-          </article>
-        }
+              <h3>{{ project.name }}</h3>
+              <p class="project-card__description">{{ project.description }}</p>
+              <div class="project-card__footer">
+                <div class="tag-pills">
+                  @for (technology of project.stack; track technology) {
+                    <span>{{ technology }}</span>
+                  }
+                </div>
+                <div class="project-card__links">
+                  @if (project.siteUrl) {
+                    <a
+                      class="project-card__link project-card__link--site"
+                      [href]="project.siteUrl"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      draggable="false"
+                      (pointerdown)="$event.stopPropagation()"
+                    >
+                      {{ t().projects.visit }} <span aria-hidden="true">↗</span>
+                    </a>
+                  }
+                  <a
+                    class="project-card__link project-card__link--github"
+                    [href]="project.githubUrl"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    draggable="false"
+                    (pointerdown)="$event.stopPropagation()"
+                  >
+                    {{ t().projects.source }}
+                    @if (project.repositoryPrivate) {
+                      <span class="project-card__private">
+                        · {{ t().projects.privateRepository }}
+                      </span>
+                    }
+                    <span aria-hidden="true">↗</span>
+                  </a>
+                </div>
+              </div>
+            </article>
+          }
+        </div>
+
+        <div class="projects-carousel__footer">
+          <span class="projects-carousel__hint">
+            <i aria-hidden="true">↔</i> {{ t().projects.dragHint }}
+          </span>
+          <div class="projects-carousel__progress" aria-hidden="true">
+            <span
+              [style.width.%]="((projectCarouselIndex() + 1) / t().projects.items.length) * 100"
+            ></span>
+          </div>
+          <div class="projects-carousel__dots">
+            @for (project of t().projects.items; track project.name; let index = $index) {
+              <button
+                type="button"
+                [class.active]="projectCarouselIndex() === index"
+                [attr.aria-current]="projectCarouselIndex() === index ? 'true' : null"
+                [attr.aria-label]="t().projects.goTo + ' ' + project.name"
+                (click)="goToProject(index)"
+              ></button>
+            }
+          </div>
+        </div>
       </div>
     </div>
   </section>
@@ -239,15 +400,68 @@
         <span class="section__index">06</span>
         <h2>{{ t().hobbies.title }}</h2>
       </div>
-      <div class="hobbies-list">
-        @for (item of t().hobbies.items; track item.label) {
-          <div class="hobby-pill">
-            <span>{{ item.i }}</span
-            >{{ item.label }}
+
+      <div class="interests-grid">
+        <article class="interest-card">
+          <span class="interest-card__index">01</span>
+          <h3>{{ t().hobbies.tech.title }}</h3>
+          <p>{{ t().hobbies.tech.description }}</p>
+          <div class="interest-tags">
+            @for (item of t().hobbies.tech.items; track item) {
+              <span>{{ item }}</span>
+            }
           </div>
-        }
+        </article>
+
+        <article class="interest-card interest-card--sport">
+          <span class="interest-card__index">02</span>
+          <h3>{{ t().hobbies.sport.title }}</h3>
+          <p>{{ t().hobbies.sport.description }}</p>
+          <div class="interest-tags">
+            @for (item of t().hobbies.sport.items; track item) {
+              <span>{{ item }}</span>
+            }
+          </div>
+        </article>
       </div>
-      <p class="hobbies-note">{{ t().hobbies.note }}</p>
+
+      <article class="music-player">
+        <div class="music-player__head">
+          <span class="interest-card__index">03</span>
+          <div>
+            <p>{{ t().hobbies.music.eyebrow }}</p>
+            <h3>{{ t().hobbies.music.title }}</h3>
+            <span>{{ t().hobbies.music.description }}</span>
+          </div>
+          <div class="music-player__equalizer" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+        </div>
+
+        <div class="music-player__body">
+          <iframe
+            [src]="spotifyEmbedUrl()"
+            [title]="selectedTrack().title + ' — ' + selectedTrack().artist"
+            allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+            loading="lazy"
+          ></iframe>
+
+          <div class="playlist">
+            <p>{{ t().hobbies.music.choose }}</p>
+            @for (track of musicTracks; track track.spotifyId; let index = $index) {
+              <button
+                type="button"
+                [class.is-active]="selectedTrackIndex() === index"
+                [attr.aria-pressed]="selectedTrackIndex() === index"
+                (click)="selectTrack(index)"
+              >
+                <span>{{ track.no }}</span>
+                <b>{{ track.title }}</b>
+                <small>{{ track.artist }}</small>
+                <i aria-hidden="true">▶</i>
+              </button>
+            }
+          </div>
+        </div>
+      </article>
     </div>
   </section>
 
@@ -381,6 +595,20 @@
 <footer class="site-footer">
   <div class="shell">
     <span>© {{ year }} Jean Cazals — Paris</span>
+    <div class="site-footer__socials" [attr.aria-label]="t().socials.label">
+      <a href="https://github.com/jeancdf" target="_blank" rel="noopener noreferrer">
+        <svg aria-hidden="true"><use href="#icon-github"></use></svg>
+        <span>GitHub</span>
+      </a>
+      <a
+        href="https://www.linkedin.com/in/jean-cazals-ba183231a"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        <svg aria-hidden="true"><use href="#icon-linkedin"></use></svg>
+        <span>LinkedIn</span>
+      </a>
+    </div>
     <a href="#top">{{ t().footer.top }} ↑</a>
   </div>
 </footer>

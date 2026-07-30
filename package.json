@@ -3,6 +3,7 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
+    "cv:pdf": "node scripts/generate-cv.mjs",
     "start": "ng serve --proxy-config proxy.conf.json",
     "start:api": "node --env-file-if-exists=.env server.mjs",
     "build": "ng build",

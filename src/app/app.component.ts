@@ -7,14 +7,16 @@ import {
   OnDestroy,
   ViewChild,
   computed,
+  inject,
   signal,
 } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
+import { DomSanitizer } from '@angular/platform-browser';
 import * as L from 'leaflet';
 
 type Language = 'fr' | 'en';
 type CodeTab = 'fetch' | 'curl' | 'json';
-type PinId = 'g7' | 'hetic' | 'mariage' | 'golf';
+type PinId = 'g7' | 'hetic' | 'mariage' | 'golf' | 'giftFinder' | 'arkeos';
 type ContactError = 'invalid' | 'rateLimit' | 'generic' | null;
 type TokenKind = 'punct' | 'key' | 'str' | 'fn' | 'kw' | 'plain' | 'ok' | 'dim';
 
@@ -31,6 +33,7 @@ interface Pin {
   short: string;
   coordinates: L.LatLngExpression;
   color: string;
+  clusterGroup?: string;
 }
 
 const copy = {
@@ -74,7 +77,7 @@ const copy = {
         {
           kind: 'experience',
           label: 'Expérience',
-          period: "2024 — aujourd'hui",
+          period: "2022 — aujourd'hui",
           company: 'G7 Taxis',
           place: 'Paris, France',
           role: 'Développeur web full-stack',
@@ -126,6 +129,20 @@ const copy = {
           place: 'France',
           role: 'Bootcamp développement web',
           description: 'Formation intensive de six mois aux fondamentaux du développement web.',
+          bullets: [
+            'Projet de fin de formation : Arkeos, une plateforme communautaire dédiée aux passionnés de reptiles et d’amphibiens.',
+          ],
+          stack: ['React', 'Express', 'PostgreSQL', 'Socket.IO'],
+        },
+        {
+          kind: 'transition',
+          label: 'Réorientation',
+          period: '2020 — 2021',
+          company: 'Réorientation',
+          place: '',
+          role: 'Du business au développement web',
+          description:
+            'Décision de réorienter mon parcours vers la conception et le développement d’applications web.',
           bullets: [],
           stack: [],
         },
@@ -135,8 +152,9 @@ const copy = {
           period: '2018 — 2020',
           company: 'ESSEC Business School',
           place: 'France',
-          role: 'E-Bachelor',
-          description: 'Formation en management, commerce et entrepreneuriat.',
+          role: 'Programme E-Bachelor · cursus interrompu',
+          description:
+            'Formation en management, commerce et entrepreneuriat, interrompue avant l’obtention du diplôme afin de me réorienter vers le développement web.',
           bullets: [],
           stack: [],
         },
@@ -156,30 +174,76 @@ const copy = {
     },
     projects: {
       title: 'Projets',
-      intro: 'Deux projets personnels en cours de construction — bientôt en ligne.',
+      intro: 'Quatre projets web — dont trois accessibles en ligne, avec leur code source sur GitHub.',
+      visit: 'Voir le site',
+      source: 'GitHub',
+      privateRepository: 'privé',
+      firstProjectTitle: 'Mon tout premier projet',
+      firstProjectSubtitle: 'Là où tout a commencé',
+      carouselLabel: 'Carrousel des projets',
+      previous: 'Projet précédent',
+      next: 'Projet suivant',
+      goTo: 'Afficher le projet',
+      dragHint: 'Molette, flèches ou glisser pour naviguer',
       items: [
         {
           no: 'P1',
-          status: 'En cours',
+          status: 'En ligne · en cours',
+          live: true,
           name: 'Gestion de mariage',
           description:
             'Une plateforme pour organiser un mariage de A à Z : invités, prestataires, budget et planning au même endroit.',
           stack: ['React', 'NestJS', 'PostgreSQL'],
+          siteUrl: 'https://mon-mariage.duckdns.org/',
+          githubUrl: 'https://github.com/jeancdf/mon-mariage',
+          repositoryPrivate: false,
+          firstProject: false,
         },
         {
           no: 'P2',
           status: 'En cours',
+          live: false,
           name: 'CRM Club de golf',
           description:
             "Un CRM pour gérer les membres d'un club de golf : adhésions, réservations et suivi de l'activité.",
           stack: ['Angular', 'Spring Boot', 'PostgreSQL'],
+          siteUrl: '',
+          githubUrl: 'https://github.com/jeancdf/carnet-de-golf',
+          repositoryPrivate: true,
+          firstProject: false,
+        },
+        {
+          no: 'P3',
+          status: 'En ligne',
+          live: true,
+          name: 'Gift Finder',
+          description:
+            'Un assistant conversationnel qui propose des idées cadeaux personnalisées grâce à l’IA, puis permet de créer et partager sa liste.',
+          stack: ['Angular', 'Express', 'PostgreSQL', 'Qwen'],
+          siteUrl: 'https://gift-finder.duckdns.org/',
+          githubUrl: 'https://github.com/jeancdf/Cadeau-anniv',
+          repositoryPrivate: false,
+          firstProject: false,
+        },
+        {
+          no: 'P4',
+          status: 'En ligne',
+          live: true,
+          name: 'Arkeos',
+          description:
+            'Mon tout premier projet de développement, réalisé à la fin de ma formation O’clock : une plateforme communautaire pour les passionnés de reptiles et d’amphibiens.',
+          stack: ['React', 'Express', 'PostgreSQL', 'Socket.IO'],
+          siteUrl: 'https://arkeos.duckdns.org/',
+          githubUrl: 'https://github.com/jeancdf/Arkeos',
+          repositoryPrivate: false,
+          firstProject: true,
         },
       ],
     },
     map: {
       title: 'Paris, sur la carte',
       intro: 'Cliquez sur les points pour explorer où se passe mon parcours et mes projets.',
-      hint: 'Cliquez sur un autre point pour changer.',
+      hint: 'Les lieux proches sont regroupés. Zoomez ou cliquez sur le compteur pour séparer les points.',
       pins: {
         g7: {
           name: 'G7 Taxis',
@@ -197,9 +261,9 @@ const copy = {
         },
         mariage: {
           name: 'Gestion de mariage',
-          tag: 'PROJET · BIENTÔT',
+          tag: 'PROJET · EN LIGNE',
           description:
-            "Plateforme d'organisation de mariage — invités, prestataires, budget et planning. En cours de développement.",
+            "Plateforme d'organisation de mariage — invités, prestataires, budget et planning. Accessible en ligne et toujours en développement.",
           short: 'Projet · Mariage',
         },
         golf: {
@@ -209,17 +273,48 @@ const copy = {
             "CRM de gestion des membres d'un club de golf : adhésions, réservations et suivi. En cours de développement.",
           short: 'Projet · Golf',
         },
+        giftFinder: {
+          name: 'Gift Finder',
+          tag: 'PROJET · EN LIGNE',
+          description:
+            'Assistant conversationnel de recherche de cadeaux personnalisés et de création de listes partageables.',
+          short: 'Gift Finder',
+        },
+        arkeos: {
+          name: 'Arkeos',
+          tag: 'PROJET O’CLOCK · EN LIGNE',
+          description:
+            'Projet de fin de formation : plateforme communautaire pour les passionnés de reptiles et d’amphibiens.',
+          short: 'Arkeos',
+        },
       },
     },
     hobbies: {
       title: 'En dehors du code',
-      note: "// à personnaliser — dis-moi tes vrais centres d'intérêt et je les remplace",
-      items: [
-        { i: '01', label: 'Side-projects' },
-        { i: '02', label: 'Nouvelles technos' },
-        { i: '03', label: 'Sport' },
-        { i: '04', label: 'Musique' },
-      ],
+      tech: {
+        title: 'IA, modèles & agents',
+        description:
+          'J’aborde l’IA comme un sujet d’ingénierie : conception d’agents autonomes, orchestration d’outils avec MCP, adaptation de modèles issus de Hugging Face et exécution sur les serveurs locaux de l’entreprise pour maîtriser les données, les performances et l’intégration.',
+        items: [
+          'Hugging Face',
+          'Agents autonomes',
+          'Adaptation de modèles',
+          'Inférence locale',
+          'Modèles open source',
+          'MCP',
+        ],
+      },
+      sport: {
+        title: 'Sports',
+        description: 'Sur le terrain ou avec une raquette.',
+        items: ['Football', 'Tennis', 'Padel'],
+      },
+      music: {
+        eyebrow: 'En écoute',
+        title: 'Ma sélection',
+        description: 'Des classiques aux sons actuels.',
+        choose: 'Choisir un morceau',
+      },
     },
     contact: {
       title: 'Parlons-en.',
@@ -240,6 +335,7 @@ const copy = {
       error: "L'envoi a échoué. Réessayez dans un instant ou écrivez-moi à jeancdfpro@gmail.com.",
       reset: 'Écrire un autre message',
     },
+    socials: { label: 'Profils sociaux' },
     footer: { top: 'Haut de page' },
   },
   en: {
@@ -282,7 +378,7 @@ const copy = {
         {
           kind: 'experience',
           label: 'Experience',
-          period: '2024 — present',
+          period: '2022 — present',
           company: 'G7 Taxis',
           place: 'Paris, France',
           role: 'Full-stack web developer',
@@ -334,6 +430,19 @@ const copy = {
           place: 'France',
           role: 'Web development bootcamp',
           description: 'Six-month intensive course covering the fundamentals of web development.',
+          bullets: [
+            'Final project: Arkeos, a community platform for reptile and amphibian enthusiasts.',
+          ],
+          stack: ['React', 'Express', 'PostgreSQL', 'Socket.IO'],
+        },
+        {
+          kind: 'transition',
+          label: 'Career change',
+          period: '2020 — 2021',
+          company: 'Career change',
+          place: '',
+          role: 'From business to web development',
+          description: 'A deliberate shift toward designing and building web applications.',
           bullets: [],
           stack: [],
         },
@@ -343,8 +452,9 @@ const copy = {
           period: '2018 — 2020',
           company: 'ESSEC Business School',
           place: 'France',
-          role: 'E-Bachelor',
-          description: 'Coursework in management, business and entrepreneurship.',
+          role: 'E-Bachelor programme · not completed',
+          description:
+            'Coursework in management, business and entrepreneurship, left before graduation to transition into web development.',
           bullets: [],
           stack: [],
         },
@@ -364,30 +474,76 @@ const copy = {
     },
     projects: {
       title: 'Projects',
-      intro: 'Two personal projects in the works — coming online soon.',
+      intro: 'Four web projects — including three live products, with their source code on GitHub.',
+      visit: 'Visit site',
+      source: 'GitHub',
+      privateRepository: 'private',
+      firstProjectTitle: 'My very first project',
+      firstProjectSubtitle: 'Where it all began',
+      carouselLabel: 'Project carousel',
+      previous: 'Previous project',
+      next: 'Next project',
+      goTo: 'Show project',
+      dragHint: 'Scroll, use the arrows or drag to navigate',
       items: [
         {
           no: 'P1',
-          status: 'In progress',
+          status: 'Live · in progress',
+          live: true,
           name: 'Wedding planner',
           description:
             'A platform to organize a wedding end to end: guests, vendors, budget and schedule in one place.',
           stack: ['React', 'NestJS', 'PostgreSQL'],
+          siteUrl: 'https://mon-mariage.duckdns.org/',
+          githubUrl: 'https://github.com/jeancdf/mon-mariage',
+          repositoryPrivate: false,
+          firstProject: false,
         },
         {
           no: 'P2',
           status: 'In progress',
+          live: false,
           name: 'Golf club CRM',
           description:
             "A CRM to manage a golf club's members: memberships, bookings and activity tracking.",
           stack: ['Angular', 'Spring Boot', 'PostgreSQL'],
+          siteUrl: '',
+          githubUrl: 'https://github.com/jeancdf/carnet-de-golf',
+          repositoryPrivate: true,
+          firstProject: false,
+        },
+        {
+          no: 'P3',
+          status: 'Live',
+          live: true,
+          name: 'Gift Finder',
+          description:
+            'A conversational assistant that uses AI to suggest personalized gift ideas, then lets users create and share their list.',
+          stack: ['Angular', 'Express', 'PostgreSQL', 'Qwen'],
+          siteUrl: 'https://gift-finder.duckdns.org/',
+          githubUrl: 'https://github.com/jeancdf/Cadeau-anniv',
+          repositoryPrivate: false,
+          firstProject: false,
+        },
+        {
+          no: 'P4',
+          status: 'Live',
+          live: true,
+          name: 'Arkeos',
+          description:
+            'My very first development project, built at the end of my O’clock training: a community platform for reptile and amphibian enthusiasts.',
+          stack: ['React', 'Express', 'PostgreSQL', 'Socket.IO'],
+          siteUrl: 'https://arkeos.duckdns.org/',
+          githubUrl: 'https://github.com/jeancdf/Arkeos',
+          repositoryPrivate: false,
+          firstProject: true,
         },
       ],
     },
     map: {
       title: 'Paris, on the map',
       intro: 'Click the points to explore where my career and projects happen.',
-      hint: 'Click another point to switch.',
+      hint: 'Nearby places are grouped. Zoom in or click the counter to separate the markers.',
       pins: {
         g7: {
           name: 'G7 Taxis',
@@ -405,9 +561,9 @@ const copy = {
         },
         mariage: {
           name: 'Wedding planner',
-          tag: 'PROJECT · SOON',
+          tag: 'PROJECT · LIVE',
           description:
-            'Wedding organization platform — guests, vendors, budget and schedule. Currently in development.',
+            'Wedding organization platform — guests, vendors, budget and schedule. Live and still in development.',
           short: 'Project · Wedding',
         },
         golf: {
@@ -417,17 +573,48 @@ const copy = {
             "CRM to manage a golf club's members: memberships, bookings and tracking. Currently in development.",
           short: 'Project · Golf',
         },
+        giftFinder: {
+          name: 'Gift Finder',
+          tag: 'PROJECT · LIVE',
+          description:
+            'A conversational assistant for personalized gift ideas and shareable gift lists.',
+          short: 'Gift Finder',
+        },
+        arkeos: {
+          name: 'Arkeos',
+          tag: 'O’CLOCK PROJECT · LIVE',
+          description:
+            'Final bootcamp project: a community platform for reptile and amphibian enthusiasts.',
+          short: 'Arkeos',
+        },
       },
     },
     hobbies: {
       title: 'Beyond the code',
-      note: "// to customize — tell me your real interests and I'll swap these",
-      items: [
-        { i: '01', label: 'Side-projects' },
-        { i: '02', label: 'New tech' },
-        { i: '03', label: 'Sport' },
-        { i: '04', label: 'Music' },
-      ],
+      tech: {
+        title: 'AI, models & agents',
+        description:
+          'I approach AI as an engineering discipline: designing autonomous agents, orchestrating tools through MCP, adapting Hugging Face models and running them on the company’s local servers to retain control over data, performance and integration.',
+        items: [
+          'Hugging Face',
+          'Autonomous agents',
+          'Model adaptation',
+          'Local inference',
+          'Open-source models',
+          'MCP',
+        ],
+      },
+      sport: {
+        title: 'Sports',
+        description: 'On the pitch or with a racket.',
+        items: ['Football', 'Tennis', 'Padel'],
+      },
+      music: {
+        eyebrow: 'Now playing',
+        title: 'My selection',
+        description: 'From timeless classics to current sounds.',
+        choose: 'Choose a track',
+      },
     },
     contact: {
       title: "Let's talk.",
@@ -449,6 +636,7 @@ const copy = {
         'Unable to send your request. Please try again shortly or email me at jeancdfpro@gmail.com.',
       reset: 'Write another message',
     },
+    socials: { label: 'Social profiles' },
     footer: { top: 'Back to top' },
   },
 } as const;
@@ -463,6 +651,9 @@ const copy = {
 })
 export class AppComponent implements AfterViewInit, OnDestroy {
   @ViewChild('mapElement') private mapElement?: ElementRef<HTMLDivElement>;
+  @ViewChild('projectsTrack') private projectsTrack?: ElementRef<HTMLDivElement>;
+
+  private readonly sanitizer = inject(DomSanitizer);
 
   readonly language = signal<Language>('fr');
   readonly t = computed(() => copy[this.language()]);
@@ -475,14 +666,71 @@ export class AppComponent implements AfterViewInit, OnDestroy {
   readonly msgId = signal('');
   readonly year = new Date().getFullYear();
   readonly form = { name: '', email: '', message: '', website: '' };
+  readonly projectCarouselIndex = signal(0);
+  readonly projectCarouselDragging = signal(false);
+  readonly selectedTrackIndex = signal(0);
+  readonly musicTracks = [
+    {
+      no: '01',
+      title: 'A Day in the Life',
+      artist: 'The Beatles',
+      spotifyId: '4XiDAxr6alWzxm24i2Rt4K',
+    },
+    { no: '02', title: 'Sticky', artist: 'Drake', spotifyId: '4rmVZajAF7PkrCagGPHbqa' },
+    {
+      no: '03',
+      title: 'How Deep Is Your Love',
+      artist: 'Bee Gees',
+      spotifyId: '2JoZzpdeP2G6Csfdq5aLXP',
+    },
+    { no: '04', title: 'Neighbors', artist: 'J. Cole', spotifyId: '0utlOiJy2weVl9WTkcEWHy' },
+    {
+      no: '05',
+      title: 'Give a Little Bit',
+      artist: 'Supertramp',
+      spotifyId: '7w9iQxnOMKhJmkLd1hJ4GJ',
+    },
+    {
+      no: '06',
+      title: "Movin' Out (Anthony's Song)",
+      artist: 'Billy Joel',
+      spotifyId: '4cG3ovmC8Hnp9ZsmSZI2O4',
+    },
+  ] as const;
+  readonly selectedTrack = computed(() => this.musicTracks[this.selectedTrackIndex()]!);
+  readonly spotifyEmbedUrl = computed(() =>
+    this.sanitizer.bypassSecurityTrustResourceUrl(
+      `https://open.spotify.com/embed/track/${this.selectedTrack().spotifyId}?utm_source=generator&theme=0`,
+    ),
+  );
 
   readonly pins = computed<Pin[]>(() => {
     const labels = this.t().map.pins;
     return [
       { id: 'g7', ...labels.g7, coordinates: [48.8988602, 2.304037], color: '#f2c94c' },
       { id: 'hetic', ...labels.hetic, coordinates: [48.8555, 2.439], color: '#c0563a' },
-      { id: 'mariage', ...labels.mariage, coordinates: [48.8792259, 2.2832742], color: '#e9e1cf' },
+      {
+        id: 'mariage',
+        ...labels.mariage,
+        coordinates: [48.88182, 2.2832742],
+        color: '#e9e1cf',
+        clusterGroup: 'palais-des-congres',
+      },
       { id: 'golf', ...labels.golf, coordinates: [48.8941179, 2.2855198], color: '#97a798' },
+      {
+        id: 'giftFinder',
+        ...labels.giftFinder,
+        coordinates: [48.877928, 2.279864],
+        color: '#d89075',
+        clusterGroup: 'palais-des-congres',
+      },
+      {
+        id: 'arkeos',
+        ...labels.arkeos,
+        coordinates: [48.877928, 2.286684],
+        color: '#75a9a5',
+        clusterGroup: 'palais-des-congres',
+      },
     ];
   });
   readonly selectedPin = computed(
@@ -490,11 +738,16 @@ export class AppComponent implements AfterViewInit, OnDestroy {
   );
 
   private map?: L.Map;
+  private markerLayer?: L.LayerGroup;
   private markers = new Map<PinId, L.Marker>();
   private observer?: IntersectionObserver;
   private mapResizeObserver?: ResizeObserver;
   private mapRefreshFrame?: number;
   private mapRevealTimer?: number;
+  private projectDragPointerId?: number;
+  private projectDragStartX = 0;
+  private projectDragStartScrollLeft = 0;
+  private projectDragMoved = false;
 
   contactErrorMessage(): string {
     const error = this.contactError();
@@ -657,10 +910,105 @@ export class AppComponent implements AfterViewInit, OnDestroy {
   selectPin(pinId: PinId): void {
     this.selectedPinId.set(pinId);
     const pin = this.pins().find((candidate) => candidate.id === pinId);
-    if (pin) {
-      this.map?.flyTo(pin.coordinates, 13, { duration: 0.7 });
-      this.markers.get(pinId)?.openTooltip();
+    if (!pin || !this.map) return;
+
+    this.map.flyTo(pin.coordinates, pin.clusterGroup ? 14 : 13, { duration: 0.7 });
+    this.map.once('moveend', () => this.markers.get(pinId)?.openTooltip());
+  }
+
+  selectTrack(index: number): void {
+    this.selectedTrackIndex.set(index);
+  }
+
+  formatProjectNumber(value: number): string {
+    return String(value).padStart(2, '0');
+  }
+
+  scrollProjects(direction: -1 | 1): void {
+    const lastIndex = this.t().projects.items.length - 1;
+    const nextIndex = Math.max(0, Math.min(lastIndex, this.projectCarouselIndex() + direction));
+    this.scrollToProject(nextIndex);
+  }
+
+  goToProject(index: number): void {
+    this.scrollToProject(index);
+  }
+
+  onProjectScroll(): void {
+    this.projectCarouselIndex.set(this.findNearestProjectIndex());
+  }
+
+  onProjectWheel(event: WheelEvent): void {
+    const track = this.projectsTrack?.nativeElement;
+    if (!track) return;
+
+    const delta = Math.abs(event.deltaX) > Math.abs(event.deltaY) ? event.deltaX : event.deltaY;
+    if (!delta) return;
+
+    const maxScrollLeft = track.scrollWidth - track.clientWidth;
+    const atStart = track.scrollLeft <= 1;
+    const atEnd = track.scrollLeft >= maxScrollLeft - 1;
+
+    if ((delta < 0 && atStart) || (delta > 0 && atEnd)) return;
+
+    event.preventDefault();
+    track.scrollLeft += delta;
+  }
+
+  private isProjectInteractiveTarget(target: EventTarget | null): boolean {
+    return target instanceof HTMLElement && !!target.closest('a, button');
+  }
+
+  onProjectPointerDown(event: PointerEvent): void {
+    const track = this.projectsTrack?.nativeElement;
+    if (!track || event.pointerType !== 'mouse' || event.button !== 0) return;
+    if (this.isProjectInteractiveTarget(event.target)) return;
+
+    this.projectDragPointerId = event.pointerId;
+    this.projectDragStartX = event.clientX;
+    this.projectDragStartScrollLeft = track.scrollLeft;
+    this.projectDragMoved = false;
+    this.projectCarouselDragging.set(true);
+    track.setPointerCapture(event.pointerId);
+  }
+
+  onProjectPointerMove(event: PointerEvent): void {
+    const track = this.projectsTrack?.nativeElement;
+    if (!track || this.projectDragPointerId !== event.pointerId) return;
+
+    const distance = event.clientX - this.projectDragStartX;
+    if (Math.abs(distance) > 4) this.projectDragMoved = true;
+    if (!this.projectDragMoved) return;
+
+    event.preventDefault();
+    track.scrollLeft = this.projectDragStartScrollLeft - distance;
+  }
+
+  onProjectPointerUp(event: PointerEvent): void {
+    const track = this.projectsTrack?.nativeElement;
+    if (!track || this.projectDragPointerId !== event.pointerId) return;
+
+    if (track.hasPointerCapture(event.pointerId)) {
+      track.releasePointerCapture(event.pointerId);
     }
+
+    const shouldSnap = this.projectDragMoved;
+    this.projectDragPointerId = undefined;
+    this.projectCarouselDragging.set(false);
+
+    if (shouldSnap) {
+      this.scrollToProject(this.findNearestProjectIndex());
+      window.setTimeout(() => {
+        this.projectDragMoved = false;
+      });
+    }
+  }
+
+  onProjectTrackClick(event: MouseEvent): void {
+    if (this.isProjectInteractiveTarget(event.target)) return;
+    if (!this.projectDragMoved) return;
+    event.preventDefault();
+    event.stopPropagation();
   }
 
   async submitContact(form: NgForm): Promise<void> {
@@ -706,6 +1054,68 @@ export class AppComponent implements AfterViewInit, OnDestroy {
     form.resetForm();
   }
 
+  private groupNearbyPins(pins: Pin[], maxDistancePixels = 56): Pin[][] {
+    if (!this.map) return pins.map((pin) => [pin]);
+
+    const groups: Pin[][] = [];
+
+    for (const pin of pins) {
+      const nearbyGroup = groups.find((group) =>
+        group.some(
+          (member) =>
+            Boolean(pin.clusterGroup) &&
+            member.clusterGroup === pin.clusterGroup &&
+            this.map!.project(L.latLng(member.coordinates), this.map!.getZoom()).distanceTo(
+              this.map!.project(L.latLng(pin.coordinates), this.map!.getZoom()),
+            ) <= maxDistancePixels,
+        ),
+      );
+
+      if (nearbyGroup) {
+        nearbyGroup.push(pin);
+      } else {
+        groups.push([pin]);
+      }
+    }
+
+    return groups;
+  }
+
+  private projectCards(): HTMLElement[] {
+    const track = this.projectsTrack?.nativeElement;
+    return track ? Array.from(track.querySelectorAll<HTMLElement>('.project-card')) : [];
+  }
+
+  private findNearestProjectIndex(): number {
+    const track = this.projectsTrack?.nativeElement;
+    const cards = this.projectCards();
+    if (!track || cards.length === 0) return 0;
+
+    return cards.reduce(
+      (closestIndex, card, index) => {
+        const distance = Math.abs(card.offsetLeft - track.offsetLeft - track.scrollLeft);
+        const closestCard = cards[closestIndex]!;
+        const closestDistance = Math.abs(
+          closestCard.offsetLeft - track.offsetLeft - track.scrollLeft,
+        );
+        return distance < closestDistance ? index : closestIndex;
+      },
+      0,
+    );
+  }
+
+  private scrollToProject(index: number): void {
+    const track = this.projectsTrack?.nativeElement;
+    const card = this.projectCards()[index];
+    if (!track || !card) return;
+
+    track.scrollTo({
+      left: card.offsetLeft - track.offsetLeft,
+      behavior: 'smooth',
+    });
+    this.projectCarouselIndex.set(index);
+  }
+
   private createMap(): void {
     if (this.map || !this.mapElement) return;
 
@@ -715,7 +1125,7 @@ export class AppComponent implements AfterViewInit, OnDestroy {
       zoom: 11.2,
       minZoom: 10,
       maxZoom: 17,
-      scrollWheelZoom: false,
+      scrollWheelZoom: true,
       zoomControl: false,
     });
 
@@ -725,19 +1135,9 @@ export class AppComponent implements AfterViewInit, OnDestroy {
       maxZoom: 19,
     }).addTo(this.map);
 
-    for (const pin of this.pins()) {
-      const icon = L.divIcon({
-        className: 'portfolio-map-marker',
-        html: `<span style="--pin-color:${pin.color}"><b></b></span>`,
-        iconSize: [32, 42],
-        iconAnchor: [16, 40],
-      });
-      const marker = L.marker(pin.coordinates, { icon })
-        .addTo(this.map)
-        .bindTooltip(pin.name, { direction: 'top', offset: [0, -34] })
-        .on('click', () => this.selectedPinId.set(pin.id));
-      this.markers.set(pin.id, marker);
-    }
+    this.markerLayer = L.layerGroup().addTo(this.map);
+    this.renderMapMarkers();
+    this.map.on('zoomend', () => this.renderMapMarkers());
 
     if ('ResizeObserver' in window) {
       this.mapResizeObserver = new ResizeObserver(() => this.scheduleMapRefresh());
@@ -745,6 +1145,51 @@ export class AppComponent implements AfterViewInit, OnDestroy {
     }
 
     this.map.whenReady(() => this.scheduleMapRefresh());
+  }
+
+  private renderMapMarkers(): void {
+    if (!this.map || !this.markerLayer) return;
+
+    this.markerLayer.clearLayers();
+    this.markers.clear();
+
+    for (const group of this.groupNearbyPins(this.pins())) {
+      const latLngs = group.map((pin) => L.latLng(pin.coordinates));
+      const coordinates = L.latLng(
+        latLngs.reduce((sum, point) => sum + point.lat, 0) / latLngs.length,
+        latLngs.reduce((sum, point) => sum + point.lng, 0) / latLngs.length,
+      );
+      const isCluster = group.length > 1;
+      const markerColor = isCluster ? '#f2c94c' : group[0]!.color;
+      const icon = L.divIcon({
+        className: `portfolio-map-marker${isCluster ? ' portfolio-map-marker--cluster' : ''}`,
+        html: `<span style="--pin-color:${markerColor}"><b>${isCluster ? group.length : ''}</b></span>`,
+        iconSize: isCluster ? [38, 38] : [32, 42],
+        iconAnchor: isCluster ? [19, 19] : [16, 40],
+      });
+      const marker = L.marker(coordinates, { icon })
+        .addTo(this.markerLayer)
+        .bindTooltip(group.map((pin) => pin.name).join(' · '), {
+          direction: 'top',
+          offset: isCluster ? [0, -18] : [0, -34],
+        })
+        .on('click', () => {
+          if (isCluster) {
+            this.map?.fitBounds(L.latLngBounds(latLngs), {
+              animate: true,
+              maxZoom: 14,
+              padding: [64, 64],
+            });
+            return;
+          }
+
+          this.selectedPinId.set(group[0]!.id);
+        });
+
+      for (const pin of group) {
+        this.markers.set(pin.id, marker);
+      }
+    }
   }
 
   private scheduleMapRefresh(): void {
