@@ -67,6 +67,8 @@ const copy = {
     about: {
       title: 'À propos',
       lead: 'Développeur full-stack confiant et direct : je pars du besoin réel et je livre des solutions concrètes, fiables et pensées pour ceux qui les utilisent.',
+      story:
+        'À 15 ans, je suis parti vivre un an à Detroit, dans le Michigan. J’y ai appris l’anglais avant de revenir à Paris.',
       body: "Côté front, je travaille surtout avec Angular et React (TypeScript, Tailwind) pour des interfaces modernes et maintenables. Côté back, je construis des API et des systèmes d'authentification avec Spring Boot, NestJS, Node.js, Django et Python. J'interviens sur tout le cycle — analyse, conception, développement, intégration, tests et mise en production — avec un vrai soin pour la qualité, la performance, la sécurité et la maintenabilité.",
     },
     journey: {
@@ -368,6 +370,8 @@ const copy = {
     about: {
       title: 'About',
       lead: 'A confident, straight-to-the-point full-stack developer: I start from the real need and ship concrete, reliable solutions built for the people who use them.',
+      story:
+        'When I was 15, I moved to Detroit, Michigan. I learned English there over the course of a year before returning to Paris.',
       body: 'On the front end I mostly work with Angular and React (TypeScript, Tailwind) for modern, maintainable interfaces. On the back end I build APIs and authentication systems with Spring Boot, NestJS, Node.js, Django and Python. I cover the whole cycle — analysis, design, development, integration, testing and production — with real care for quality, performance, security and maintainability.',
     },
     journey: {
@@ -657,6 +661,17 @@ export class AppComponent implements AfterViewInit, OnDestroy {
 
   readonly language = signal<Language>('fr');
   readonly t = computed(() => copy[this.language()]);
+  readonly cvPdf = computed(() =>
+    this.language() === 'en'
+      ? {
+          href: 'uploads/Resume-Jean-Cazals-Harvard-2026.pdf',
+          download: 'Resume-Jean-Cazals.pdf',
+        }
+      : {
+          href: 'uploads/CV-Jean-Cazals-Harvard-2026.pdf',
+          download: 'CV-Jean-Cazals.pdf',
+        },
+  );
   readonly mobileMenuOpen = signal(false);
   readonly activeTab = signal<CodeTab>('fetch');
   readonly selectedPinId = signal<PinId>('g7');

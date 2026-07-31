@@ -55,11 +55,11 @@ Le résultat est généré dans `dist/jean-cazals-cv/browser`.
 
 ## Régénérer le CV PDF
 
-Le CV téléchargeable suit une mise en page Harvard sobre et compatible avec les logiciels de
-recrutement. Sa source se trouve dans `cv/jean-cazals-cv.html`.
+Les CV français et anglais téléchargeables suivent une mise en page Harvard sobre et compatible
+avec les logiciels de recrutement. Leurs sources se trouvent dans `cv/jean-cazals-cv.html` et
+`cv/jean-cazals-resume.html`.
 
-Après une modification du contenu, régénérez
-`public/uploads/CV-Jean-Cazals-Harvard-2026.pdf` avec :
+Après une modification du contenu, régénérez les deux PDF dans `public/uploads` avec :
 
 ```bash
 npm run cv:pdf

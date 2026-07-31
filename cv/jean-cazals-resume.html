@@ -1,0 +1,484 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Resume Jean Cazals — Full-stack web developer</title>
+    <style>
+      @page {
+        size: A4;
+        margin: 12mm 15mm 13mm;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html {
+        color: #171717;
+        background: #fff;
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 9.4pt;
+        line-height: 1.34;
+      }
+
+      body {
+        max-width: 180mm;
+        margin: 0 auto;
+        background: #fff;
+      }
+
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+
+      a:hover {
+        text-decoration: underline;
+      }
+
+      header {
+        padding-bottom: 4mm;
+        border-bottom: 1.5px solid #7a1f2b;
+        text-align: center;
+      }
+
+      h1 {
+        margin: 0;
+        color: #111;
+        font-family: Georgia, 'Times New Roman', serif;
+        font-size: 25pt;
+        font-weight: 700;
+        letter-spacing: 0.025em;
+        line-height: 1;
+        text-transform: uppercase;
+      }
+
+      .headline {
+        margin: 2mm 0 2.4mm;
+        color: #7a1f2b;
+        font-size: 10.5pt;
+        font-weight: 700;
+        letter-spacing: 0.11em;
+        text-transform: uppercase;
+      }
+
+      .contact {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 1.1mm 2.4mm;
+        margin: 0;
+        color: #333;
+        font-size: 8.6pt;
+      }
+
+      .contact span:not(:last-child)::after {
+        margin-left: 2.4mm;
+        color: #7a1f2b;
+        content: '•';
+      }
+
+      main {
+        padding-top: 1mm;
+      }
+
+      section {
+        margin-top: 4mm;
+      }
+
+      h2 {
+        margin: 0 0 2mm;
+        padding-bottom: 0.8mm;
+        border-bottom: 0.8px solid #7a1f2b;
+        color: #7a1f2b;
+        font-size: 10.2pt;
+        font-weight: 700;
+        letter-spacing: 0.12em;
+        line-height: 1.1;
+        text-transform: uppercase;
+      }
+
+      p {
+        margin: 0;
+      }
+
+      .summary {
+        text-align: justify;
+      }
+
+      .entry {
+        break-inside: avoid;
+        margin-top: 2.8mm;
+      }
+
+      .entry:first-of-type {
+        margin-top: 0;
+      }
+
+      .entry-heading {
+        display: grid;
+        align-items: baseline;
+        grid-template-columns: minmax(0, 1fr) auto;
+        gap: 4mm;
+      }
+
+      .entry-title {
+        font-size: 10pt;
+        font-weight: 700;
+      }
+
+      .entry-date {
+        font-size: 8.8pt;
+        font-weight: 700;
+        white-space: nowrap;
+      }
+
+      .entry-subheading {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+        gap: 4mm;
+        margin-top: 0.25mm;
+        color: #333;
+        font-size: 8.9pt;
+        font-style: italic;
+      }
+
+      .entry-location {
+        white-space: nowrap;
+      }
+
+      ul {
+        margin: 1.1mm 0 0 4.5mm;
+        padding: 0;
+      }
+
+      li {
+        margin-top: 0.7mm;
+        padding-left: 1mm;
+      }
+
+      li::marker {
+        color: #7a1f2b;
+      }
+
+      .technology {
+        margin-top: 1.2mm;
+        color: #333;
+        font-size: 8.5pt;
+      }
+
+      .technology strong {
+        color: #171717;
+      }
+
+      .skills {
+        display: grid;
+        gap: 1.1mm;
+      }
+
+      .skill-row {
+        display: grid;
+        grid-template-columns: 34mm minmax(0, 1fr);
+        gap: 3mm;
+      }
+
+      .skill-row strong {
+        color: #222;
+      }
+
+      .project {
+        break-inside: avoid;
+        margin-top: 2.6mm;
+      }
+
+      .project:first-of-type {
+        margin-top: 0;
+      }
+
+      .project-heading {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: baseline;
+        gap: 1.2mm 2.6mm;
+      }
+
+      .project-name {
+        font-size: 9.6pt;
+        font-weight: 700;
+      }
+
+      .project-status {
+        color: #7a1f2b;
+        font-size: 7.8pt;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+
+      .project-links {
+        margin-left: auto;
+        font-size: 8.1pt;
+        white-space: nowrap;
+      }
+
+      .project-links a {
+        border-bottom: 0.5px solid #777;
+      }
+
+      .project-description {
+        margin-top: 0.6mm;
+      }
+
+      .first-project {
+        padding-left: 2.5mm;
+        border-left: 2px solid #7a1f2b;
+      }
+
+      .first-project .project-name::after {
+        margin-left: 2mm;
+        color: #7a1f2b;
+        content: '— first development project';
+        font-size: 8pt;
+        font-style: italic;
+        font-weight: 400;
+      }
+
+      .compact-note {
+        color: #333;
+        font-size: 8.7pt;
+      }
+
+      .footer-note {
+        margin-top: 4mm;
+        color: #555;
+        font-size: 7.8pt;
+        text-align: center;
+      }
+
+      @media screen {
+        body {
+          padding: 15mm;
+          box-shadow: 0 0 30px rgba(0, 0, 0, 0.12);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>Jean Cazals</h1>
+      <p class="headline">Full-stack web developer</p>
+      <p class="contact">
+        <span>Paris, Île-de-France</span>
+        <span><a href="mailto:jeancdfpro@gmail.com">jeancdfpro@gmail.com</a></span>
+        <span><a href="https://cv-de-jean.duckdns.org">cv-de-jean.duckdns.org</a></span>
+        <span><a href="https://github.com/jeancdf">github.com/jeancdf</a></span>
+        <span
+          ><a href="https://www.linkedin.com/in/jean-cazals-ba183231a"
+            >linkedin.com/in/jean-cazals-ba183231a</a
+          ></span
+        >
+      </p>
+    </header>
+
+    <main>
+      <section aria-labelledby="profile">
+        <h2 id="profile">Profile</h2>
+        <p class="summary">
+          Full-stack web developer with 4 years of experience at G7 Taxis, specializing in the
+          design and maintenance of reliable business applications from front end to production.
+          Experience with booking and dispatch tools, CRMs, and testing solutions for critical
+          microservices. Strong command of Angular, React, TypeScript, Spring Boot, NestJS,
+          PostgreSQL, MongoDB and Docker, with a keen technical interest in autonomous agents and
+          running AI models locally.
+        </p>
+      </section>
+
+      <section aria-labelledby="experience">
+        <h2 id="experience">Professional experience</h2>
+        <article class="entry">
+          <div class="entry-heading">
+            <p class="entry-title">G7 Taxis — Full-stack web developer</p>
+            <p class="entry-date">2022 — Present</p>
+          </div>
+          <div class="entry-subheading">
+            <span>Business applications and internal systems</span>
+            <span class="entry-location">Paris, France</span>
+          </div>
+          <ul>
+            <li>
+              Develop and maintain the internal tools used for the company’s day-to-day operations.
+            </li>
+            <li>Enhance the booking and dispatch software used by Parisian taxi services.</li>
+            <li>
+              Contribute to the taxi and driver management CRM across its interface, APIs and data.
+            </li>
+            <li>
+              Design two tools dedicated to testing and validating the company’s critical
+              microservices.
+            </li>
+            <li>
+              Contribute to the full feature lifecycle: requirements analysis, design, development,
+              integration, testing and production deployment.
+            </li>
+          </ul>
+          <p class="technology">
+            <strong>Environment:</strong> Angular, React, TypeScript, NestJS, Spring Boot,
+            PostgreSQL, MongoDB, Docker, GitLab CI/CD
+          </p>
+        </article>
+      </section>
+
+      <section aria-labelledby="skills">
+        <h2 id="skills">Technical skills</h2>
+        <div class="skills">
+          <p class="skill-row">
+            <strong>Front end</strong>
+            <span>Angular, React, TypeScript, Bootstrap, Tailwind CSS</span>
+          </p>
+          <p class="skill-row">
+            <strong>Back end & APIs</strong>
+            <span>Spring Boot, NestJS, Node.js, Express, Django, Python</span>
+          </p>
+          <p class="skill-row">
+            <strong>Data</strong>
+            <span>PostgreSQL, SQL, MongoDB</span>
+          </p>
+          <p class="skill-row">
+            <strong>DevOps & quality</strong>
+            <span
+              >Docker, GitLab CI/CD, GitHub Actions, Git, testing and production deployment</span
+            >
+          </p>
+          <p class="skill-row">
+            <strong>Applied AI</strong>
+            <span
+              >Hugging Face, autonomous agents, MCP, model adaptation, local inference, open-source
+              models</span
+            >
+          </p>
+        </div>
+      </section>
+
+      <section aria-labelledby="projects">
+        <h2 id="projects">Selected projects</h2>
+
+        <article class="project">
+          <div class="project-heading">
+            <span class="project-name">Gift Finder</span>
+            <span class="project-status">Live</span>
+            <span class="project-links">
+              <a href="https://gift-finder.duckdns.org">Website</a> ·
+              <a href="https://github.com/jeancdf/Cadeau-anniv">GitHub</a>
+            </span>
+          </div>
+          <p class="project-description">
+            Conversational assistant that uses AI to suggest personalized gift ideas and create
+            shareable lists. Angular, Express, PostgreSQL, Qwen.
+          </p>
+        </article>
+
+        <article class="project">
+          <div class="project-heading">
+            <span class="project-name">Wedding Management</span>
+            <span class="project-status">Live · in progress</span>
+            <span class="project-links">
+              <a href="https://mon-mariage.duckdns.org">Website</a> ·
+              <a href="https://github.com/jeancdf/mon-mariage">GitHub</a>
+            </span>
+          </div>
+          <p class="project-description">
+            Full-featured wedding planning platform for managing guests, vendors, budgets and
+            schedules. React, NestJS, PostgreSQL.
+          </p>
+        </article>
+
+        <article class="project first-project">
+          <div class="project-heading">
+            <span class="project-name">Arkeos</span>
+            <span class="project-status">Live</span>
+            <span class="project-links">
+              <a href="https://arkeos.duckdns.org">Website</a> ·
+              <a href="https://github.com/jeancdf/Arkeos">GitHub</a>
+            </span>
+          </div>
+          <p class="project-description">
+            O’clock bootcamp capstone and first development project: a community platform for
+            reptile and amphibian enthusiasts. React, Express, PostgreSQL, Socket.IO.
+          </p>
+        </article>
+
+        <article class="project">
+          <div class="project-heading">
+            <span class="project-name">Golf Club CRM</span>
+            <span class="project-status">In progress</span>
+            <span class="project-links">Private repository</span>
+          </div>
+          <p class="project-description">
+            CRM for member records, memberships, bookings and activity tracking. Angular, Spring
+            Boot, PostgreSQL.
+          </p>
+        </article>
+      </section>
+
+      <section aria-labelledby="education">
+        <h2 id="education">Education</h2>
+
+        <article class="entry">
+          <div class="entry-heading">
+            <p class="entry-title">HETIC — Master’s degree, CTO & Tech Lead</p>
+            <p class="entry-date">Oct. 2024 — Dec. 2026</p>
+          </div>
+          <div class="entry-subheading">
+            <span>In progress · architecture, technical leadership and digital products</span>
+            <span class="entry-location">Montreuil, France</span>
+          </div>
+        </article>
+
+        <article class="entry">
+          <div class="entry-heading">
+            <p class="entry-title">HETIC — Bachelor’s degree in Web Development</p>
+            <p class="entry-date">Sep. 2022 — Oct. 2024</p>
+          </div>
+          <div class="entry-subheading">
+            <span>Front-end and back-end application design and development</span>
+            <span class="entry-location">Montreuil, France</span>
+          </div>
+        </article>
+
+        <article class="entry">
+          <div class="entry-heading">
+            <p class="entry-title">O’clock — Web development bootcamp</p>
+            <p class="entry-date">2021 · 6 months</p>
+          </div>
+          <div class="entry-subheading">
+            <span>Intensive training in web development fundamentals · Arkeos project</span>
+            <span class="entry-location">France</span>
+          </div>
+        </article>
+
+        <article class="entry">
+          <div class="entry-heading">
+            <p class="entry-title">ESSEC Business School — E-Bachelor program</p>
+            <p class="entry-date">2018 — 2020</p>
+          </div>
+          <div class="entry-subheading">
+            <span>Left before graduation to transition into web development</span>
+            <span class="entry-location">France</span>
+          </div>
+          <p class="compact-note">Coursework in management, business and entrepreneurship.</p>
+        </article>
+      </section>
+
+      <section aria-labelledby="languages">
+        <h2 id="languages">Languages & interests</h2>
+        <p>
+          <strong>Languages:</strong> native French · bilingual English &nbsp;&nbsp;|&nbsp;&nbsp;
+          <strong>Interests:</strong> open-source and local AI, football, tennis, padel, music
+        </p>
+      </section>
+
+      <p class="footer-note">Resume updated July 2026 · Clickable links in the PDF version</p>
+    </main>
+  </body>
+</html>

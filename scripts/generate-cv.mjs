@@ -3,8 +3,16 @@ import { spawnSync } from 'node:child_process';
 import { dirname, resolve } from 'node:path';
 import { pathToFileURL } from 'node:url';
 
-const sourcePath = resolve('cv/jean-cazals-cv.html');
-const outputPath = resolve('public/uploads/CV-Jean-Cazals-Harvard-2026.pdf');
+const documents = [
+  {
+    sourcePath: resolve('cv/jean-cazals-cv.html'),
+    outputPath: resolve('public/uploads/CV-Jean-Cazals-Harvard-2026.pdf'),
+  },
+  {
+    sourcePath: resolve('cv/jean-cazals-resume.html'),
+    outputPath: resolve('public/uploads/Resume-Jean-Cazals-Harvard-2026.pdf'),
+  },
+];
 
 const browserCandidates = [
   process.env.CHROME_PATH,
@@ -24,13 +32,6 @@ if (!browserPath) {
   process.exit(1);
 }
 
-if (!existsSync(sourcePath)) {
-  console.error(`Source du CV introuvable : ${sourcePath}`);
-  process.exit(1);
-}
-
-mkdirSync(dirname(outputPath), { recursive: true });
-
 const usesWindowsBrowser = browserPath.toLowerCase().endsWith('.exe');
 
 const toWindowsPath = (filePath) => {
@@ -42,28 +43,37 @@ const toWindowsPath = (filePath) => {
   return conversion.stdout.trim();
 };
 
-const sourceUrl = usesWindowsBrowser
-  ? `file:///${toWindowsPath(sourcePath).replaceAll('\\', '/')}`
-  : pathToFileURL(sourcePath).href;
-const browserOutputPath = usesWindowsBrowser ? toWindowsPath(outputPath) : outputPath;
+for (const { sourcePath, outputPath } of documents) {
+  if (!existsSync(sourcePath)) {
+    console.error(`Source du CV introuvable : ${sourcePath}`);
+    process.exit(1);
+  }
 
-const result = spawnSync(
-  browserPath,
-  [
-    '--headless=new',
-    '--disable-gpu',
-    '--disable-extensions',
-    '--no-first-run',
-    '--no-pdf-header-footer',
-    `--print-to-pdf=${browserOutputPath}`,
-    sourceUrl,
-  ],
-  { encoding: 'utf8' },
-);
+  mkdirSync(dirname(outputPath), { recursive: true });
 
-if (result.status !== 0 || !existsSync(outputPath)) {
-  console.error(result.stderr || result.stdout || 'La génération du PDF a échoué.');
-  process.exit(result.status || 1);
+  const sourceUrl = usesWindowsBrowser
+    ? `file:///${toWindowsPath(sourcePath).replaceAll('\\', '/')}`
+    : pathToFileURL(sourcePath).href;
+  const browserOutputPath = usesWindowsBrowser ? toWindowsPath(outputPath) : outputPath;
+
+  const result = spawnSync(
+    browserPath,
+    [
+      '--headless=new',
+      '--disable-gpu',
+      '--disable-extensions',
+      '--no-first-run',
+      '--no-pdf-header-footer',
+      `--print-to-pdf=${browserOutputPath}`,
+      sourceUrl,
+    ],
+    { encoding: 'utf8' },
+  );
+
+  if (result.status !== 0 || !existsSync(outputPath)) {
+    console.error(result.stderr || result.stdout || 'La génération du PDF a échoué.');
+    process.exit(result.status || 1);
+  }
+
+  console.log(`CV généré : ${outputPath}`);
 }
-
-console.log(`CV généré : ${outputPath}`);

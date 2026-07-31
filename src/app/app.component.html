@@ -62,8 +62,8 @@
       </button>
       <a
         class="button button--dark button--small"
-        href="uploads/CV-Jean-Cazals-Harvard-2026.pdf"
-        download="CV-Jean-Cazals.pdf"
+        [href]="cvPdf().href"
+        [download]="cvPdf().download"
       >
         {{ t().nav.cv }}
       </a>
@@ -143,6 +143,7 @@
       </div>
       <div class="section__content">
         <p class="lead">{{ t().about.lead }}</p>
+        <p class="body-copy">{{ t().about.story }}</p>
         <p class="body-copy">{{ t().about.body }}</p>
       </div>
     </div>
