@@ -664,11 +664,11 @@ export class AppComponent implements AfterViewInit, OnDestroy {
   readonly cvPdf = computed(() =>
     this.language() === 'en'
       ? {
-          href: 'uploads/Resume-Jean-Cazals-Harvard-2026.pdf',
+          href: 'uploads/Resume-Jean-Cazals-2026.pdf',
           download: 'Resume-Jean-Cazals.pdf',
         }
       : {
-          href: 'uploads/CV-Jean-Cazals-Harvard-2026.pdf',
+          href: 'uploads/CV-Jean-Cazals-2026.pdf',
           download: 'CV-Jean-Cazals.pdf',
         },
   );

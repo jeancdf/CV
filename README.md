@@ -55,8 +55,8 @@ Le résultat est généré dans `dist/jean-cazals-cv/browser`.
 
 ## Régénérer le CV PDF
 
-Les CV français et anglais téléchargeables suivent une mise en page Harvard sobre et compatible
-avec les logiciels de recrutement. Leurs sources se trouvent dans `cv/jean-cazals-cv.html` et
+Les CV français et anglais téléchargeables suivent une mise en page sobre et compatible avec les
+logiciels de recrutement. Leurs sources se trouvent dans `cv/jean-cazals-cv.html` et
 `cv/jean-cazals-resume.html`.
 
 Après une modification du contenu, régénérez les deux PDF dans `public/uploads` avec :

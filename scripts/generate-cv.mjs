@@ -6,11 +6,11 @@ import { pathToFileURL } from 'node:url';
 const documents = [
   {
     sourcePath: resolve('cv/jean-cazals-cv.html'),
-    outputPath: resolve('public/uploads/CV-Jean-Cazals-Harvard-2026.pdf'),
+    outputPath: resolve('public/uploads/CV-Jean-Cazals-2026.pdf'),
   },
   {
     sourcePath: resolve('cv/jean-cazals-resume.html'),
-    outputPath: resolve('public/uploads/Resume-Jean-Cazals-Harvard-2026.pdf'),
+    outputPath: resolve('public/uploads/Resume-Jean-Cazals-2026.pdf'),
   },
 ];
 
