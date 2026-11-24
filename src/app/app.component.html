@@ -33,6 +33,8 @@
         <a href="#apropos" (click)="closeMenu()">{{ t().nav.about }}</a>
         <a href="#parcours" (click)="closeMenu()">{{ t().nav.experience }}</a>
         <a href="#competences" (click)="closeMenu()">{{ t().nav.skills }}</a>
+        <a href="#projets" (click)="closeMenu()">{{ t().nav.projects }}</a>
+        <a href="#freelance" (click)="closeMenu()">{{ t().nav.freelance }}</a>
         <a href="#carte" (click)="closeMenu()">{{ t().nav.map }}</a>
         <a href="#contact" (click)="closeMenu()">{{ t().nav.contact }}</a>
       </div>
@@ -309,22 +311,22 @@
                       {{ t().projects.visit }} <span aria-hidden="true">↗</span>
                     </a>
                   }
-                  <a
-                    class="project-card__link project-card__link--github"
-                    [href]="project.githubUrl"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    draggable="false"
-                    (pointerdown)="$event.stopPropagation()"
-                  >
-                    {{ t().projects.source }}
-                    @if (project.repositoryPrivate) {
-                      <span class="project-card__private">
-                        · {{ t().projects.privateRepository }}
-                      </span>
-                    }
-                    <span aria-hidden="true">↗</span>
-                  </a>
+                  @if (!project.repositoryPrivate && project.githubUrl) {
+                    <a
+                      class="project-card__link project-card__link--github"
+                      [href]="project.githubUrl"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      draggable="false"
+                      (pointerdown)="$event.stopPropagation()"
+                    >
+                      {{ t().projects.source }} <span aria-hidden="true">↗</span>
+                    </a>
+                  } @else {
+                    <span class="project-card__private-badge">
+                      {{ t().projects.privateRepository }}
+                    </span>
+                  }
                 </div>
               </div>
             </article>
@@ -356,10 +358,58 @@
     </div>
   </section>
 
+  <section id="freelance" class="section reveal">
+    <div class="shell">
+      <div class="section__head section__head--inline">
+        <span class="section__index">05</span>
+        <h2>{{ t().freelance.title }}</h2>
+      </div>
+      <p class="section__intro">{{ t().freelance.intro }}</p>
+
+      <div class="freelance-grid">
+        @for (client of t().freelance.items; track client.name) {
+          <article class="freelance-card">
+            <div class="project-card__top">
+              <span>{{ client.no }}</span>
+              <span
+                class="status-pill"
+                [class.status-pill--live]="client.production"
+                [class.status-pill--staging]="!client.production"
+              >
+                {{ client.status }}
+              </span>
+            </div>
+            <p class="freelance-card__meta">{{ client.category }} · {{ client.location }}</p>
+            <h3>{{ client.name }}</h3>
+            <p class="freelance-card__description">{{ client.description }}</p>
+            <div class="project-card__footer">
+              <div class="tag-pills">
+                @for (technology of client.stack; track technology) {
+                  <span>{{ technology }}</span>
+                }
+              </div>
+              <div class="project-card__links">
+                <a
+                  class="project-card__link project-card__link--site"
+                  [href]="client.siteUrl"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  {{ client.production ? t().freelance.visit : t().freelance.preview }}
+                  <span aria-hidden="true">↗</span>
+                </a>
+              </div>
+            </div>
+          </article>
+        }
+      </div>
+    </div>
+  </section>
+
   <section id="carte" class="section map-section reveal">
     <div class="shell">
       <div class="section__head section__head--inline section__head--light">
-        <span class="section__index section__index--light">05</span>
+        <span class="section__index section__index--light">06</span>
         <h2>{{ t().map.title }}</h2>
       </div>
       <p class="section__intro section__intro--light">{{ t().map.intro }}</p>
@@ -371,6 +421,9 @@
             class="map-canvas"
             aria-label="Carte des lieux du parcours de Jean Cazals"
           ></div>
+          @if (mapWheelHint()) {
+            <p class="map-scroll-hint">{{ t().map.scrollHint }}</p>
+          }
         </div>
         <aside class="map-panel">
           <div class="map-panel__nav">
@@ -398,7 +451,7 @@
   <section id="hobbies" class="section reveal">
     <div class="shell">
       <div class="section__head section__head--inline">
-        <span class="section__index">06</span>
+        <span class="section__index">07</span>
         <h2>{{ t().hobbies.title }}</h2>
       </div>
 
@@ -469,7 +522,7 @@
   <section id="contact" class="section contact-section reveal">
     <div class="shell contact-layout">
       <div class="contact-copy">
-        <span class="section__index section__index--light">07</span>
+        <span class="section__index section__index--light">08</span>
         <h2>{{ t().contact.title }}</h2>
         <p>{{ t().contact.body }}</p>
 

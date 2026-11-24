@@ -16,7 +16,16 @@ import * as L from 'leaflet';
 
 type Language = 'fr' | 'en';
 type CodeTab = 'fetch' | 'curl' | 'json';
-type PinId = 'g7' | 'hetic' | 'mariage' | 'golf' | 'giftFinder' | 'arkeos';
+type PinId =
+  | 'g7'
+  | 'hetic'
+  | 'laurentDiMascio'
+  | 'allGood'
+  | 'maisonVictoria'
+  | 'mariage'
+  | 'golf'
+  | 'giftFinder'
+  | 'arkeos';
 type ContactError = 'invalid' | 'rateLimit' | 'generic' | null;
 type TokenKind = 'punct' | 'key' | 'str' | 'fn' | 'kw' | 'plain' | 'ok' | 'dim';
 
@@ -42,6 +51,8 @@ const copy = {
       about: 'À propos',
       experience: 'Parcours',
       skills: 'Compétences',
+      projects: 'Projets',
+      freelance: 'Freelance',
       map: 'Carte',
       contact: 'Contact',
       cv: 'CV PDF',
@@ -176,10 +187,11 @@ const copy = {
     },
     projects: {
       title: 'Projets',
-      intro: 'Quatre projets web — dont trois accessibles en ligne, avec leur code source sur GitHub.',
+      intro:
+        'Dix applications et produits web déployés en ligne — IA appliquée, plateformes métier, temps réel et projets open source.',
       visit: 'Voir le site',
       source: 'GitHub',
-      privateRepository: 'privé',
+      privateRepository: 'Code privé',
       firstProjectTitle: 'Mon tout premier projet',
       firstProjectSubtitle: 'Là où tout a commencé',
       carouselLabel: 'Carrousel des projets',
@@ -190,32 +202,84 @@ const copy = {
       items: [
         {
           no: 'P1',
-          status: 'En ligne · en cours',
+          status: 'En ligne',
           live: true,
-          name: 'Gestion de mariage',
+          name: 'Atelier IA',
           description:
-            'Une plateforme pour organiser un mariage de A à Z : invités, prestataires, budget et planning au même endroit.',
-          stack: ['React', 'NestJS', 'PostgreSQL'],
-          siteUrl: 'https://mon-mariage.duckdns.org/',
-          githubUrl: 'https://github.com/jeancdf/mon-mariage',
-          repositoryPrivate: false,
+            "Plateforme interactive de formation à l'IA appliquée en entreprise : chapitres approfondis sur les LLM, 36 quiz expliqués, laboratoires interactifs et études de cas logistiques.",
+          stack: ['React', 'TypeScript', 'Vite', 'MDX', 'KaTeX'],
+          siteUrl: 'https://atelier-ai.duckdns.org/',
+          githubUrl: '',
+          repositoryPrivate: true,
           firstProject: false,
         },
         {
           no: 'P2',
-          status: 'En cours',
-          live: false,
-          name: 'CRM Club de golf',
+          status: 'En ligne',
+          live: true,
+          name: 'LSC Golf — CRM & Accès QR',
           description:
-            "Un CRM pour gérer les membres d'un club de golf : adhésions, réservations et suivi de l'activité.",
-          stack: ['Angular', 'Spring Boot', 'PostgreSQL'],
-          siteUrl: '',
-          githubUrl: 'https://github.com/jeancdf/carnet-de-golf',
+            "Plateforme de gestion d'un club de golf (350+ membres) : contrôle d'accès par QR code rotatif, console d'administration, synchronisation Microsoft Access, compétitions et adhésions.",
+          stack: ['Angular', 'NestJS', 'PostgreSQL', 'Docker'],
+          siteUrl: 'https://membre-lsc.duckdns.org/',
+          githubUrl: '',
           repositoryPrivate: true,
           firstProject: false,
         },
         {
           no: 'P3',
+          status: 'En ligne',
+          live: true,
+          name: 'Mes Finances',
+          description:
+            "Application de suivi budgétaire et d'épargne personnelle : catégorisation des dépenses, import bancaire CSV, graphiques d'évolution et mode sombre.",
+          stack: ['Angular', 'NestJS', 'Prisma', 'SQLite', 'Docker'],
+          siteUrl: 'https://mes-finances.duckdns.org/',
+          githubUrl: '',
+          repositoryPrivate: true,
+          firstProject: false,
+        },
+        {
+          no: 'P4',
+          status: 'En ligne',
+          live: true,
+          name: 'Agridom',
+          description:
+            'Jeu de stratégie agricole et politique multijoueur en temps réel sur la carte de France : gestion des départements, économie dynamique, industrialisation et influence politique.',
+          stack: ['Angular', 'Colyseus', 'Express', 'PostgreSQL', 'Redis'],
+          siteUrl: 'https://agridom.duckdns.org/',
+          githubUrl: '',
+          repositoryPrivate: true,
+          firstProject: false,
+        },
+        {
+          no: 'P5',
+          status: 'En ligne',
+          live: true,
+          name: 'Blood Tower',
+          description:
+            'Compagnon temps réel et moteur de règles pour maître du jeu : événements typés à visibilité granulaire, automatisation assistée, journal rejouable avec annulation en cascade et tests E2E.',
+          stack: ['Angular', 'Express', 'WebSocket', 'PostgreSQL', 'Playwright'],
+          siteUrl: 'https://blood-tower.duckdns.org/',
+          githubUrl: '',
+          repositoryPrivate: true,
+          firstProject: false,
+        },
+        {
+          no: 'P6',
+          status: 'En ligne',
+          live: true,
+          name: 'Cadrage',
+          description:
+            "Outil d'entretien de cadrage intelligent avant premier rendez-vous client : questions adaptatives, détection de contradictions, import de documents et synthèse IA structurée.",
+          stack: ['React', 'Fastify', 'TypeScript', 'IA'],
+          siteUrl: 'https://client-contact.duckdns.org/',
+          githubUrl: 'https://github.com/jeancdf/client-freelance',
+          repositoryPrivate: false,
+          firstProject: false,
+        },
+        {
+          no: 'P7',
           status: 'En ligne',
           live: true,
           name: 'Gift Finder',
@@ -228,7 +292,33 @@ const copy = {
           firstProject: false,
         },
         {
-          no: 'P4',
+          no: 'P8',
+          status: 'En ligne · en cours',
+          live: true,
+          name: 'Gestion de mariage',
+          description:
+            'Une plateforme pour organiser un mariage de A à Z : invités, prestataires, budget et planning au même endroit.',
+          stack: ['React', 'NestJS', 'PostgreSQL'],
+          siteUrl: 'https://mon-mariage.duckdns.org/',
+          githubUrl: 'https://github.com/jeancdf/mon-mariage',
+          repositoryPrivate: false,
+          firstProject: false,
+        },
+        {
+          no: 'P9',
+          status: 'En ligne',
+          live: true,
+          name: 'Carnet de Golf',
+          description:
+            "Application de suivi pédagogique pour une école de golf : gestion des groupes et élèves, appels de présence, évaluations par secteur, planning et rapports mensuels PDF envoyés par e-mail.",
+          stack: ['Angular', 'Node.js', 'PostgreSQL', 'PDFKit'],
+          siteUrl: 'https://carnet-de-golf.duckdns.org/',
+          githubUrl: '',
+          repositoryPrivate: true,
+          firstProject: false,
+        },
+        {
+          no: 'P10',
           status: 'En ligne',
           live: true,
           name: 'Arkeos',
@@ -242,10 +332,56 @@ const copy = {
         },
       ],
     },
+    freelance: {
+      title: 'Sites clients · Freelance',
+      intro:
+        'Conception, développement et déploiement clé en main pour des artisans et commerces parisiens — vitrines SEO, Click & Collect, paiement Stripe et back-office dédié.',
+      visit: 'Voir le site',
+      preview: 'Voir la préprod',
+      items: [
+        {
+          no: 'F1',
+          production: true,
+          status: 'En production',
+          category: 'Artisan bottier · Patine & glaçage',
+          location: 'Paris 17e · Rue Saint-Ferdinand',
+          name: 'Laurent di Mascio',
+          description:
+            'Site vitrine sur mesure et SEO local pour la boutique de Laurent di Mascio près de la porte Maillot : pages métiers sémantiques, données structurées Schema.org et temps de chargement minimal.',
+          stack: ['HTML / CSS', 'SEO · JSON-LD', 'Nginx', 'Docker'],
+          siteUrl: 'https://laurentdimascio.fr/',
+        },
+        {
+          no: 'F2',
+          production: false,
+          status: 'Préprod en ligne · bientôt en prod',
+          category: 'Coffee shop & cookies artisanaux',
+          location: 'Paris 17e · Boulevard Pereire',
+          name: 'AllGood La Boutique',
+          description:
+            "Site bilingue FR/EN et boutique Click & Collect pour All good + Sucré : composition de boîtes de 5 cookies, retrait par créneau, paiement Stripe et console d'administration (fournées, stocks, commandes).",
+          stack: ['Node.js 24', 'SQLite', 'SSR', 'Stripe', 'Docker'],
+          siteUrl: 'https://all-good.51-210-109-16.sslip.io/',
+        },
+        {
+          no: 'F3',
+          production: false,
+          status: 'Préprod en ligne · bientôt en prod',
+          category: 'Boulangerie, pâtisserie & traiteur',
+          location: 'Paris 17e · Avenue des Ternes',
+          name: 'La Maison Victoria',
+          description:
+            'Site vitrine, commande en ligne en retrait boutique, plateaux traiteur sur devis et back-office complet : carte du jour filtrable, créneaux de 30 min, intégration livraison et paiement Stripe.',
+          stack: ['Node.js 24', 'SQLite', 'SSR', 'Stripe', 'Docker'],
+          siteUrl: 'https://maison-victoria.51-210-109-16.sslip.io/',
+        },
+      ],
+    },
     map: {
       title: 'Paris, sur la carte',
       intro: 'Cliquez sur les points pour explorer où se passe mon parcours et mes projets.',
       hint: 'Les lieux proches sont regroupés. Zoomez ou cliquez sur le compteur pour séparer les points.',
+      scrollHint: 'Ctrl + molette pour zoomer la carte',
       pins: {
         g7: {
           name: 'G7 Taxis',
@@ -261,6 +397,27 @@ const copy = {
             'École du web à Montreuil : Licence Développeur Web puis Master CTO & Tech Lead (2022 → 2026).',
           short: 'HETIC',
         },
+        laurentDiMascio: {
+          name: 'Laurent di Mascio',
+          tag: 'FREELANCE · EN PROD',
+          description:
+            'Artisan bottier près de la porte Maillot : site vitrine sur mesure, SEO local et données structurées Schema.org.',
+          short: 'Laurent di Mascio',
+        },
+        allGood: {
+          name: 'AllGood La Boutique',
+          tag: 'FREELANCE · PRÉPROD',
+          description:
+            'Coffee shop & cookies artisanaux (bd Pereire) : boutique bilingue Click & Collect, paiement Stripe et console boutique.',
+          short: 'AllGood',
+        },
+        maisonVictoria: {
+          name: 'La Maison Victoria',
+          tag: 'FREELANCE · PRÉPROD',
+          description:
+            'Boulangerie, pâtisserie et traiteur (av. des Ternes) : carte filtrable, créneaux de retrait, devis traiteur et Stripe.',
+          short: 'Maison Victoria',
+        },
         mariage: {
           name: 'Gestion de mariage',
           tag: 'PROJET · EN LIGNE',
@@ -269,11 +426,11 @@ const copy = {
           short: 'Projet · Mariage',
         },
         golf: {
-          name: 'CRM Club de golf',
-          tag: 'PROJET · BIENTÔT',
+          name: 'Carnet de Golf',
+          tag: 'PROJET · EN LIGNE',
           description:
-            "CRM de gestion des membres d'un club de golf : adhésions, réservations et suivi. En cours de développement.",
-          short: 'Projet · Golf',
+            "Application de suivi pédagogique d'école de golf : élèves, présences, évaluations et rapports PDF mensuels.",
+          short: 'Carnet de Golf',
         },
         giftFinder: {
           name: 'Gift Finder',
@@ -345,6 +502,8 @@ const copy = {
       about: 'About',
       experience: 'Career',
       skills: 'Skills',
+      projects: 'Projects',
+      freelance: 'Freelance',
       map: 'Map',
       contact: 'Contact',
       cv: 'PDF CV',
@@ -478,10 +637,11 @@ const copy = {
     },
     projects: {
       title: 'Projects',
-      intro: 'Four web projects — including three live products, with their source code on GitHub.',
+      intro:
+        'Ten live web applications and products — applied AI, business platforms, real-time systems and open-source projects.',
       visit: 'Visit site',
       source: 'GitHub',
-      privateRepository: 'private',
+      privateRepository: 'Private repo',
       firstProjectTitle: 'My very first project',
       firstProjectSubtitle: 'Where it all began',
       carouselLabel: 'Project carousel',
@@ -492,32 +652,84 @@ const copy = {
       items: [
         {
           no: 'P1',
-          status: 'Live · in progress',
+          status: 'Live',
           live: true,
-          name: 'Wedding planner',
+          name: 'Atelier IA',
           description:
-            'A platform to organize a wedding end to end: guests, vendors, budget and schedule in one place.',
-          stack: ['React', 'NestJS', 'PostgreSQL'],
-          siteUrl: 'https://mon-mariage.duckdns.org/',
-          githubUrl: 'https://github.com/jeancdf/mon-mariage',
-          repositoryPrivate: false,
+            'Interactive training platform for applied enterprise AI: in-depth LLM chapters, 36 explained quizzes, interactive labs and logistics case studies.',
+          stack: ['React', 'TypeScript', 'Vite', 'MDX', 'KaTeX'],
+          siteUrl: 'https://atelier-ai.duckdns.org/',
+          githubUrl: '',
+          repositoryPrivate: true,
           firstProject: false,
         },
         {
           no: 'P2',
-          status: 'In progress',
-          live: false,
-          name: 'Golf club CRM',
+          status: 'Live',
+          live: true,
+          name: 'LSC Golf — Member CRM & QR Access',
           description:
-            "A CRM to manage a golf club's members: memberships, bookings and activity tracking.",
-          stack: ['Angular', 'Spring Boot', 'PostgreSQL'],
-          siteUrl: '',
-          githubUrl: 'https://github.com/jeancdf/carnet-de-golf',
+            'Golf club management platform (350+ members): rotating QR-code access control, admin console, Microsoft Access sync, competitions and memberships.',
+          stack: ['Angular', 'NestJS', 'PostgreSQL', 'Docker'],
+          siteUrl: 'https://membre-lsc.duckdns.org/',
+          githubUrl: '',
           repositoryPrivate: true,
           firstProject: false,
         },
         {
           no: 'P3',
+          status: 'Live',
+          live: true,
+          name: 'Mes Finances',
+          description:
+            'Personal budgeting and savings tracker: expense categorization, CSV bank import, trend visualizations and light/dark themes.',
+          stack: ['Angular', 'NestJS', 'Prisma', 'SQLite', 'Docker'],
+          siteUrl: 'https://mes-finances.duckdns.org/',
+          githubUrl: '',
+          repositoryPrivate: true,
+          firstProject: false,
+        },
+        {
+          no: 'P4',
+          status: 'Live',
+          live: true,
+          name: 'Agridom',
+          description:
+            'Real-time multiplayer agricultural and political strategy game across French departments: land management, dynamic economy, industrialization and political influence.',
+          stack: ['Angular', 'Colyseus', 'Express', 'PostgreSQL', 'Redis'],
+          siteUrl: 'https://agridom.duckdns.org/',
+          githubUrl: '',
+          repositoryPrivate: true,
+          firstProject: false,
+        },
+        {
+          no: 'P5',
+          status: 'Live',
+          live: true,
+          name: 'Blood Tower',
+          description:
+            'Real-time Storyteller companion and rule engine: visibility-scoped typed events, assisted automation, replayable audit log with cascade undo and E2E tests.',
+          stack: ['Angular', 'Express', 'WebSocket', 'PostgreSQL', 'Playwright'],
+          siteUrl: 'https://blood-tower.duckdns.org/',
+          githubUrl: '',
+          repositoryPrivate: true,
+          firstProject: false,
+        },
+        {
+          no: 'P6',
+          status: 'Live',
+          live: true,
+          name: 'Cadrage',
+          description:
+            'Smart client discovery tool ahead of a first meeting: adaptive questioning, contradiction detection, document ingestion and structured AI briefing.',
+          stack: ['React', 'Fastify', 'TypeScript', 'AI'],
+          siteUrl: 'https://client-contact.duckdns.org/',
+          githubUrl: 'https://github.com/jeancdf/client-freelance',
+          repositoryPrivate: false,
+          firstProject: false,
+        },
+        {
+          no: 'P7',
           status: 'Live',
           live: true,
           name: 'Gift Finder',
@@ -530,7 +742,33 @@ const copy = {
           firstProject: false,
         },
         {
-          no: 'P4',
+          no: 'P8',
+          status: 'Live · in progress',
+          live: true,
+          name: 'Wedding planner',
+          description:
+            'A platform to organize a wedding end to end: guests, vendors, budget and schedule in one place.',
+          stack: ['React', 'NestJS', 'PostgreSQL'],
+          siteUrl: 'https://mon-mariage.duckdns.org/',
+          githubUrl: 'https://github.com/jeancdf/mon-mariage',
+          repositoryPrivate: false,
+          firstProject: false,
+        },
+        {
+          no: 'P9',
+          status: 'Live',
+          live: true,
+          name: 'Golf Academy Logbook',
+          description:
+            'Coaching and progress-tracking app for a golf academy: student groups, attendance tracking, skill evaluations, session calendar and automated monthly PDF reports.',
+          stack: ['Angular', 'Node.js', 'PostgreSQL', 'PDFKit'],
+          siteUrl: 'https://carnet-de-golf.duckdns.org/',
+          githubUrl: '',
+          repositoryPrivate: true,
+          firstProject: false,
+        },
+        {
+          no: 'P10',
           status: 'Live',
           live: true,
           name: 'Arkeos',
@@ -544,10 +782,56 @@ const copy = {
         },
       ],
     },
+    freelance: {
+      title: 'Freelance client sites',
+      intro:
+        'End-to-end design, development and deployment for Paris artisans and local businesses — local SEO showcases, Click & Collect, Stripe checkout and custom admin consoles.',
+      visit: 'Visit site',
+      preview: 'View staging',
+      items: [
+        {
+          no: 'F1',
+          production: true,
+          status: 'Live in production',
+          category: 'Artisan shoemaker · Patina & leather care',
+          location: 'Paris 17th · Rue Saint-Ferdinand',
+          name: 'Laurent di Mascio',
+          description:
+            "Bespoke showcase website and local SEO for Laurent di Mascio's Porte Maillot workshop: semantic service pages, Schema.org structured data and ultra-fast static delivery.",
+          stack: ['HTML / CSS', 'SEO · JSON-LD', 'Nginx', 'Docker'],
+          siteUrl: 'https://laurentdimascio.fr/',
+        },
+        {
+          no: 'F2',
+          production: false,
+          status: 'Live staging · launching soon',
+          category: 'Coffee shop & artisan cookies',
+          location: 'Paris 17th · Boulevard Pereire',
+          name: 'AllGood La Boutique',
+          description:
+            'Bilingual FR/EN website and Click & Collect store for All good + Sucré: build-your-own 5-cookie boxes, pickup time slots, Stripe Checkout and admin console (daily bakes, stock, orders).',
+          stack: ['Node.js 24', 'SQLite', 'SSR', 'Stripe', 'Docker'],
+          siteUrl: 'https://all-good.51-210-109-16.sslip.io/',
+        },
+        {
+          no: 'F3',
+          production: false,
+          status: 'Live staging · launching soon',
+          category: 'Kosher bakery, pastry & caterer',
+          location: 'Paris 17th · Avenue des Ternes',
+          name: 'La Maison Victoria',
+          description:
+            'Website, Click & Collect ordering, catering platters with custom quotes and full admin console: filterable daily menu, 30-minute pickup slots, delivery links and Stripe payments.',
+          stack: ['Node.js 24', 'SQLite', 'SSR', 'Stripe', 'Docker'],
+          siteUrl: 'https://maison-victoria.51-210-109-16.sslip.io/',
+        },
+      ],
+    },
     map: {
       title: 'Paris, on the map',
       intro: 'Click the points to explore where my career and projects happen.',
       hint: 'Nearby places are grouped. Zoom in or click the counter to separate the markers.',
+      scrollHint: 'Ctrl + scroll to zoom the map',
       pins: {
         g7: {
           name: 'G7 Taxis',
@@ -563,6 +847,27 @@ const copy = {
             "Web school in Montreuil: Web Developer bachelor's then CTO & Tech Lead master's (2022 → 2026).",
           short: 'HETIC',
         },
+        laurentDiMascio: {
+          name: 'Laurent di Mascio',
+          tag: 'FREELANCE · LIVE',
+          description:
+            'Artisan shoemaker near Porte Maillot: custom showcase website, local SEO and Schema.org structured data.',
+          short: 'Laurent di Mascio',
+        },
+        allGood: {
+          name: 'AllGood La Boutique',
+          tag: 'FREELANCE · STAGING',
+          description:
+            'Coffee shop & artisan cookies (bd Pereire): bilingual Click & Collect store, Stripe Checkout and shop console.',
+          short: 'AllGood',
+        },
+        maisonVictoria: {
+          name: 'La Maison Victoria',
+          tag: 'FREELANCE · STAGING',
+          description:
+            'Bakery, pastry & caterer (av. des Ternes): filterable menu, pickup slots, catering quotes and Stripe.',
+          short: 'Maison Victoria',
+        },
         mariage: {
           name: 'Wedding planner',
           tag: 'PROJECT · LIVE',
@@ -571,11 +876,11 @@ const copy = {
           short: 'Project · Wedding',
         },
         golf: {
-          name: 'Golf club CRM',
-          tag: 'PROJECT · SOON',
+          name: 'Golf Academy Logbook',
+          tag: 'PROJECT · LIVE',
           description:
-            "CRM to manage a golf club's members: memberships, bookings and tracking. Currently in development.",
-          short: 'Project · Golf',
+            'Golf academy progress-tracking platform: students, attendance, skill evaluations and automated monthly PDF reports.',
+          short: 'Golf Logbook',
         },
         giftFinder: {
           name: 'Gift Finder',
@@ -683,6 +988,7 @@ export class AppComponent implements AfterViewInit, OnDestroy {
   readonly form = { name: '', email: '', message: '', website: '' };
   readonly projectCarouselIndex = signal(0);
   readonly projectCarouselDragging = signal(false);
+  readonly mapWheelHint = signal(false);
   readonly selectedTrackIndex = signal(0);
   readonly musicTracks = [
     {
@@ -725,6 +1031,27 @@ export class AppComponent implements AfterViewInit, OnDestroy {
       { id: 'g7', ...labels.g7, coordinates: [48.8988602, 2.304037], color: '#f2c94c' },
       { id: 'hetic', ...labels.hetic, coordinates: [48.8555, 2.439], color: '#c0563a' },
       {
+        id: 'laurentDiMascio',
+        ...labels.laurentDiMascio,
+        coordinates: [48.878416, 2.289094],
+        color: '#d4a373',
+        clusterGroup: 'palais-des-congres',
+      },
+      {
+        id: 'allGood',
+        ...labels.allGood,
+        coordinates: [48.88255, 2.28865],
+        color: '#e07a5f',
+        clusterGroup: 'palais-des-congres',
+      },
+      {
+        id: 'maisonVictoria',
+        ...labels.maisonVictoria,
+        coordinates: [48.87875, 2.2881],
+        color: '#d48c9e',
+        clusterGroup: 'palais-des-congres',
+      },
+      {
         id: 'mariage',
         ...labels.mariage,
         coordinates: [48.88182, 2.2832742],
@@ -759,6 +1086,11 @@ export class AppComponent implements AfterViewInit, OnDestroy {
   private mapResizeObserver?: ResizeObserver;
   private mapRefreshFrame?: number;
   private mapRevealTimer?: number;
+  private mapWheelHintTimer?: number;
+  private mapContainer?: HTMLDivElement;
+  private readonly onMapWheel = (event: WheelEvent): void => {
+    this.zoomMapFromWheel(event);
+  };
   private projectDragPointerId?: number;
   private projectDragStartX = 0;
   private projectDragStartScrollLeft = 0;
@@ -901,6 +1233,8 @@ export class AppComponent implements AfterViewInit, OnDestroy {
     this.mapResizeObserver?.disconnect();
     if (this.mapRefreshFrame) cancelAnimationFrame(this.mapRefreshFrame);
     if (this.mapRevealTimer) window.clearTimeout(this.mapRevealTimer);
+    if (this.mapWheelHintTimer) window.clearTimeout(this.mapWheelHintTimer);
+    this.mapContainer?.removeEventListener('wheel', this.onMapWheel);
     this.map?.remove();
   }
 
@@ -1131,18 +1465,68 @@ export class AppComponent implements AfterViewInit, OnDestroy {
     this.projectCarouselIndex.set(index);
   }
 
+  private queueMapCreation(section: Element): void {
+    const start = (event?: Event) => {
+      if (event instanceof TransitionEvent && event.target !== section) return;
+      if (event instanceof TransitionEvent && event.propertyName !== 'transform') {
+        return;
+      }
+
+      section.removeEventListener('transitionend', start);
+      if (this.mapRevealTimer) window.clearTimeout(this.mapRevealTimer);
+      this.mapRevealTimer = undefined;
+      this.createMap();
+      this.scheduleMapRefresh();
+    };
+
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reduceMotion) {
+      start();
+      return;
+    }
+
+    section.addEventListener('transitionend', start);
+    this.mapRevealTimer = window.setTimeout(start, 800);
+  }
+
+  private zoomMapFromWheel(event: WheelEvent): void {
+    if (!this.map) return;
+    if (!event.ctrlKey && !event.metaKey) {
+      this.showMapWheelHint();
+      return;
+    }
+
+    event.preventDefault();
+    const direction = event.deltaY > 0 ? -1 : 1;
+    this.map.setZoom(this.map.getZoom() + direction);
+  }
+
+  private showMapWheelHint(): void {
+    this.mapWheelHint.set(true);
+    if (this.mapWheelHintTimer) window.clearTimeout(this.mapWheelHintTimer);
+    this.mapWheelHintTimer = window.setTimeout(() => {
+      this.mapWheelHint.set(false);
+      this.mapWheelHintTimer = undefined;
+    }, 1400);
+  }
+
   private createMap(): void {
     if (this.map || !this.mapElement) return;
 
     const mapContainer = this.mapElement.nativeElement;
+    const coarsePointer = window.matchMedia('(pointer: coarse)').matches;
     this.map = L.map(mapContainer, {
       center: [48.882, 2.328],
       zoom: 11.2,
       minZoom: 10,
       maxZoom: 17,
-      scrollWheelZoom: true,
+      // Wheel zoom traps page scrolling. Zoom stays on Ctrl/Cmd + wheel.
+      scrollWheelZoom: false,
+      dragging: !coarsePointer,
       zoomControl: false,
     });
+    this.mapContainer = mapContainer;
+    mapContainer.addEventListener('wheel', this.onMapWheel, { passive: false });
 
     L.control.zoom({ position: 'bottomright' }).addTo(this.map);
     L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -1224,7 +1608,8 @@ export class AppComponent implements AfterViewInit, OnDestroy {
 
     if (!('IntersectionObserver' in window)) {
       sections.forEach((element) => element.classList.add('is-visible'));
-      this.createMap();
+      const mapSection = document.querySelector('#carte');
+      if (mapSection) this.queueMapCreation(mapSection);
       return;
     }
 
@@ -1235,10 +1620,7 @@ export class AppComponent implements AfterViewInit, OnDestroy {
 
           entry.target.classList.add('is-visible');
           if (entry.target.id === 'carte') {
-            this.createMap();
-            this.scheduleMapRefresh();
-            if (this.mapRevealTimer) window.clearTimeout(this.mapRevealTimer);
-            this.mapRevealTimer = window.setTimeout(() => this.scheduleMapRefresh(), 750);
+            this.queueMapCreation(entry.target);
           }
 
           this.observer?.unobserve(entry.target);

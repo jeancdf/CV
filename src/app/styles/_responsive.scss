@@ -47,6 +47,10 @@
     --project-card-width: min(480px, calc(100% - 48px));
   }
 
+  .freelance-grid {
+    grid-template-columns: 1fr;
+  }
+
   .map-panel {
     width: 100%;
   }
