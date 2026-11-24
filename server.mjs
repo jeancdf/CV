@@ -41,6 +41,7 @@ if (process.env.TRUST_PROXY === 'true') {
 app.disable('x-powered-by');
 app.use(
   helmet({
+    referrerPolicy: { policy: 'strict-origin-when-cross-origin' },
     contentSecurityPolicy: {
       directives: {
         defaultSrc: ["'self'"],
